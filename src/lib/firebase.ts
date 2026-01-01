@@ -1,6 +1,7 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app'
 import { getAuth, Auth } from 'firebase/auth'
 import { getFirestore, Firestore, enableIndexedDbPersistence } from 'firebase/firestore'
+import { getFunctions, Functions } from 'firebase/functions'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,11 +15,13 @@ const firebaseConfig = {
 let app: FirebaseApp
 let auth: Auth
 let db: Firestore
+let functions: Functions
 
 if (typeof window !== 'undefined') {
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
   auth = getAuth(app)
   db = getFirestore(app)
+  functions = getFunctions(app)
 
   enableIndexedDbPersistence(db).catch((err) => {
     if (err.code === 'failed-precondition') {
@@ -29,4 +32,4 @@ if (typeof window !== 'undefined') {
   })
 }
 
-export { app, auth, db }
+export { app, auth, db, functions }
