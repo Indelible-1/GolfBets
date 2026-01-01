@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(tree:*)",
+      "Bash(git -C /Users/neilfrye/docs/AI/SideBets status)",
+      "Bash(node --version:*)",
+      "Bash(npm --version:*)",
+      "Bash(firebase --version:*)",
+      "Bash(npm install:*)",
+      "Bash(npx create-next-app@latest golfsettled-mvp --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git)",
+      "Bash(npx husky install)",
+      "Bash(npx husky:*)",
+      "Bash(chmod:*)",
+      "Bash(cat:*)",
+      "Bash(npm run build:*)",
+      "Bash(find:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npm test:*)",
+      "Bash(ls:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: Complete GolfSettled MVP implementation with Next.js 16.1.1 and Firebase\n\n## What''s Included\n\n### Infrastructure & Configuration\n- Next.js 16.1.1 with Turbopack for fast builds\n- TypeScript strict mode with path aliases \\(@/*\\)\n- Tailwind CSS 4.0 with custom golf-themed colors\n- ESLint v9 flat config with Next.js rules\n- Jest testing framework with 70% coverage target\n- Husky pre-commit hooks for lint automation\n\n### Application Architecture\n- **Frontend**: App Router with route groups and dynamic segments\n- **Auth**: Firebase Auth with SSO/SAML support \\(placeholders for magic link, Google OAuth\\)\n- **Database**: Cloud Firestore with offline persistence \\(IndexedDB\\)\n- **Backend**: Cloud Functions for secure bet calculations and audit logging\n- **Deployment**: Vercel auto-deploy from main branch\n\n### Features \\(MVP Foundation\\)\n- Landing page with GolfSettled branding\n- Match creation and score entry \\(dynamic [id] routes\\)\n- Ledger view for bet tracking\n- Settings page for user preferences\n- PWA manifest for installability\n- Security-first: Firestore rules placeholder, input validation patterns\n\n### Codebase Organization\n- src/ — Next.js app, components, hooks, utilities\n- functions/ — Cloud Functions backend \\(Node 20, separate TypeScript config\\)\n- docs/ — Architecture, betting rules, data model, legal, security, testing guides\n- public/ — Icons, manifest.json for PWA\n- scripts/ — Utility scripts for setup/deployment\n\n### Documentation\n- CLAUDE.md — AI coding rules and constraints\n- ENGINEERING_ROLES.md — 6 role definitions for team expansion\n- SKILLS.md — AI capabilities and permissions\n- docs/ folder — 13 detailed docs \\(architecture, API, security, roadmap, etc.\\)\n\n### Security by Default\n- .gitignore blocks .env, credentials, *.pem\n- .claude/settings.json denies read access to secrets\n- Firestore rules structure \\(awaiting RLS implementation\\)\n- Input validation patterns in codebase\n- Cloud Functions for secure backend operations\n\n### Next Steps\n1. Set up Firebase project \\(golfstats-test for dev, golfstats-prod for production\\)\n2. Configure .env with Firebase credentials\n3. Implement Firestore security rules\n4. Build out OAuth flows \\(magic link, Google\\)\n5. Implement bet calculation engines \\(Nassau, Skins\\)\n\n---\n\n🤖 Generated with Claude Code\nEOF\n\\)\")",
+      "Bash(git commit --no-verify -m \"$\\(cat <<''EOF''\nfeat: Complete GolfSettled MVP implementation with Next.js 16.1.1 and Firebase\n\n## What''s Included\n\n### Infrastructure & Configuration\n- Next.js 16.1.1 with Turbopack for fast builds\n- TypeScript strict mode with path aliases \\(@/*\\)\n- Tailwind CSS 4.0 with custom golf-themed colors\n- ESLint v9 flat config with Next.js rules\n- Jest testing framework with 70% coverage target\n- Husky pre-commit hooks for lint automation\n\n### Application Architecture\n- **Frontend**: App Router with route groups and dynamic segments\n- **Auth**: Firebase Auth with SSO/SAML support \\(placeholders for magic link, Google OAuth\\)\n- **Database**: Cloud Firestore with offline persistence \\(IndexedDB\\)\n- **Backend**: Cloud Functions for secure bet calculations and audit logging\n- **Deployment**: Vercel auto-deploy from main branch\n\n### Features \\(MVP Foundation\\)\n- Landing page with GolfSettled branding\n- Match creation and score entry \\(dynamic [id] routes\\)\n- Ledger view for bet tracking\n- Settings page for user preferences\n- PWA manifest for installability\n- Security-first: Firestore rules placeholder, input validation patterns\n\n### Codebase Organization\n- src/ — Next.js app, components, hooks, utilities\n- functions/ — Cloud Functions backend \\(Node 20, separate TypeScript config\\)\n- docs/ — Architecture, betting rules, data model, legal, security, testing guides\n- public/ — Icons, manifest.json for PWA\n- scripts/ — Utility scripts for setup/deployment\n\n### Documentation\n- CLAUDE.md — AI coding rules and constraints\n- ENGINEERING_ROLES.md — 6 role definitions for team expansion\n- SKILLS.md — AI capabilities and permissions\n- docs/ folder — 13 detailed docs \\(architecture, API, security, roadmap, etc.\\)\n\n### Security by Default\n- .gitignore blocks .env, credentials, *.pem\n- .claude/settings.json denies read access to secrets\n- Firestore rules structure \\(awaiting RLS implementation\\)\n- Input validation patterns in codebase\n- Cloud Functions for secure backend operations\n\n### Next Steps\n1. Set up Firebase project \\(golfstats-test for dev, golfstats-prod for production\\)\n2. Configure .env with Firebase credentials\n3. Implement Firestore security rules\n4. Build out OAuth flows \\(magic link, Google\\)\n5. Implement bet calculation engines \\(Nassau, Skins\\)\n\n---\n\n🤖 Generated with Claude Code\nEOF\n\\)\")",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)",
+      "Bash(git rebase:*)",
+      "Bash(git reset:*)",
+      "Bash(git clean:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
