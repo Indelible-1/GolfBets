@@ -2,6 +2,7 @@ import {
   collection,
   CollectionReference,
   DocumentReference,
+  doc,
   getFirestore,
 } from 'firebase/firestore'
 import {
@@ -58,44 +59,45 @@ export const auditCollection = (matchId: string): CollectionReference<AuditEntry
 // ============ DOCUMENT REFERENCES ============
 
 export const userDoc = (userId: string): DocumentReference<User> =>
-  collection(db, 'users').doc(userId).withConverter(userConverter) as DocumentReference<User>
+  doc(collection(db, 'users'), userId).withConverter(userConverter) as DocumentReference<User>
 
 export const matchDoc = (matchId: string): DocumentReference<Match> =>
-  collection(db, 'matches').doc(matchId).withConverter(matchConverter) as DocumentReference<Match>
+  doc(collection(db, 'matches'), matchId).withConverter(matchConverter) as DocumentReference<Match>
 
 export const betDoc = (matchId: string, betId: string): DocumentReference<Bet> =>
-  collection(db, `matches/${matchId}/bets`)
-    .doc(betId)
-    .withConverter(betConverter) as DocumentReference<Bet>
+  doc(collection(db, `matches/${matchId}/bets`), betId).withConverter(betConverter) as DocumentReference<Bet>
 
 export const participantDoc = (
   matchId: string,
   participantId: string,
 ): DocumentReference<Participant> =>
-  collection(db, `matches/${matchId}/participants`)
-    .doc(participantId)
-    .withConverter(participantConverter) as DocumentReference<Participant>
+  doc(
+    collection(db, `matches/${matchId}/participants`),
+    participantId,
+  ).withConverter(participantConverter) as DocumentReference<Participant>
 
 export const scoreDoc = (matchId: string, scoreId: string): DocumentReference<Score> =>
-  collection(db, `matches/${matchId}/scores`)
-    .doc(scoreId)
-    .withConverter(scoreConverter) as DocumentReference<Score>
+  doc(collection(db, `matches/${matchId}/scores`), scoreId).withConverter(
+    scoreConverter,
+  ) as DocumentReference<Score>
 
 export const ledgerEntryDoc = (
   matchId: string,
   entryId: string,
 ): DocumentReference<LedgerEntry> =>
-  collection(db, `matches/${matchId}/ledger`)
-    .doc(entryId)
-    .withConverter(ledgerConverter) as DocumentReference<LedgerEntry>
+  doc(collection(db, `matches/${matchId}/ledger`), entryId).withConverter(
+    ledgerConverter,
+  ) as DocumentReference<LedgerEntry>
 
 export const auditEntryDoc = (
   matchId: string,
   auditId: string,
 ): DocumentReference<AuditEntry> =>
-  collection(db, `matches/${matchId}/audit`)
-    .doc(auditId)
-    .withConverter(auditConverter) as DocumentReference<AuditEntry>
+  doc(collection(db, `matches/${matchId}/audit`), auditId).withConverter(
+    auditConverter,
+  ) as DocumentReference<AuditEntry>
 
 export const inviteDoc = (inviteId: string): DocumentReference<Invite> =>
-  collection(db, 'invites').doc(inviteId).withConverter(inviteConverter) as DocumentReference<Invite>
+  doc(collection(db, 'invites'), inviteId).withConverter(
+    inviteConverter,
+  ) as DocumentReference<Invite>
