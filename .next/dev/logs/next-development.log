@@ -257,3 +257,11 @@ Import traces:
 [00:01:11.565] Browser WARN    [2026-01-02T00:19:01.154Z]  @firebase/firestore: Firestore (12.6.0): enableIndexedDbPersistence() will be deprecated in the future, you can use `FirestoreSettings.cache` instead.
 [00:02:05.171] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:02:05.623] Browser WARN    [2026-01-02T00:19:55.446Z]  @firebase/firestore: Firestore (12.6.0): enableIndexedDbPersistence() will be deprecated in the future, you can use `FirestoreSettings.cache` instead.
+[00:35:22.703] Server  LOG     ✓ Compiled in 102ms
+[00:35:26.184] Server  LOG     ✓ Compiled in 0ms
+[00:35:26.509] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:35:26.917] Browser WARN    [2026-01-02T00:53:16.475Z]  @firebase/firestore: Firestore (12.6.0): enableIndexedDbPersistence() will be deprecated in the future, you can use `FirestoreSettings.cache` instead.
+[00:35:41.871] Server  LOG     ✓ Compiled in 16ms
+[00:35:49.432] Server  LOG     ✓ Compiled in 8ms
+[00:36:05.796] Server  LOG     ✓ Compiled in 11ms
+[00:36:19.349] Server  LOG     ✓ Compiled in 21ms

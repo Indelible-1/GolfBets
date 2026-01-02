@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { BottomNav } from '@/components/layout'
+import { SyncIndicator, OfflineBanner } from '@/components/offline'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,8 +30,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body className={`${inter.className} safe-top safe-bottom`}>
+        <SyncIndicator />
         <main className="min-h-screen pb-20">{children}</main>
         <BottomNav />
+        <OfflineBanner />
       </body>
     </html>
   )
