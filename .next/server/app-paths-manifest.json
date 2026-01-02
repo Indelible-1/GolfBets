@@ -1,0 +1,13 @@
+{
+  "/(auth)/callback/page": "app/(auth)/callback/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/ledger/page": "app/ledger/page.js",
+  "/match/[id]/page": "app/match/[id]/page.js",
+  "/match/[id]/results/page": "app/match/[id]/results/page.js",
+  "/match/[id]/scorecard/page": "app/match/[id]/scorecard/page.js",
+  "/match/new/page": "app/match/new/page.js",
+  "/page": "app/page.js",
+  "/settings/page": "app/settings/page.js"
+}

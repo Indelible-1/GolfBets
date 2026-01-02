@@ -5,7 +5,6 @@ import {
   signOut,
   signInWithPopup,
   GoogleAuthProvider,
-  Auth,
   UserCredential,
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase'

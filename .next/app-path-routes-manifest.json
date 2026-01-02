@@ -1,0 +1,13 @@
+{
+  "/(auth)/callback/page": "/callback",
+  "/(auth)/login/page": "/login",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/ledger/page": "/ledger",
+  "/match/[id]/page": "/match/[id]",
+  "/match/[id]/results/page": "/match/[id]/results",
+  "/match/[id]/scorecard/page": "/match/[id]/scorecard",
+  "/match/new/page": "/match/new",
+  "/page": "/",
+  "/settings/page": "/settings"
+}

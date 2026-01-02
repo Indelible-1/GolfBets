@@ -1,0 +1,259 @@
+[00:00:00.570] Server  LOG     ✓ Ready in 424ms
+[00:00:03.861] Server  ERROR   ⨯ ./src/hooks/useAuth.ts:5:1
+Export getAuthInstance doesn't exist in target module
+  3 | import { useEffect, useState } from 'react'
+  4 | import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+> 5 | import { getAuthInstance } from '@/lib/auth/config'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { User } from '@/types'
+  7 | import { getUser, createUser, updateUserActivity } from '@/lib/firestore/users'
+  8 |
+
+The export getAuthInstance was not found in module [project]/src/lib/auth/config.ts [app-client] (ecmascript).
+Did you mean to import signOutUser?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/hooks/useAuth.ts [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/hooks/useAuth.ts [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+
+
+
+./src/hooks/useAuth.ts:5:1
+Export getAuthInstance doesn't exist in target module
+  3 | import { useEffect, useState } from 'react'
+  4 | import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+> 5 | import { getAuthInstance } from '@/lib/auth/config'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { User } from '@/types'
+  7 | import { getUser, createUser, updateUserActivity } from '@/lib/firestore/users'
+  8 |
+
+The export getAuthInstance was not found in module [project]/src/lib/auth/config.ts [app-ssr] (ecmascript).
+Did you mean to import signOutUser?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/hooks/useAuth.ts [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/hooks/useAuth.ts [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+
+
+[00:00:03.863] Server  ERROR   ⨯ ./src/hooks/useAuth.ts:5:1
+Export getAuthInstance doesn't exist in target module
+  3 | import { useEffect, useState } from 'react'
+  4 | import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+> 5 | import { getAuthInstance } from '@/lib/auth/config'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { User } from '@/types'
+  7 | import { getUser, createUser, updateUserActivity } from '@/lib/firestore/users'
+  8 |
+
+The export getAuthInstance was not found in module [project]/src/lib/auth/config.ts [app-client] (ecmascript).
+Did you mean to import signOutUser?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/hooks/useAuth.ts [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/hooks/useAuth.ts [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+
+
+
+./src/hooks/useAuth.ts:5:1
+Export getAuthInstance doesn't exist in target module
+  3 | import { useEffect, useState } from 'react'
+  4 | import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+> 5 | import { getAuthInstance } from '@/lib/auth/config'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { User } from '@/types'
+  7 | import { getUser, createUser, updateUserActivity } from '@/lib/firestore/users'
+  8 |
+
+The export getAuthInstance was not found in module [project]/src/lib/auth/config.ts [app-ssr] (ecmascript).
+Did you mean to import signOutUser?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/hooks/useAuth.ts [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/hooks/useAuth.ts [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+
+
+[00:00:04.515] Browser ERROR   uncaughtError: Error: ./src/hooks/useAuth.ts:5:1
+Export getAuthInstance doesn't exist in target module
+  3 | import { useEffect, useState } from 'react'
+  4 | import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+> 5 | import { getAuthInstance } from '@/lib/auth/config'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { User } from '@/types'
+  7 | import { getUser, createUser, updateUserActivity } from '@/lib/firestore/users'
+  8 |
+
+The export getAuthInstance was not found in module [project]/src/lib/auth/config.ts [app-client] (ecmascript).
+Did you mean to import signOutUser?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/hooks/useAuth.ts [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/hooks/useAuth.ts [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+
+
+[00:00:04.925] Browser ERROR   ./src/hooks/useAuth.ts:5:1
+Export getAuthInstance doesn't exist in target module
+  3 | import { useEffect, useState } from 'react'
+  4 | import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+> 5 | import { getAuthInstance } from '@/lib/auth/config'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { User } from '@/types'
+  7 | import { getUser, createUser, updateUserActivity } from '@/lib/firestore/users'
+  8 |
+
+The export getAuthInstance was not found in module [project]/src/lib/auth/config.ts [app-client] (ecmascript).
+Did you mean to import signOutUser?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/hooks/useAuth.ts [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/hooks/useAuth.ts [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+[00:00:04.925] Browser ERROR   ./src/hooks/useAuth.ts:5:1
+Export getAuthInstance doesn't exist in target module
+  3 | import { useEffect, useState } from 'react'
+  4 | import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+> 5 | import { getAuthInstance } from '@/lib/auth/config'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { User } from '@/types'
+  7 | import { getUser, createUser, updateUserActivity } from '@/lib/firestore/users'
+  8 |
+
+The export getAuthInstance was not found in module [project]/src/lib/auth/config.ts [app-ssr] (ecmascript).
+Did you mean to import signOutUser?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/hooks/useAuth.ts [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/hooks/useAuth.ts [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+[00:00:04.925] Browser ERROR   ./src/hooks/useAuth.ts:5:1
+Export getAuthInstance doesn't exist in target module
+  3 | import { useEffect, useState } from 'react'
+  4 | import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+> 5 | import { getAuthInstance } from '@/lib/auth/config'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { User } from '@/types'
+  7 | import { getUser, createUser, updateUserActivity } from '@/lib/firestore/users'
+  8 |
+
+The export getAuthInstance was not found in module [project]/src/lib/auth/config.ts [app-client] (ecmascript).
+Did you mean to import signOutUser?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/hooks/useAuth.ts [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/hooks/useAuth.ts [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+[00:00:04.925] Browser ERROR   ./src/hooks/useAuth.ts:5:1
+Export getAuthInstance doesn't exist in target module
+  3 | import { useEffect, useState } from 'react'
+  4 | import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+> 5 | import { getAuthInstance } from '@/lib/auth/config'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { User } from '@/types'
+  7 | import { getUser, createUser, updateUserActivity } from '@/lib/firestore/users'
+  8 |
+
+The export getAuthInstance was not found in module [project]/src/lib/auth/config.ts [app-ssr] (ecmascript).
+Did you mean to import signOutUser?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/hooks/useAuth.ts [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/hooks/useAuth.ts [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+[00:00:09.725] Server  LOG     ✓ Compiled in 13ms
+[00:00:10.192] Server  ERROR   ⨯ FirebaseError: Firebase: No Firebase App '[DEFAULT]' has been created - call initializeApp() first (app/no-app).
+[00:00:10.444] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:10.872] Browser ERROR   uncaughtError: FirebaseError: Firebase: No Firebase App '[DEFAULT]' has been created - call initializeApp() first (app/no-app).
+[00:00:13.061] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:00:13.061] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./src/hooks/useAuth.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:00:13.070] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:00:13.075] Server  LOG     ✓ Compiled in 24ms
+[00:00:13.416] Server  ERROR   ⨯ FirebaseError: Firebase: No Firebase App '[DEFAULT]' has been created - call initializeApp() first (app/no-app).
+[00:00:13.671] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:14.225] Browser WARN    [2026-01-02T00:18:03.882Z]  @firebase/firestore: Firestore (12.6.0): enableIndexedDbPersistence() will be deprecated in the future, you can use `FirestoreSettings.cache` instead.
+[00:00:24.314] Server  ERROR   ⨯ FirebaseError: Firebase: No Firebase App '[DEFAULT]' has been created - call initializeApp() first (app/no-app).
+[00:00:54.952] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./src/lib/firestore/collections.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:00:55.077] Server  LOG     ✓ Compiled in 9ms
+[00:00:55.539] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:56.004] Browser WARN    [2026-01-02T00:18:45.810Z]  @firebase/firestore: Firestore (12.6.0): enableIndexedDbPersistence() will be deprecated in the future, you can use `FirestoreSettings.cache` instead.
+[00:00:58.816] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./src/lib/firestore/collections.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:00:58.867] Server  LOG     ✓ Compiled in 5ms
+[00:00:59.130] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:59.513] Browser WARN    [2026-01-02T00:18:49.148Z]  @firebase/firestore: Firestore (12.6.0): enableIndexedDbPersistence() will be deprecated in the future, you can use `FirestoreSettings.cache` instead.
+[00:01:03.962] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./src/lib/firestore/collections.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:01:04.027] Server  LOG     ✓ Compiled in 5ms
+[00:01:04.295] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:04.812] Browser WARN    [2026-01-02T00:18:54.636Z]  @firebase/firestore: Firestore (12.6.0): enableIndexedDbPersistence() will be deprecated in the future, you can use `FirestoreSettings.cache` instead.
+[00:01:10.879] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./src/lib/firestore/collections.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:01:10.986] Server  LOG     ✓ Compiled in 3ms
+[00:01:11.202] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:11.565] Browser WARN    [2026-01-02T00:19:01.154Z]  @firebase/firestore: Firestore (12.6.0): enableIndexedDbPersistence() will be deprecated in the future, you can use `FirestoreSettings.cache` instead.
+[00:02:05.171] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:05.623] Browser WARN    [2026-01-02T00:19:55.446Z]  @firebase/firestore: Firestore (12.6.0): enableIndexedDbPersistence() will be deprecated in the future, you can use `FirestoreSettings.cache` instead.

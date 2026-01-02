@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../src/app/%28auth%29/layout.tsx"],"sourcesContent":["export const dynamic = 'force-dynamic'\n\nexport default function AuthLayout({ children }: { children: React.ReactNode }) {\n  return <>{children}</>\n}\n"],"names":[],"mappings":"uDAEe,SAAS,EAAW,UAAE,CAAQ,CAAiC,EAC5E,MAAO,CAAA,EAAA,EAAA,GAAA,EAAA,EAAA,QAAA,CAAA,UAAG,GACZ,kCAJuB"}

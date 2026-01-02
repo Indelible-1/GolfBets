@@ -1,0 +1,126 @@
+/* [project]/src/app/globals.css [app-client] (css) */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    font-size: 16px;
+  }
+
+  body {
+    color: #111827;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: contain;
+    background-color: #fff;
+  }
+
+  :root {
+    --foreground: #111827;
+    --background: #fff;
+    --primary: #16a34a;
+    --primary-foreground: #fff;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --error: #dc2626;
+    --success: #16a34a;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #22c55e, 0 0 0 4px #22c55e80;
+  }
+}
+
+@layer components {
+  .tap-target {
+    justify-content: center;
+    align-items: center;
+    min-width: 3rem;
+    min-height: 3rem;
+    display: flex;
+  }
+
+  .score-positive {
+    color: #dc2626;
+    font-weight: 600;
+  }
+
+  .score-negative {
+    color: #16a34a;
+    font-weight: 600;
+  }
+
+  .score-even {
+    color: #4b5563;
+    font-weight: 600;
+  }
+
+  .card {
+    background-color: #fff;
+    border-radius: .75rem;
+    padding: 1rem;
+    box-shadow: 0 2px 8px -2px #0000001a, 0 2px 4px -2px #0000000f;
+  }
+
+  .card-interactive {
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: .75rem;
+    padding: 1rem;
+    transition-property: box-shadow;
+    transition-duration: .15s;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    box-shadow: 0 2px 8px -2px #0000001a, 0 2px 4px -2px #0000000f;
+  }
+
+  .card-interactive:hover {
+    box-shadow: 0 4px 12px -2px #00000026, 0 4px 6px -2px #0000001a;
+  }
+
+  .btn {
+    border-radius: .5rem;
+    justify-content: center;
+    align-items: center;
+    min-width: 3rem;
+    min-height: 3rem;
+    padding: .5rem 1rem;
+    font-weight: 600;
+    transition-property: background-color, color;
+    transition-duration: .15s;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    display: flex;
+  }
+
+  .btn:disabled {
+    opacity: .5;
+  }
+
+  .btn-primary {
+    color: #fff;
+    background-color: #16a34a;
+  }
+
+  .btn-primary:hover {
+    background-color: #15803d;
+  }
+
+  .btn-secondary {
+    color: #374151;
+    background-color: #f3f4f6;
+  }
+
+  .btn-secondary:hover {
+    background-color: #e5e7eb;
+  }
+}
+
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/*# sourceMappingURL=src_app_globals_css_bad6b30c._.single.css.map*/
