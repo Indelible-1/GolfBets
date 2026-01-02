@@ -1,5 +1,5 @@
-import { getDoc, setDoc, updateDoc, query, where, getDocs } from 'firebase/firestore'
-import { Match, MatchStatus } from '@/types'
+import { getDoc, setDoc, updateDoc, query, where, getDocs, collection, doc, getFirestore, DocumentReference } from 'firebase/firestore'
+import { Match, MatchStatus, Invite } from '@/types'
 import { matchDoc, matchesCollection } from './collections'
 
 // ============ READ ============
@@ -185,6 +185,152 @@ export async function removeParticipantFromMatch(
     })
   } catch (error) {
     console.error('Error removing participant from match:', error)
+    throw error
+  }
+}
+
+// ============ INVITES ============
+
+/**
+ * Generate a unique token for invite URL
+ */
+function generateInviteToken(): string {
+  return `invite_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
+}
+
+/**
+ * Create an invite for a match
+ * @param matchId Match to invite players to
+ * @param createdBy User creating the invite
+ * @returns Invite object with shareable token
+ */
+export async function createMatchInvite(
+  matchId: string,
+  createdBy: string,
+): Promise<Invite> {
+  try {
+    const match = await getMatch(matchId)
+    if (!match) {
+      throw new Error('Match not found')
+    }
+
+    const inviteId = `invite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    const token = generateInviteToken()
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+
+    const invite: Invite = {
+      id: inviteId,
+      token,
+      matchId,
+      groupId: null,
+      maxUses: 50,
+      useCount: 0,
+      createdBy,
+      createdAt: new Date(),
+      expiresAt,
+    }
+
+    const inviteRef = doc(getFirestore(), `matches/${matchId}/invites`, inviteId)
+    await setDoc(inviteRef, invite)
+
+    return invite
+  } catch (error) {
+    console.error('Error creating match invite:', error)
+    throw error
+  }
+}
+
+/**
+ * Find match by invite token
+ * @param token Invite token from URL
+ * @returns Match object if found and valid
+ */
+export async function getMatchByInviteToken(token: string): Promise<Match | null> {
+  try {
+    // Query all matches for this invite token
+    // This is inefficient at scale but fine for MVP
+    const matchesSnap = await getDocs(matchesCollection())
+
+    for (const matchSnap of matchesSnap.docs) {
+      const invitesRef = collection(matchSnap.ref, 'invites')
+      const inviteQuery = query(invitesRef, where('token', '==', token))
+      const invitesSnap = await getDocs(inviteQuery)
+
+      if (invitesSnap.size > 0) {
+        const invite = invitesSnap.docs[0].data() as Invite
+
+        // Check if expired or maxed out
+        if (invite.expiresAt < new Date()) {
+          throw new Error('Invite has expired')
+        }
+        if (invite.useCount >= invite.maxUses) {
+          throw new Error('Invite has reached max uses')
+        }
+
+        return matchSnap.data() as Match
+      }
+    }
+
+    return null
+  } catch (error) {
+    console.error('Error finding match by invite token:', error)
+    throw error
+  }
+}
+
+/**
+ * Accept an invite and add user to match
+ * @param token Invite token
+ * @param userId User accepting invite
+ */
+export async function acceptMatchInvite(token: string, userId: string): Promise<Match> {
+  try {
+    // Find the match and invite
+    const matchesSnap = await getDocs(matchesCollection())
+    let match: Match | null = null
+    let inviteId: string | null = null
+    let matchRef: DocumentReference<Match> | null = null
+
+    for (const matchSnap of matchesSnap.docs) {
+      const invitesRef = collection(matchSnap.ref, 'invites')
+      const inviteQuery = query(invitesRef, where('token', '==', token))
+      const invitesSnap = await getDocs(inviteQuery)
+
+      if (invitesSnap.size > 0) {
+        match = matchSnap.data() as Match
+        matchRef = matchSnap.ref
+        inviteId = invitesSnap.docs[0].id
+        break
+      }
+    }
+
+    if (!match || !inviteId || !matchRef) {
+      throw new Error('Invalid invite token')
+    }
+
+    // Check if expired or maxed out
+    if (match.completedAt && match.status === 'completed') {
+      throw new Error('Cannot join completed matches')
+    }
+
+    // Add participant if not already added
+    if (!match.participantIds.includes(userId)) {
+      match.participantIds.push(userId)
+      await updateDoc(matchRef, {
+        participantIds: match.participantIds,
+        updatedAt: new Date(),
+      })
+    }
+
+    // Increment useCount
+    const inviteRef = doc(matchRef, 'invites', inviteId)
+    await updateDoc(inviteRef, {
+      useCount: (await getDoc(inviteRef)).data()?.useCount + 1 || 1,
+    })
+
+    return match
+  } catch (error) {
+    console.error('Error accepting match invite:', error)
     throw error
   }
 }

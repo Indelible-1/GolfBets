@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Input, Card, Button } from '@/components/ui'
 import { BetSelector, type BetConfig } from './BetSelector'
 import { useAuth } from '@/hooks/useAuth'
-import { createMatch } from '@/lib/firestore/matches'
+import { createMatch, createMatchInvite } from '@/lib/firestore/matches'
 import { createBet } from '@/lib/firestore/bets'
 import { cn } from '@/lib/utils'
 
@@ -117,6 +117,9 @@ export function CreateMatchWizard() {
           },
         })
       }
+
+      // Create invite for the match
+      await createMatchInvite(matchId, user.id)
 
       router.push(`/match/${matchId}`)
     } catch (err) {

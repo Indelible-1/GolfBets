@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { Screen, Header } from '@/components/layout'
 import { Card, Button, Badge } from '@/components/ui'
 import { ProtectedRoute } from '@/components/auth'
 import { useMatch } from '@/hooks/useMatch'
+import { useMatchInvite } from '@/hooks/useMatchInvite'
 
 interface MatchDetailPageProps {
   params: { id: string }
@@ -13,7 +15,22 @@ interface MatchDetailPageProps {
 export default function MatchPage({ params }: MatchDetailPageProps) {
   const matchId = params.id
   const { match, loading, error } = useMatch(matchId)
+  const { invite } = useMatchInvite(matchId)
+  const [inviteCopied, setInviteCopied] = useState(false)
   const participants = match?.participantIds || []
+
+  const inviteUrl = invite ? `${typeof window !== 'undefined' ? window.location.origin : ''}/invite/${invite.token}` : ''
+
+  const handleCopyInvite = async () => {
+    if (!inviteUrl) return
+    try {
+      await navigator.clipboard.writeText(inviteUrl)
+      setInviteCopied(true)
+      setTimeout(() => setInviteCopied(false), 2000)
+    } catch {
+      console.error('Failed to copy invite link')
+    }
+  }
 
   const statusBadgeVariant = {
     pending: 'warning' as const,
@@ -140,6 +157,33 @@ export default function MatchPage({ params }: MatchDetailPageProps) {
               )}
             </div>
           </div>
+
+          {/* Invite Link */}
+          {invite && match.status === 'pending' && (
+            <Card variant="elevated" className="p-4">
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-600 uppercase font-semibold mb-2">Invite Link</p>
+                  <p className="text-xs text-gray-500 mb-2">Share this link with friends to invite them to the match</p>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={inviteUrl}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-xs text-gray-600 bg-gray-50"
+                  />
+                  <Button
+                    size="sm"
+                    onClick={handleCopyInvite}
+                    className={inviteCopied ? 'bg-green-500 hover:bg-green-600' : ''}
+                  >
+                    {inviteCopied ? '✅ Copied' : 'Copy'}
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
 
           {/* Action Buttons */}
           <div className="space-y-3">
