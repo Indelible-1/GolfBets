@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { BottomNav } from '@/components/layout'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${inter.className} safe-top safe-bottom`}>
         <main className="min-h-screen pb-20">{children}</main>
+        <BottomNav />
       </body>
     </html>
   )

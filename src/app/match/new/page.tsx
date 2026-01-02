@@ -1,3 +1,21 @@
+'use client'
+
+import { Screen, Header } from '@/components/layout'
+import { CreateMatchWizard } from '@/components/match'
+import { ProtectedRoute } from '@/components/auth'
+
 export default function NewMatchPage() {
-  return <div className="p-4"><h1 className="text-xl font-bold">New Match</h1><p className="text-gray-500">Frontend Engineer will implement</p></div>
+  return (
+    <ProtectedRoute>
+      <Screen padBottom>
+        <Header
+          title="New Match"
+          subtitle="Set up a golf match and configure bets"
+        />
+        <div className="p-4 pb-24">
+          <CreateMatchWizard />
+        </div>
+      </Screen>
+    </ProtectedRoute>
+  )
 }
