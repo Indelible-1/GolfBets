@@ -87,8 +87,14 @@ export function useLedger(userId: string | null): UseLedgerReturn {
         unsubscribeFrom?.()
         unsubscribeTo?.()
       }
-    } catch {
-      // Silently catch setup errors - error is already handled in onSnapshot error handler
+    } catch (err) {
+      // Handle query setup errors (e.g., invalid query construction)
+      console.error('Error setting up ledger subscriptions:', err)
+      // Schedule state update to avoid synchronous setState in effect
+      queueMicrotask(() => {
+        setError(err instanceof Error ? err : new Error('Failed to initialize ledger subscription'))
+        setLoading(false)
+      })
     }
   }, [userId])
 
@@ -145,8 +151,14 @@ export function useMatchLedger(matchId: string | null) {
       )
 
       return () => unsubscribe()
-    } catch {
-      // Silently catch setup errors - error is already handled in onSnapshot error handler
+    } catch (err) {
+      // Handle query setup errors (e.g., invalid query construction)
+      console.error('Error setting up match ledger subscription:', err)
+      // Schedule state update to avoid synchronous setState in effect
+      queueMicrotask(() => {
+        setError(err instanceof Error ? err : new Error('Failed to initialize match ledger subscription'))
+        setLoading(false)
+      })
     }
   }, [matchId])
 

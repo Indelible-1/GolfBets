@@ -38,16 +38,24 @@ export default function ResultsPage({ params }: ResultsPageProps) {
         const parts = await getMatchParticipants(matchId)
         setParticipants(parts)
 
-        // Fetch user details for each participant
+        // Fetch user details for each participant using Promise.allSettled
+        // to prevent one failed fetch from breaking the entire page
         const userMap = new Map<string, User>()
-        const userPromises = parts.map(async (part) => {
-          const userData = await getUser(part.userId)
-          if (userData) {
-            userMap.set(part.userId, userData)
+        const userResults = await Promise.allSettled(
+          parts.map(async (part) => {
+            const userData = await getUser(part.userId)
+            return { userId: part.userId, userData }
+          })
+        )
+
+        // Process successful results, log failures
+        userResults.forEach((result, index) => {
+          if (result.status === 'fulfilled' && result.value.userData) {
+            userMap.set(result.value.userId, result.value.userData)
+          } else if (result.status === 'rejected') {
+            console.warn(`Failed to fetch user data for participant ${parts[index]?.userId}:`, result.reason)
           }
         })
-
-        await Promise.all(userPromises)
         setParticipantUsers(userMap)
         setError(null)
       } catch (err) {

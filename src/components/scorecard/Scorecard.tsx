@@ -11,6 +11,7 @@ interface ScorecardProps {
   allParticipantScores: Record<string, Record<number, number | undefined>>
   participantNames: Record<string, string>
   onScoreChange: (hole: number, score: number | undefined) => Promise<void>
+  onError?: (error: Error) => void
   loading?: boolean
   className?: string
 }
@@ -24,6 +25,7 @@ export function Scorecard({
   allParticipantScores,
   participantNames,
   onScoreChange,
+  onError,
   loading = false,
   className,
 }: ScorecardProps) {
@@ -60,7 +62,13 @@ export function Scorecard({
     })
 
   const handleScoreChange = async (hole: number, score: number | undefined) => {
-    await onScoreChange(hole, score)
+    try {
+      await onScoreChange(hole, score)
+    } catch (err) {
+      console.error('Error saving score:', err)
+      const error = err instanceof Error ? err : new Error('Failed to save score')
+      onError?.(error)
+    }
   }
 
   return (

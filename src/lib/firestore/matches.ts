@@ -322,10 +322,13 @@ export async function acceptMatchInvite(token: string, userId: string): Promise<
       })
     }
 
-    // Increment useCount
+    // Increment useCount safely
     const inviteRef = doc(matchRef, 'invites', inviteId)
+    const inviteSnapshot = await getDoc(inviteRef)
+    const inviteData = inviteSnapshot.data()
+    const currentUseCount = typeof inviteData?.useCount === 'number' ? inviteData.useCount : 0
     await updateDoc(inviteRef, {
-      useCount: (await getDoc(inviteRef)).data()?.useCount + 1 || 1,
+      useCount: currentUseCount + 1,
     })
 
     return match

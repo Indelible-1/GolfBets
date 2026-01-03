@@ -12,27 +12,44 @@ interface Balance {
   onSettle?: (userId: string) => Promise<void>
 }
 
+interface SettleError {
+  userId: string
+  message: string
+}
+
 interface SettlementListProps {
   balances: Balance[]
   loading?: boolean
   className?: string
+  onSettleError?: (error: SettleError) => void
 }
 
 export function SettlementList({
   balances,
   loading = false,
   className,
+  onSettleError,
 }: SettlementListProps) {
   const [settlingUserId, setSettlingUserId] = useState<string | null>(null)
+  const [settleError, setSettleError] = useState<SettleError | null>(null)
 
   const handleSettle = async (userId: string, onSettle?: (userId: string) => Promise<void>) => {
     if (!onSettle) return
 
     setSettlingUserId(userId)
+    setSettleError(null)
     try {
       await onSettle(userId)
     } catch (err) {
       console.error('Error settling balance:', err)
+      const error: SettleError = {
+        userId,
+        message: err instanceof Error ? err.message : 'Failed to settle balance',
+      }
+      setSettleError(error)
+      onSettleError?.(error)
+      // Clear error after 5 seconds
+      setTimeout(() => setSettleError(null), 5000)
     } finally {
       setSettlingUserId(null)
     }
@@ -63,6 +80,12 @@ export function SettlementList({
 
   return (
     <div className={cn('space-y-3', className)}>
+      {settleError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+          <p className="text-red-700 text-sm">{settleError.message}</p>
+        </div>
+      )}
+
       {loading && (
         <div className="text-center py-8">
           <div className="animate-spin text-4xl mb-2">⛳</div>

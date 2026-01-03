@@ -17,19 +17,42 @@ export default function MatchPage({ params }: MatchDetailPageProps) {
   const { match, loading, error } = useMatch(matchId)
   const { invite } = useMatchInvite(matchId)
   const [inviteCopied, setInviteCopied] = useState(false)
+  const [copyError, setCopyError] = useState<string | null>(null)
   const participants = match?.participantIds || []
 
   const inviteUrl = invite ? `${typeof window !== 'undefined' ? window.location.origin : ''}/invite/${invite.token}` : ''
 
   const handleCopyInvite = async () => {
     if (!inviteUrl) return
+    setCopyError(null)
     try {
       await navigator.clipboard.writeText(inviteUrl)
       setInviteCopied(true)
       setTimeout(() => setInviteCopied(false), 2000)
-    } catch {
-      console.error('Failed to copy invite link')
+    } catch (err) {
+      console.error('Failed to copy invite link:', err)
+      setCopyError('Failed to copy link. Please copy manually.')
+      setTimeout(() => setCopyError(null), 3000)
     }
+  }
+
+  /**
+   * Safely parse teeTime from various formats (Date, Firestore Timestamp, string)
+   */
+  const parseTeeTime = (teeTime: unknown): Date => {
+    if (teeTime instanceof Date) {
+      return teeTime
+    }
+    if (typeof teeTime === 'object' && teeTime !== null && 'toDate' in teeTime) {
+      return (teeTime as { toDate: () => Date }).toDate()
+    }
+    const parsed = new Date(String(teeTime))
+    // Return current date if parsing failed
+    if (Number.isNaN(parsed.getTime())) {
+      console.warn('Invalid teeTime format, using current date:', teeTime)
+      return new Date()
+    }
+    return parsed
   }
 
   const statusBadgeVariant = {
@@ -86,15 +109,7 @@ export default function MatchPage({ params }: MatchDetailPageProps) {
                   {match.courseName}
                 </h2>
                 <p className="text-gray-600 mt-1">
-                  {new Date(
-                    match.teeTime instanceof Date
-                      ? match.teeTime
-                      : typeof match.teeTime === 'object' &&
-                          match.teeTime !== null &&
-                          'toDate' in match.teeTime
-                        ? (match.teeTime as { toDate: () => Date }).toDate()
-                        : new Date(String(match.teeTime))
-                  ).toLocaleString('en-US', {
+                  {parseTeeTime(match.teeTime).toLocaleString('en-US', {
                     weekday: 'long',
                     month: 'short',
                     day: 'numeric',
@@ -181,6 +196,9 @@ export default function MatchPage({ params }: MatchDetailPageProps) {
                     {inviteCopied ? '✅ Copied' : 'Copy'}
                   </Button>
                 </div>
+                {copyError && (
+                  <p className="text-red-600 text-xs mt-2">{copyError}</p>
+                )}
               </div>
             </Card>
           )}
