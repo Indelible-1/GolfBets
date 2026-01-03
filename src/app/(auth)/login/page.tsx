@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { sendMagicLink } from '@/lib/auth/config'
 import { Screen } from '@/components/layout'
-import { Button, Card } from '@/components/ui'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -46,51 +45,49 @@ export default function LoginPage() {
 
   if (success) {
     return (
-      <Screen gradient={true}>
-        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
-          <Card variant="elevated" className="w-full max-w-sm p-8 text-center space-y-4">
-            <div className="text-4xl">✅</div>
-            <div>
-              <h2 className="text-lg font-semibold text-emerald-900 mb-2">Magic link sent!</h2>
-              <p className="text-gray-700 text-sm">Check your email and click the link to sign in.</p>
+      <Screen gradient={true} padBottom={false} className="flex items-center justify-center">
+        <div className="px-6 w-full max-w-sm">
+          <div className="bg-white rounded-2xl p-8 text-center space-y-4 shadow-xl">
+            <div className="w-16 h-16 mx-auto bg-emerald-100 rounded-full flex items-center justify-center">
+              <span className="text-3xl">✅</span>
             </div>
-            <p className="text-xs text-gray-500">Redirecting to sign in page...</p>
-          </Card>
+            <div className="space-y-2">
+              <h2 className="text-xl font-bold text-gray-900">Check your email</h2>
+              <p className="text-gray-600 text-sm">We sent a magic link to sign you in.</p>
+            </div>
+            <p className="text-xs text-gray-400">Redirecting...</p>
+          </div>
         </div>
       </Screen>
     )
   }
 
   return (
-    <Screen gradient={true}>
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
-        {/* Logo section with enhanced glow effect */}
-        <div className="mb-12 text-center">
-          <div className="relative inline-block mb-6">
-            <div className="absolute inset-0 blur-2xl bg-emerald-400/30 scale-150 rounded-full" />
-            <span className="relative text-7xl drop-shadow-lg">⛳</span>
+    <Screen gradient={true} padBottom={false} className="flex items-center justify-center">
+      <div className="px-6 w-full max-w-sm space-y-8">
+        {/* Logo section */}
+        <div className="text-center space-y-4">
+          <div className="relative inline-block">
+            <div className="absolute inset-0 blur-3xl bg-emerald-400/40 scale-[2] rounded-full" />
+            <span className="relative text-6xl drop-shadow-2xl">⛳</span>
           </div>
-
-          <h1 className="text-4xl font-bold text-white tracking-tight mb-3">
-            GolfSettled
-          </h1>
-          <p className="text-emerald-200 text-base tracking-wide">
-            Settle bets. Track scores. Play on.
-          </p>
+          <div className="space-y-1">
+            <h1 className="text-4xl font-bold text-white tracking-tight">Sign In</h1>
+            <p className="text-emerald-200 text-sm">Enter your email to continue</p>
+          </div>
         </div>
 
-        {/* Login card with glass morphism effect */}
-        <Card variant="elevated" className="w-full max-w-sm p-8 space-y-6">
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Login form */}
+        <div className="bg-white rounded-2xl p-6 shadow-xl space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="p-4 bg-red-50/80 border border-red-200/50 rounded-lg backdrop-blur-sm">
+              <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
                 <p className="text-sm text-red-700 font-medium">{error}</p>
               </div>
             )}
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2 tracking-wide">
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
                 Email address
               </label>
               <input
@@ -102,25 +99,26 @@ export default function LoginPage() {
                 disabled={loading}
                 autoFocus
                 required
-                className="w-full px-4 py-3.5 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 font-medium"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white outline-none transition-all text-gray-900 placeholder-gray-400"
               />
             </div>
 
-            <Button type="submit" fullWidth loading={loading} size="md" variant="primary">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 px-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {loading ? 'Sending...' : 'Send Magic Link'}
-            </Button>
+            </button>
           </form>
 
-          {/* Helper text */}
-          <div className="pt-2 border-t border-white/10">
-            <p className="text-center text-gray-500 text-sm leading-relaxed">
-              No password needed — we&apos;ll email you a secure link to sign in.
-            </p>
-          </div>
-        </Card>
+          <p className="text-center text-gray-500 text-xs pt-2 border-t border-gray-100">
+            No password needed — we&apos;ll email you a secure link.
+          </p>
+        </div>
 
         {/* Footer note */}
-        <p className="text-center text-emerald-200/50 text-xs mt-8">
+        <p className="text-center text-emerald-200/60 text-xs">
           New here? Enter your email to create an account.
         </p>
       </div>

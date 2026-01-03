@@ -1,13 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/useAuth'
 
 interface SyncIndicatorProps {
   className?: string
 }
 
 export function SyncIndicator({ className }: SyncIndicatorProps) {
+  const pathname = usePathname()
+  const { user } = useAuth()
   const [isOnline, setIsOnline] = useState(
     typeof navigator !== 'undefined' ? navigator.onLine : true,
   )
@@ -24,6 +28,11 @@ export function SyncIndicator({ className }: SyncIndicatorProps) {
       window.removeEventListener('offline', handleOffline)
     }
   }, [])
+
+  // Don't show on landing/login pages when not authenticated
+  if (!user && (pathname === '/' || pathname === '/login')) {
+    return null
+  }
 
   if (isOnline) {
     return null

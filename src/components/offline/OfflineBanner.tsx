@@ -1,13 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/useAuth'
 
 interface OfflineBannerProps {
   className?: string
 }
 
 export function OfflineBanner({ className }: OfflineBannerProps) {
+  const pathname = usePathname()
+  const { user } = useAuth()
   const [isOnline, setIsOnline] = useState(
     typeof navigator !== 'undefined' ? navigator.onLine : true,
   )
@@ -40,6 +44,11 @@ export function OfflineBanner({ className }: OfflineBannerProps) {
       window.removeEventListener('offline', handleOffline)
     }
   }, [wasOffline])
+
+  // Don't show on landing/login pages when not authenticated
+  if (!user && (pathname === '/' || pathname === '/login')) {
+    return null
+  }
 
   if (!showBackOnlineMessage && isOnline) {
     return null

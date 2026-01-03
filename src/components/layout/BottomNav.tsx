@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/useAuth'
 
 interface NavItem {
   href: string
@@ -19,9 +20,15 @@ const navItems: NavItem[] = [
 
 export function BottomNav() {
   const pathname = usePathname()
+  const { user, loading } = useAuth()
 
-  // Hide on auth pages
-  if (pathname?.startsWith('/auth') || pathname?.startsWith('/(auth)')) {
+  // Hide on auth pages and when not logged in
+  if (pathname?.startsWith('/auth') || pathname?.startsWith('/(auth)') || pathname === '/login') {
+    return null
+  }
+
+  // Hide while loading or when not authenticated
+  if (loading || !user) {
     return null
   }
 
