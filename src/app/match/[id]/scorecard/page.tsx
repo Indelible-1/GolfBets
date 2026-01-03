@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { Screen, Header } from '@/components/layout'
 import { Card, Button, Modal } from '@/components/ui'
 import { Scorecard } from '@/components/scorecard'
@@ -12,11 +13,8 @@ import { useScores, useParticipantScores } from '@/hooks/useScores'
 import { createOrUpdateScore } from '@/lib/firestore/scores'
 import { updateMatchStatus } from '@/lib/firestore/matches'
 
-interface ScorecardPageProps {
-  params: { id: string }
-}
-
-export default function ScorecardPage({ params }: ScorecardPageProps) {
+export default function ScorecardPage() {
+  const params = useParams<{ id: string }>()
   const matchId = params.id
   const { user } = useAuth()
   const { match, loading: matchLoading } = useMatch(matchId)
