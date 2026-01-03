@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./.env.local)",
+      "Read(./.env.development)",
+      "Read(./.env.production)",
+      "Read(./.env.test)",
+      "Read(./secrets/**)",
+      "Read(./.secrets/**)",
+      "Read(./**/firebase-admin*.json)",
+      "Read(./**/*serviceAccount*.json)",
+      "Read(./firebase-debug.log)",
+      "Read(./pubsub-debug.log)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/*.p12)",
+      "Read(./**/*.pfx)",
+      "Read(./**/*.crt)"
+    ]
+  }
+}

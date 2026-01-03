@@ -8,6 +8,39 @@ import {
   UserCredential,
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
+import { magicLinkSchema } from '@/lib/validation/schemas'
+import { logger } from '@/lib/logger'
+
+// ============ UTILITY FUNCTIONS ============
+
+/**
+ * Create session cookie for middleware authentication
+ */
+async function createSessionCookie(idToken: string): Promise<void> {
+  try {
+    await fetch('/api/auth/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken }),
+    })
+  } catch (error) {
+    logger.error('Failed to create session cookie', error instanceof Error ? error : new Error('Unknown error'))
+    throw error
+  }
+}
+
+/**
+ * Delete session cookie on sign-out
+ */
+async function deleteSessionCookie(): Promise<void> {
+  try {
+    await fetch('/api/auth/session', {
+      method: 'DELETE',
+    })
+  } catch (error) {
+    logger.error('Failed to delete session cookie', error instanceof Error ? error : new Error('Unknown error'))
+  }
+}
 
 // ============ MAGIC LINK AUTH ============
 
@@ -16,17 +49,26 @@ import { auth } from '@/lib/firebase'
  * @param email User's email address
  */
 export async function sendMagicLink(email: string): Promise<void> {
+  // Validate email
+  const validation = magicLinkSchema.safeParse({ email })
+  if (!validation.success) {
+    throw new Error(validation.error.issues[0]?.message || 'Invalid email')
+  }
+
+  const normalizedEmail = validation.data.email
+
   const actionCodeSettings = {
     url: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
     handleCodeInApp: true,
   }
 
   try {
-    await sendSignInLinkToEmail(auth, email, actionCodeSettings)
+    await sendSignInLinkToEmail(auth, normalizedEmail, actionCodeSettings)
     // Store email in localStorage so user can confirm it after clicking link
-    localStorage.setItem('emailForSignIn', email)
+    localStorage.setItem('emailForSignIn', normalizedEmail)
+    logger.info('Magic link sent', { email: normalizedEmail })
   } catch (error) {
-    console.error('Error sending magic link:', error)
+    logger.error('Error sending magic link', error instanceof Error ? error : new Error('Unknown error'), { email: normalizedEmail })
     throw error
   }
 }
@@ -54,9 +96,15 @@ export async function completeMagicLink(): Promise<UserCredential | null> {
   try {
     const result = await signInWithEmailLink(auth, email, currentUrl)
     localStorage.removeItem('emailForSignIn')
+
+    // Create session cookie for middleware
+    const idToken = await result.user.getIdToken()
+    await createSessionCookie(idToken)
+
+    logger.info('User signed in via magic link', { userId: result.user.uid, email })
     return result
   } catch (error) {
-    console.error('Error completing magic link sign-in:', error)
+    logger.error('Error completing magic link sign-in', error instanceof Error ? error : new Error('Unknown error'), { email })
     // Provide more specific error messages
     if (error instanceof Error) {
       if (error.message.includes('expired')) {
@@ -80,9 +128,16 @@ export async function signInWithGoogle(): Promise<UserCredential> {
   const provider = new GoogleAuthProvider()
 
   try {
-    return await signInWithPopup(auth, provider)
+    const result = await signInWithPopup(auth, provider)
+
+    // Create session cookie for middleware
+    const idToken = await result.user.getIdToken()
+    await createSessionCookie(idToken)
+
+    logger.info('User signed in via Google', { userId: result.user.uid, email: result.user.email || 'not-provided' })
+    return result
   } catch (error) {
-    console.error('Error signing in with Google:', error)
+    logger.error('Error signing in with Google', error instanceof Error ? error : new Error('Unknown error'))
     throw error
   }
 }
@@ -94,9 +149,15 @@ export async function signInWithGoogle(): Promise<UserCredential> {
  */
 export async function signOutUser(): Promise<void> {
   try {
+    // Delete session cookie first
+    await deleteSessionCookie()
+
+    // Then sign out from Firebase
     await signOut(auth)
+
+    logger.info('User signed out')
   } catch (error) {
-    console.error('Error signing out:', error)
+    logger.error('Error signing out', error instanceof Error ? error : new Error('Unknown error'))
     throw error
   }
 }

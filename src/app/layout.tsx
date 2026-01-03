@@ -3,6 +3,10 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { BottomNav } from '@/components/layout'
 import { SyncIndicator, OfflineBanner } from '@/components/offline'
+import { PWAProvider } from '@/components/pwa/PWAProvider'
+import { InstallPrompt } from '@/components/pwa/InstallPrompt'
+import { IOSInstallInstructions } from '@/components/pwa/IOSInstallInstructions'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,13 +32,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/icon.svg" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
       <body className={`${inter.className} safe-top safe-bottom`}>
-        <SyncIndicator />
-        <main className="min-h-screen pb-20">{children}</main>
-        <BottomNav />
-        <OfflineBanner />
+        <ErrorBoundary>
+          <PWAProvider>
+            <SyncIndicator />
+            <main className="min-h-screen pb-20">{children}</main>
+            <BottomNav />
+            <OfflineBanner />
+            <InstallPrompt />
+            <IOSInstallInstructions />
+          </PWAProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

@@ -1,0 +1,108 @@
+# GolfSettled MVP — .gitignore
+# Copy this to your project root as `.gitignore`
+
+# ============================================
+# SECRETS — CRITICAL: Never commit these
+# ============================================
+
+# Environment variables
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Firebase credentials
+firebase-admin-key.json
+serviceAccountKey.json
+*-firebase-adminsdk-*.json
+firebase-debug.log
+.firebase/
+
+# Keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# Secrets directories
+secrets/
+.secrets/
+config/credentials.json
+
+# ============================================
+# CLAUDE CODE — Local settings
+# ============================================
+
+.claude/settings.local.json
+
+# ============================================
+# DEPENDENCIES
+# ============================================
+
+node_modules/
+.pnp
+.pnp.js
+
+# ============================================
+# BUILD & OUTPUT
+# ============================================
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Vercel
+.vercel
+
+# ============================================
+# TESTING
+# ============================================
+
+coverage/
+.nyc_output/
+
+# ============================================
+# IDE & EDITOR
+# ============================================
+
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ============================================
+# LOGS
+# ============================================
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ============================================
+# MISC
+# ============================================
+
+*.tsbuildinfo
+.eslintcache
+.cache/
+
+# ============================================
+# OPTIONAL: Uncomment if needed
+# ============================================
+
+# Local Firestore emulator data
+# firebase-data/
+
+# PWA generated files (regenerated on build)
+# public/sw.js
+# public/workbox-*.js
