@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { sendMagicLink } from '@/lib/auth/config'
-import { Screen, Header } from '@/components/layout'
-import { Input, Button, Card } from '@/components/ui'
+import { Screen } from '@/components/layout'
+import { Button, Card } from '@/components/ui'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -46,16 +46,15 @@ export default function LoginPage() {
 
   if (success) {
     return (
-      <Screen>
-        <Header title="Check your email" />
-        <div className="p-4 space-y-4">
-          <Card variant="elevated" className="bg-green-50 border border-green-200">
-            <div className="text-center">
-              <div className="text-4xl mb-3">✅</div>
-              <h2 className="text-lg font-semibold text-green-900 mb-2">Magic link sent!</h2>
-              <p className="text-green-700 mb-4">Check your email and click the link to sign in.</p>
-              <p className="text-sm text-green-600">Redirecting to sign in page...</p>
+      <Screen gradient={true}>
+        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+          <Card variant="elevated" className="w-full max-w-sm p-8 text-center space-y-4">
+            <div className="text-4xl">✅</div>
+            <div>
+              <h2 className="text-lg font-semibold text-emerald-900 mb-2">Magic link sent!</h2>
+              <p className="text-gray-700 text-sm">Check your email and click the link to sign in.</p>
             </div>
+            <p className="text-xs text-gray-500">Redirecting to sign in page...</p>
           </Card>
         </div>
       </Screen>
@@ -63,52 +62,67 @@ export default function LoginPage() {
   }
 
   return (
-    <Screen>
-      <Header title="Sign In" />
-
-      <div className="p-4 max-w-md mx-auto pt-6">
-        <Card variant="elevated" className="space-y-6">
-          {/* Title */}
-          <div className="text-center">
-            <div className="text-4xl mb-3">⛳</div>
-            <h1 className="text-2xl font-bold text-gray-900">GolfSettled</h1>
-            <p className="text-gray-500 mt-1">Track golf bets with friends</p>
+    <Screen gradient={true}>
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+        {/* Logo section with enhanced glow effect */}
+        <div className="mb-12 text-center">
+          <div className="relative inline-block mb-6">
+            <div className="absolute inset-0 blur-2xl bg-emerald-400/30 scale-150 rounded-full" />
+            <span className="relative text-7xl drop-shadow-lg">⛳</span>
           </div>
 
+          <h1 className="text-4xl font-bold text-white tracking-tight mb-3">
+            GolfSettled
+          </h1>
+          <p className="text-emerald-200 text-base tracking-wide">
+            Settle bets. Track scores. Play on.
+          </p>
+        </div>
+
+        {/* Login card with glass morphism effect */}
+        <Card variant="elevated" className="w-full max-w-sm p-8 space-y-6">
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-700">{error}</p>
+              <div className="p-4 bg-red-50/80 border border-red-200/50 rounded-lg backdrop-blur-sm">
+                <p className="text-sm text-red-700 font-medium">{error}</p>
               </div>
             )}
 
             <div>
-              <Input
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2 tracking-wide">
+                Email address
+              </label>
+              <input
                 type="email"
-                label="Email Address"
+                id="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
                 autoFocus
                 required
+                className="w-full px-4 py-3.5 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 font-medium"
               />
-              <p className="text-xs text-gray-500 mt-2">
-                We&apos;ll send you a magic link to sign in. No password needed.
-              </p>
             </div>
 
-            <Button type="submit" fullWidth loading={loading} size="md">
-              Send Magic Link
+            <Button type="submit" fullWidth loading={loading} size="md" variant="primary">
+              {loading ? 'Sending...' : 'Send Magic Link'}
             </Button>
           </form>
 
-          {/* Footer */}
-          <div className="text-center text-xs text-gray-500">
-            <p>No account? Sign in to create one.</p>
+          {/* Helper text */}
+          <div className="pt-2 border-t border-white/10">
+            <p className="text-center text-gray-500 text-sm leading-relaxed">
+              No password needed — we&apos;ll email you a secure link to sign in.
+            </p>
           </div>
         </Card>
+
+        {/* Footer note */}
+        <p className="text-center text-emerald-200/50 text-xs mt-8">
+          New here? Enter your email to create an account.
+        </p>
       </div>
     </Screen>
   )

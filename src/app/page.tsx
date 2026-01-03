@@ -38,10 +38,10 @@ export default function HomePage() {
 
   if (authLoading) {
     return (
-      <Screen className="flex items-center justify-center">
+      <Screen gradient={true} className="flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="animate-spin text-4xl">⛳</div>
-          <p className="text-gray-600">Loading GolfSettled...</p>
+          <p className="text-emerald-200">Loading GolfSettled...</p>
         </div>
       </Screen>
     )
@@ -49,42 +49,50 @@ export default function HomePage() {
 
   if (!user) {
     return (
-      <Screen className="flex flex-col items-center justify-center">
-        <div className="p-4 max-w-md w-full text-center space-y-6">
-          {/* Brand */}
-          <div>
-            <div className="text-5xl mb-3">⛳</div>
-            <h1 className="text-3xl font-bold text-fairway-700">GolfSettled</h1>
-            <p className="text-gray-500 mt-2">Track golf bets with friends</p>
+      <Screen gradient={true} className="flex flex-col items-center justify-center">
+        <div className="px-6 max-w-md w-full text-center space-y-8">
+          {/* Brand Section */}
+          <div className="pt-8 pb-4">
+            <div className="relative inline-block mb-6">
+              <div className="absolute inset-0 blur-2xl bg-emerald-400/30 scale-150 rounded-full" />
+              <span className="relative text-6xl drop-shadow-lg">⛳</span>
+            </div>
+            <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">GolfSettled</h1>
+            <p className="text-emerald-200 text-base">Track golf bets with friends</p>
           </div>
 
-          {/* Features */}
-          <div className="grid grid-cols-3 gap-3 py-6">
-            <div className="space-y-2">
-              <div className="text-2xl">🏆</div>
-              <p className="text-xs text-gray-600">Nassau</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-2xl">💰</div>
-              <p className="text-xs text-gray-600">Skins</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-2xl">📊</div>
-              <p className="text-xs text-gray-600">Ledger</p>
+          {/* Features Grid */}
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-2 text-center">
+                <div className="text-3xl">🏆</div>
+                <p className="text-sm font-medium text-emerald-200">Nassau</p>
+                <p className="text-xs text-emerald-300/60">9 & 9 betting</p>
+              </div>
+              <div className="space-y-2 text-center">
+                <div className="text-3xl">💰</div>
+                <p className="text-sm font-medium text-emerald-200">Skins</p>
+                <p className="text-xs text-emerald-300/60">Hole by hole</p>
+              </div>
+              <div className="space-y-2 text-center">
+                <div className="text-3xl">📊</div>
+                <p className="text-sm font-medium text-emerald-200">Ledger</p>
+                <p className="text-xs text-emerald-300/60">Track balances</p>
+              </div>
             </div>
           </div>
 
-          {/* CTA */}
-          <Link href="/login">
+          {/* CTA Button */}
+          <Link href="/login" className="block">
             <Button size="lg" fullWidth>
               Get Started
             </Button>
           </Link>
 
-          {/* Footer */}
-          <div className="text-xs text-gray-500 space-y-1 pt-4">
-            <p>No real money is handled by this app</p>
-            <p>Settle up offline via Venmo, Zelle, or cash</p>
+          {/* Footer Note */}
+          <div className="text-center space-y-2 text-emerald-200/70 text-sm pt-2">
+            <p className="font-medium">No real money is handled by this app</p>
+            <p className="text-xs">Settle up offline via Venmo, Zelle, or cash</p>
           </div>
         </div>
       </Screen>
@@ -92,13 +100,13 @@ export default function HomePage() {
   }
 
   return (
-    <Screen>
-      <Header title="GolfSettled" subtitle={`Hey, ${user.displayName || 'Golfer'}!`} />
+    <Screen gradient={true}>
+      <Header title="GolfSettled" subtitle={`Hey, ${user.displayName || 'Golfer'}!`} onGradient={true} />
 
       <div className="p-4 space-y-6">
         {/* Quick Action */}
         <Link href="/match/new">
-          <Card variant="elevated" className="bg-gradient-to-r from-fairway-600 to-fairway-700 text-white cursor-pointer hover:shadow-xl transition-shadow">
+          <Card variant="elevated" className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white cursor-pointer hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold">Start a Match</h2>
@@ -111,12 +119,12 @@ export default function HomePage() {
 
         {/* Matches Section */}
         <div>
-          <h2 className="text-lg font-semibold mb-3">Your Matches</h2>
+          <h2 className="text-lg font-semibold mb-3 text-white">Your Matches</h2>
 
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin inline-block text-2xl mb-2">⛳</div>
-              <p className="text-gray-500">Loading matches...</p>
+              <p className="text-emerald-200">Loading matches...</p>
             </div>
           ) : error ? (
             <Card variant="outlined" className="bg-red-50 border-red-200">
