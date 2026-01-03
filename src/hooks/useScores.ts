@@ -52,8 +52,14 @@ export function useScores(matchId: string | null): UseScoresReturn {
       )
 
       return () => unsubscribe()
-    } catch {
-      // Silently catch setup errors - error is already handled in onSnapshot error handler
+    } catch (err) {
+      // Handle query setup errors (e.g., invalid collection reference)
+      console.error('Error setting up scores subscription:', err)
+      // Schedule state update to avoid synchronous setState in effect
+      queueMicrotask(() => {
+        setError(err instanceof Error ? err : new Error('Failed to initialize scores subscription'))
+        setLoading(false)
+      })
     }
   }, [matchId])
 
@@ -104,8 +110,14 @@ export function useParticipantScores(
       )
 
       return () => unsubscribe()
-    } catch {
-      // Silently catch setup errors - error is already handled in onSnapshot error handler
+    } catch (err) {
+      // Handle query setup errors (e.g., invalid collection reference)
+      console.error('Error setting up participant scores subscription:', err)
+      // Schedule state update to avoid synchronous setState in effect
+      queueMicrotask(() => {
+        setError(err instanceof Error ? err : new Error('Failed to initialize participant scores subscription'))
+        setLoading(false)
+      })
     }
   }, [matchId, participantId])
 

@@ -73,58 +73,93 @@ export function CreateMatchWizard() {
   }
 
   const handleSubmit = async () => {
-    if (!user) return
+    if (!user) {
+      setError('You must be logged in to create a match')
+      return
+    }
 
     setLoading(true)
     setError(null)
 
+    let matchId: string | null = null
+
     try {
+      // Validate tee time
+      const teeTime = new Date(state.teeTime)
+      if (Number.isNaN(teeTime.getTime())) {
+        throw new Error('Invalid tee time. Please select a valid date and time.')
+      }
+
       const matchData = {
-        courseName: state.courseName,
-        teeTime: new Date(state.teeTime),
+        courseName: state.courseName.trim(),
+        teeTime,
         holes: state.holes,
       }
 
+      // Create the match first
       const match = await createMatch(user.id, matchData)
-      const matchId = match.id
+      matchId = match.id
 
-      // Create bets if configured
+      // Create bets if configured - wrap each in try-catch to handle partial failures
+      const betErrors: string[] = []
+
       if (state.betConfig.type === 'nassau' || state.betConfig.type === 'both') {
-        await createBet(matchId, user.id, {
-          type: 'nassau',
-          unitValue: state.betConfig.nassauAmount || 1,
-          scoringMode: 'gross',
-          nassauConfig: {
-            frontAmount: state.betConfig.nassauAmount || 1,
-            backAmount: state.betConfig.nassauAmount || 1,
-            overallAmount: state.betConfig.nassauAmount || 1,
-            autoPress: state.betConfig.nassauAutoPress ?? true,
-            pressTrigger: 1,
-            maxPresses: 3,
-          },
-        })
+        try {
+          await createBet(matchId, user.id, {
+            type: 'nassau',
+            unitValue: state.betConfig.nassauAmount || 1,
+            scoringMode: 'gross',
+            nassauConfig: {
+              frontAmount: state.betConfig.nassauAmount || 1,
+              backAmount: state.betConfig.nassauAmount || 1,
+              overallAmount: state.betConfig.nassauAmount || 1,
+              autoPress: state.betConfig.nassauAutoPress ?? true,
+              pressTrigger: 1,
+              maxPresses: 3,
+            },
+          })
+        } catch (betErr) {
+          console.error('Failed to create Nassau bet:', betErr)
+          betErrors.push('Nassau bet')
+        }
       }
 
       if (state.betConfig.type === 'skins' || state.betConfig.type === 'both') {
-        await createBet(matchId, user.id, {
-          type: 'skins',
-          unitValue: state.betConfig.skinsAmount || 1,
-          scoringMode: 'gross',
-          skinsConfig: {
-            skinValue: state.betConfig.skinsAmount || 1,
-            carryover: state.betConfig.skinsCarryover ?? true,
-            validation: true,
-          },
-        })
+        try {
+          await createBet(matchId, user.id, {
+            type: 'skins',
+            unitValue: state.betConfig.skinsAmount || 1,
+            scoringMode: 'gross',
+            skinsConfig: {
+              skinValue: state.betConfig.skinsAmount || 1,
+              carryover: state.betConfig.skinsCarryover ?? true,
+              validation: true,
+            },
+          })
+        } catch (betErr) {
+          console.error('Failed to create Skins bet:', betErr)
+          betErrors.push('Skins bet')
+        }
       }
 
       // Create invite for the match
-      await createMatchInvite(matchId, user.id)
+      try {
+        await createMatchInvite(matchId, user.id)
+      } catch (inviteErr) {
+        console.error('Failed to create invite:', inviteErr)
+        // Non-blocking - match was created, invite can be created later
+      }
+
+      // Warn about partial failures but still navigate
+      if (betErrors.length > 0) {
+        console.warn(`Match created but some bets failed: ${betErrors.join(', ')}`)
+      }
 
       router.push(`/match/${matchId}`)
     } catch (err) {
       console.error('Failed to create match:', err)
-      setError(err instanceof Error ? err.message : 'Failed to create match')
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create match'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

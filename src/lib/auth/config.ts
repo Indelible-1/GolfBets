@@ -33,24 +33,39 @@ export async function sendMagicLink(email: string): Promise<void> {
 
 /**
  * Complete sign-in with magic link from email
- * @returns UserCredential if successful
+ * @returns UserCredential if successful, null if not a magic link or not in browser
  */
 export async function completeMagicLink(): Promise<UserCredential | null> {
-  if (!isSignInWithEmailLink(auth, window.location.href)) {
+  // SSR guard - window is not available during server-side rendering
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  const currentUrl = window.location.href
+  if (!isSignInWithEmailLink(auth, currentUrl)) {
     return null
   }
 
   const email = localStorage.getItem('emailForSignIn')
   if (!email) {
-    throw new Error('No email found for magic link sign-in')
+    throw new Error('No email found for magic link sign-in. Please request a new link.')
   }
 
   try {
-    const result = await signInWithEmailLink(auth, email, window.location.href)
+    const result = await signInWithEmailLink(auth, email, currentUrl)
     localStorage.removeItem('emailForSignIn')
     return result
   } catch (error) {
     console.error('Error completing magic link sign-in:', error)
+    // Provide more specific error messages
+    if (error instanceof Error) {
+      if (error.message.includes('expired')) {
+        throw new Error('This magic link has expired. Please request a new one.')
+      }
+      if (error.message.includes('invalid')) {
+        throw new Error('This magic link is invalid. Please request a new one.')
+      }
+    }
     throw error
   }
 }

@@ -121,9 +121,10 @@ export function BetSelector({ value, onChange, className }: BetSelectorProps) {
                 step={0.5}
                 min={0.5}
                 value={localConfig.nassauAmount?.toString() || '1'}
-                onChange={(e) =>
-                  handleNassauAmountChange(parseFloat(e.target.value) || 1)
-                }
+                onChange={(e) => {
+                  const parsed = parseFloat(e.target.value)
+                  handleNassauAmountChange(Number.isNaN(parsed) ? 1 : parsed)
+                }}
                 placeholder="1.00"
               />
             </div>
@@ -162,9 +163,10 @@ export function BetSelector({ value, onChange, className }: BetSelectorProps) {
                 step={0.5}
                 min={0.5}
                 value={localConfig.skinsAmount?.toString() || '1'}
-                onChange={(e) =>
-                  handleSkinsAmountChange(parseFloat(e.target.value) || 1)
-                }
+                onChange={(e) => {
+                  const parsed = parseFloat(e.target.value)
+                  handleSkinsAmountChange(Number.isNaN(parsed) ? 1 : parsed)
+                }}
                 placeholder="1.00"
               />
             </div>
