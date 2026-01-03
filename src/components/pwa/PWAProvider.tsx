@@ -1,75 +1,66 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from 'react'
-import { registerBackgroundSync } from '@/lib/offline/registerSync'
-import { syncPendingChanges } from '@/lib/offline/syncManager'
+import { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react'
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
-}
-
-interface PWAContextType {
-  isInstallable: boolean
+interface PWAContextValue {
   isInstalled: boolean
+  isInstallable: boolean
   isIOS: boolean
-  isStandalone: boolean
-  promptInstall: () => Promise<boolean>
-  dismissInstallPrompt: () => void
+  promptInstall: () => Promise<void>
 }
 
-const PWAContext = createContext<PWAContextType | undefined>(undefined)
+const PWAContext = createContext<PWAContextValue>({
+  isInstalled: false,
+  isInstallable: false,
+  isIOS: false,
+  promptInstall: async () => {},
+})
 
 export function usePWA() {
-  const context = useContext(PWAContext)
-  if (!context) {
-    throw new Error('usePWA must be used within PWAProvider')
-  }
-  return context
+  return useContext(PWAContext)
 }
 
 interface PWAProviderProps {
   children: ReactNode
 }
 
-// Detect platform info once on client
-function getInitialPlatformInfo() {
-  if (typeof window === 'undefined') {
-    return { isIOS: false, isStandalone: false }
-  }
-  const isIOS =
-    /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-    !(window as unknown as { MSStream?: unknown }).MSStream
-  const isStandalone =
-    window.matchMedia('(display-mode: standalone)').matches ||
-    (window.navigator as unknown as { standalone?: boolean }).standalone === true
-  return { isIOS, isStandalone }
+// Type declaration for BeforeInstallPromptEvent
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
+/**
+ * PWA Provider - Manages PWA installation state and prompts
+ * Detects if app is installable, already installed, or running on iOS
+ */
 export function PWAProvider({ children }: PWAProviderProps) {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+  // Initialize state with lazy initialization to avoid effect-based setState
+  const [isInstalled, setIsInstalled] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia('(display-mode: standalone)').matches
+  })
+
   const [isInstallable, setIsInstallable] = useState(false)
-  const [appInstalled, setAppInstalled] = useState(false)
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
 
-  // Compute platform info once on mount (client-side only)
-  const platformInfo = useMemo(() => getInitialPlatformInfo(), [])
-  const { isIOS, isStandalone } = platformInfo
-
-  // isInstalled is true if app was installed via prompt OR running in standalone mode
-  const isInstalled = appInstalled || isStandalone
+  // Memoize iOS check since it doesn't change
+  const isIOS = useMemo(() => {
+    if (typeof window === 'undefined') return false
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window)
+  }, [])
 
   useEffect(() => {
-    // Android install prompt
+    // Listen for install prompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
-      const promptEvent = e as BeforeInstallPromptEvent
-      setDeferredPrompt(promptEvent)
+      setDeferredPrompt(e as BeforeInstallPromptEvent)
       setIsInstallable(true)
     }
 
-    // App installed (Android)
+    // Listen for successful install
     const handleAppInstalled = () => {
-      setAppInstalled(true)
+      setIsInstalled(true)
       setIsInstallable(false)
       setDeferredPrompt(null)
     }
@@ -77,57 +68,29 @@ export function PWAProvider({ children }: PWAProviderProps) {
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
     window.addEventListener('appinstalled', handleAppInstalled)
 
-    // Register background sync for offline support
-    registerBackgroundSync()
-
-    // Listen for service worker messages (for sync triggers)
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data?.type === 'SYNC_REQUIRED') {
-          syncPendingChanges()
-        }
-      })
-    }
-
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
       window.removeEventListener('appinstalled', handleAppInstalled)
     }
   }, [])
 
-  const promptInstall = async (): Promise<boolean> => {
-    if (!deferredPrompt) return false
+  const promptInstall = async () => {
+    if (!deferredPrompt) return
 
-    try {
-      await deferredPrompt.prompt()
-      const { outcome } = await deferredPrompt.userChoice
+    deferredPrompt.prompt()
+    const { outcome } = await deferredPrompt.userChoice
 
-      if (outcome === 'accepted') {
-        setAppInstalled(true)
-        setIsInstallable(false)
-      }
-
-      setDeferredPrompt(null)
-      return outcome === 'accepted'
-    } catch (error) {
-      console.error('Install prompt error:', error)
-      return false
+    if (outcome === 'accepted') {
+      setIsInstalled(true)
     }
-  }
 
-  const dismissInstallPrompt = () => {
+    setDeferredPrompt(null)
     setIsInstallable(false)
-    localStorage.setItem('pwa-install-dismissed', Date.now().toString())
   }
 
-  const value: PWAContextType = {
-    isInstallable,
-    isInstalled,
-    isIOS,
-    isStandalone,
-    promptInstall,
-    dismissInstallPrompt,
-  }
-
-  return <PWAContext.Provider value={value}>{children}</PWAContext.Provider>
+  return (
+    <PWAContext.Provider value={{ isInstalled, isInstallable, isIOS, promptInstall }}>
+      {children}
+    </PWAContext.Provider>
+  )
 }

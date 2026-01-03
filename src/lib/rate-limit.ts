@@ -1,4 +1,4 @@
-import { LRUCache as LRU } from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 
 export interface RateLimitConfig {
   interval: number
@@ -10,7 +10,7 @@ export interface RateLimitConfig {
  * Suitable for MVP - no Redis needed
  */
 export function rateLimit(config: RateLimitConfig) {
-  const tokenCache = new LRU<string, number>({
+  const tokenCache = new LRUCache<string, number>({
     max: config.uniqueTokenPerInterval,
     ttl: config.interval,
   })
