@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
 import { Screen, Header } from '@/components/layout'
-import { Card, Button } from '@/components/ui'
+import { Card } from '@/components/ui'
 import { MatchCard } from '@/components/match'
 import { getUserMatches } from '@/lib/firestore/matches'
 import type { Match } from '@/types'
@@ -49,49 +49,55 @@ export default function HomePage() {
 
   if (!user) {
     return (
-      <Screen gradient={true} className="flex flex-col items-center justify-center">
-        <div className="px-6 max-w-md w-full text-center space-y-8">
+      <Screen gradient={true} padBottom={false} className="flex flex-col items-center justify-center">
+        <div className="px-6 max-w-md w-full text-center space-y-10">
           {/* Brand Section */}
-          <div className="pt-8 pb-4">
-            <div className="relative inline-block mb-6">
-              <div className="absolute inset-0 blur-2xl bg-emerald-400/30 scale-150 rounded-full" />
-              <span className="relative text-6xl drop-shadow-lg">⛳</span>
+          <div className="space-y-4">
+            <div className="relative inline-block">
+              <div className="absolute inset-0 blur-3xl bg-emerald-400/40 scale-[2] rounded-full" />
+              <span className="relative text-7xl drop-shadow-2xl">⛳</span>
             </div>
-            <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">GolfSettled</h1>
-            <p className="text-emerald-200 text-base">Track golf bets with friends</p>
+            <div className="space-y-2">
+              <h1 className="text-5xl font-bold text-white tracking-tight">GolfSettled</h1>
+              <p className="text-emerald-100 text-lg">Track golf bets with friends</p>
+            </div>
           </div>
 
-          {/* Features Grid */}
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 space-y-4">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2 text-center">
-                <div className="text-3xl">🏆</div>
-                <p className="text-sm font-medium text-emerald-200">Nassau</p>
-                <p className="text-xs text-emerald-300/60">9 & 9 betting</p>
+          {/* Features - Simple and clean */}
+          <div className="grid grid-cols-3 gap-6 py-6">
+            <div className="space-y-2 text-center">
+              <div className="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center">
+                <span className="text-2xl">🏆</span>
               </div>
-              <div className="space-y-2 text-center">
-                <div className="text-3xl">💰</div>
-                <p className="text-sm font-medium text-emerald-200">Skins</p>
-                <p className="text-xs text-emerald-300/60">Hole by hole</p>
+              <p className="text-sm font-semibold text-white">Nassau</p>
+              <p className="text-xs text-emerald-200/70">Front 9 + Back 9</p>
+            </div>
+            <div className="space-y-2 text-center">
+              <div className="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center">
+                <span className="text-2xl">💰</span>
               </div>
-              <div className="space-y-2 text-center">
-                <div className="text-3xl">📊</div>
-                <p className="text-sm font-medium text-emerald-200">Ledger</p>
-                <p className="text-xs text-emerald-300/60">Track balances</p>
+              <p className="text-sm font-semibold text-white">Skins</p>
+              <p className="text-xs text-emerald-200/70">Hole by hole</p>
+            </div>
+            <div className="space-y-2 text-center">
+              <div className="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center">
+                <span className="text-2xl">📊</span>
               </div>
+              <p className="text-sm font-semibold text-white">Ledger</p>
+              <p className="text-xs text-emerald-200/70">Track balances</p>
             </div>
           </div>
 
           {/* CTA Button */}
           <Link href="/login" className="block">
-            <Button size="lg" fullWidth>
+            <button className="w-full py-4 px-6 bg-white text-emerald-800 font-bold text-lg rounded-2xl shadow-lg hover:bg-emerald-50 hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
               Get Started
-            </Button>
+            </button>
           </Link>
 
           {/* Footer Note */}
-          <div className="text-center space-y-2 text-emerald-200/70 text-sm pt-2">
-            <p className="font-medium">No real money is handled by this app</p>
+          <div className="space-y-1 text-emerald-200/60 text-sm pb-8">
+            <p>No real money handled by this app</p>
             <p className="text-xs">Settle up offline via Venmo, Zelle, or cash</p>
           </div>
         </div>
