@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { BottomNav } from '@/components/layout'
 import { SyncIndicator, OfflineBanner } from '@/components/offline'
@@ -9,8 +8,6 @@ import { IOSInstallInstructions } from '@/components/pwa/IOSInstallInstructions'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 export const dynamic = 'force-dynamic'
-
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 export const metadata: Metadata = {
   title: { default: 'GolfSettled', template: '%s | GolfSettled' },
@@ -34,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
-      <body className={`${inter.className} safe-top safe-bottom`}>
+      <body className="font-sans safe-top safe-bottom">
         <ErrorBoundary>
           <PWAProvider>
             <SyncIndicator />

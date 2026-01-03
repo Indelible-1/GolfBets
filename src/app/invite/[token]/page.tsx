@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { Screen, Header } from '@/components/layout'
 import { Card } from '@/components/ui'
 import { InviteCard } from '@/components/invite'
@@ -9,11 +9,8 @@ import { useAuth } from '@/hooks/useAuth'
 import { getMatchByInviteToken, acceptMatchInvite } from '@/lib/firestore/matches'
 import type { Match } from '@/types'
 
-interface InvitePageProps {
-  params: { token: string }
-}
-
-export default function InvitePage({ params }: InvitePageProps) {
+export default function InvitePage() {
+  const params = useParams<{ token: string }>()
   const token = params.token
   const router = useRouter()
   const { user: authUser, firebaseUser } = useAuth()

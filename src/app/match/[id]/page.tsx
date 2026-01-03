@@ -2,17 +2,15 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { useParams } from 'next/navigation'
 import { Screen, Header } from '@/components/layout'
 import { Card, Button, Badge } from '@/components/ui'
 import { ProtectedRoute } from '@/components/auth'
 import { useMatch } from '@/hooks/useMatch'
 import { useMatchInvite } from '@/hooks/useMatchInvite'
 
-interface MatchDetailPageProps {
-  params: { id: string }
-}
-
-export default function MatchPage({ params }: MatchDetailPageProps) {
+export default function MatchPage() {
+  const params = useParams<{ id: string }>()
   const matchId = params.id
   const { match, loading, error } = useMatch(matchId)
   const { invite } = useMatchInvite(matchId)

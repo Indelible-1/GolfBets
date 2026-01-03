@@ -7,11 +7,8 @@ import { Modal, Button } from '@/components/ui'
 export function IOSInstallInstructions() {
   const { isIOS, isStandalone } = usePWA()
   const [isOpen, setIsOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-
     // Check if user dismissed recently (within 14 days)
     const dismissed = localStorage.getItem('ios-install-dismissed')
     if (dismissed) {
@@ -22,17 +19,13 @@ export function IOSInstallInstructions() {
     }
 
     // Show modal after 45 seconds on iOS if not installed
-    if (isIOS && !isStandalone && !isOpen) {
+    if (isIOS && !isStandalone) {
       const timer = setTimeout(() => {
         setIsOpen(true)
       }, 45000)
       return () => clearTimeout(timer)
     }
-  }, [isIOS, isStandalone, isOpen])
-
-  if (!mounted) {
-    return null
-  }
+  }, [isIOS, isStandalone])
 
   const handleDismiss = () => {
     setIsOpen(false)
@@ -65,7 +58,7 @@ export function IOSInstallInstructions() {
                 Tap the <span className="font-semibold">Share button</span> in Safari
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                (It's at the bottom of your screen)
+                (It&apos;s at the bottom of your screen)
               </p>
             </div>
           </div>
@@ -76,7 +69,7 @@ export function IOSInstallInstructions() {
             </div>
             <div className="flex-1">
               <p className="text-sm text-gray-700 font-medium">
-                Scroll down and tap <span className="font-semibold">"Add to Home Screen"</span>
+                Scroll down and tap <span className="font-semibold">&quot;Add to Home Screen&quot;</span>
               </p>
             </div>
           </div>
@@ -87,7 +80,7 @@ export function IOSInstallInstructions() {
             </div>
             <div className="flex-1">
               <p className="text-sm text-gray-700 font-medium">
-                Tap <span className="font-semibold">"Add"</span> to install
+                Tap <span className="font-semibold">&quot;Add&quot;</span> to install
               </p>
             </div>
           </div>

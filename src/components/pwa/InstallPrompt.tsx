@@ -8,11 +8,8 @@ import { cn } from '@/lib/utils'
 export function InstallPrompt() {
   const { isInstallable, isInstalled, promptInstall, dismissInstallPrompt } = usePWA()
   const [visible, setVisible] = useState(false)
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-
     // Check if user dismissed recently (within 7 days)
     const dismissed = localStorage.getItem('pwa-install-dismissed')
     if (dismissed) {
@@ -24,17 +21,13 @@ export function InstallPrompt() {
 
     // Show prompt after 30 seconds on first visit
     const timer = setTimeout(() => {
-      if (isInstallable && !isInstalled && !visible) {
+      if (isInstallable && !isInstalled) {
         setVisible(true)
       }
     }, 30000)
 
     return () => clearTimeout(timer)
-  }, [isInstallable, isInstalled, visible])
-
-  if (!mounted) {
-    return null
-  }
+  }, [isInstallable, isInstalled])
 
   const handleInstall = async () => {
     const accepted = await promptInstall()
