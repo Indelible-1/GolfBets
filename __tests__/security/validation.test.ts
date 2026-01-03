@@ -141,8 +141,8 @@ describe('Handicap Validation', () => {
     expect(result.success).toBe(false)
   })
 
-  it('rejects non-integer handicaps', () => {
+  it('accepts decimal handicaps (golf handicaps can be e.g. 10.5)', () => {
     const result = handicapSchema.safeParse(10.5)
-    expect(result.success).toBe(false)
+    expect(result.success).toBe(true)
   })
 })
