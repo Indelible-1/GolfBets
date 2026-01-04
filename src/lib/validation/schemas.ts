@@ -4,11 +4,13 @@ import { z } from 'zod'
 
 export const emailSchema = z
   .string()
-  .email('Invalid email address')
-  .min(5, 'Email too short')
-  .max(254, 'Email too long')
-  .toLowerCase()
-  .trim()
+  .transform((s) => s.trim().toLowerCase())
+  .pipe(
+    z.string()
+      .email('Invalid email address')
+      .min(5, 'Email too short')
+      .max(254, 'Email too long')
+  )
 
 export const magicLinkSchema = z.object({
   email: emailSchema,

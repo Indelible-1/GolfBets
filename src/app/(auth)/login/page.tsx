@@ -34,7 +34,7 @@ export default function LoginPage() {
 
       // Auto-redirect after 3 seconds
       setTimeout(() => {
-        router.push('/auth/callback')
+        router.push('/callback')
       }, 3000)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send magic link')
