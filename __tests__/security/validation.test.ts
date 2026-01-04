@@ -44,9 +44,11 @@ describe('Email Validation', () => {
     })
   })
 
-  it('rejects SQL injection attempts', () => {
+  it('accepts emails with apostrophes (valid per RFC 5321, SQL injection is handled by Firestore)', () => {
+    // Apostrophes are valid in email local parts per RFC 5321
+    // SQL injection protection is provided by Firestore's parameterized queries, not email validation
     const result = emailSchema.safeParse("admin'--@test.com")
-    expect(result.success).toBe(false)
+    expect(result.success).toBe(true)
   })
 
   it('rejects XSS attempts', () => {
@@ -141,7 +143,7 @@ describe('Handicap Validation', () => {
     expect(result.success).toBe(false)
   })
 
-  it('accepts decimal handicaps (golf handicaps can be e.g. 10.5)', () => {
+  it('accepts decimal handicaps (golf handicap indexes are decimals)', () => {
     const result = handicapSchema.safeParse(10.5)
     expect(result.success).toBe(true)
   })

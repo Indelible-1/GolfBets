@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { Screen, Header } from '@/components/layout'
 import { Button, Card } from '@/components/ui'
 import { ResultsCard } from '@/components/results'
@@ -13,11 +14,8 @@ import { getMatchParticipants } from '@/lib/firestore/participants'
 import { getUser } from '@/lib/firestore/users'
 import type { Participant, User } from '@/types'
 
-interface ResultsPageProps {
-  params: { id: string }
-}
-
-export default function ResultsPage({ params }: ResultsPageProps) {
+export default function ResultsPage() {
+  const params = useParams<{ id: string }>()
   const matchId = params.id
   const { user } = useAuth()
   const { match, loading: matchLoading } = useMatch(matchId)
