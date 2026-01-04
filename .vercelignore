@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Development
+*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Test files
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+e2e/
+playwright-report/
+coverage/
+
+# Firebase
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+pubsub-debug.log
+functions/node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Outputs
+outputs/
