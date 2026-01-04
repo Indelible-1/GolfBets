@@ -41,10 +41,9 @@ export default function LedgerPage() {
 
         // Mark all as settled
         for (const entry of entriesToSettle) {
-          // Need to extract matchId from entry - it's in the parent reference
+          // TODO: Need to extract matchId from entry - it's in the parent reference
           // For now, we'll need to track this differently or store it in the entry
-          // Workaround: find the match that contains this ledger entry
-          console.log('Settling entry:', entry.id)
+          void entry.id // Placeholder until settlement logic is implemented
         }
       } catch (err) {
         console.error('Error settling:', err)
