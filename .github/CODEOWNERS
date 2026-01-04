@@ -1,0 +1,16 @@
+# CODEOWNERS - Require review for sensitive files
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Security-sensitive files require owner review
+firestore.rules @Indelible-1
+firestore.indexes.json @Indelible-1
+.github/workflows/ @Indelible-1
+.github/dependabot.yml @Indelible-1
+
+# Environment and config
+*.config.js @Indelible-1
+*.config.ts @Indelible-1
+*.config.mjs @Indelible-1
+
+# Firebase functions
+functions/ @Indelible-1
