@@ -126,6 +126,7 @@ golfsettled-mvp/
 │   ├── manifest.json           # PWA manifest
 │   └── icons/                  # App icons
 ├── docs/                       # Documentation
+│   └── prompts/                # Engineer role prompts
 ├── scripts/                    # Dev scripts
 ├── __tests__/                  # Test files
 ├── .env.example
