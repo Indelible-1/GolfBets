@@ -58,7 +58,7 @@ export async function sendMagicLink(email: string): Promise<void> {
   const normalizedEmail = validation.data.email
 
   const actionCodeSettings = {
-    url: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/callback`,
     handleCodeInApp: true,
   }
 
