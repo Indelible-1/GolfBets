@@ -1,36 +1,9 @@
 /**
- * Environment configuration with runtime validation
- * Fails fast if required variables are missing
+ * Environment configuration
+ * Provides typed access to environment variables
+ *
+ * Note: Validation is done at runtime in API routes, not during build
  */
-
-const requiredEnvVars = [
-  'NEXT_PUBLIC_FIREBASE_API_KEY',
-  'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN',
-  'NEXT_PUBLIC_FIREBASE_PROJECT_ID',
-  'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET',
-  'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
-  'NEXT_PUBLIC_FIREBASE_APP_ID',
-] as const
-
-// Validate on import (server-side only in production)
-function validateEnv(): void {
-  if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
-    const missing: string[] = []
-    for (const envVar of requiredEnvVars) {
-      if (!process.env[envVar]) {
-        missing.push(envVar)
-      }
-    }
-    if (missing.length > 0) {
-      throw new Error(
-        `Missing required environment variables: ${missing.join(', ')}`
-      )
-    }
-  }
-}
-
-// Run validation
-validateEnv()
 
 export const env = {
   // Firebase
