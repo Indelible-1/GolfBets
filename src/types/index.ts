@@ -199,6 +199,101 @@ export interface Invite {
   createdAt: Date
 }
 
+// ============ GROUPS (Social) ============
+
+export type SeasonPeriod = 'monthly' | 'quarterly' | 'yearly' | 'custom'
+export type SeasonStatus = 'active' | 'completed'
+export type TrendDirection = 'up' | 'down' | 'same'
+
+export interface GroupSettings {
+  defaultBets: Bet[]
+  defaultCourse: string | null
+}
+
+export interface GroupStats {
+  totalMatches: number
+  lastMatchDate: Date | null
+}
+
+export interface Group {
+  id: string
+  name: string
+  createdBy: string
+  memberIds: string[]
+  createdAt: Date
+  updatedAt: Date
+  settings: GroupSettings
+  stats: GroupStats
+}
+
+export interface GroupMember {
+  id: string
+  displayName: string
+  avatarUrl: string | null
+  matchesPlayed: number
+  netAmount: number
+}
+
+export interface GroupWithMembers extends Group {
+  members: GroupMember[]
+}
+
+// ============ SEASONS (Social) ============
+
+export interface Season {
+  id: string
+  groupId: string
+  name: string
+  period: SeasonPeriod
+  startDate: Date
+  endDate: Date
+  status: SeasonStatus
+  standings: SeasonStanding[]
+}
+
+export interface SeasonStanding {
+  playerId: string
+  displayName: string
+  netAmount: number
+  matchesPlayed: number
+  wins: number
+  losses: number
+  rank: number
+  trend: TrendDirection
+}
+
+// ============ QUICK REMATCH (Social) ============
+
+export interface RematchConfig {
+  originalMatchId: string
+  participantIds: string[]
+  courseName: string
+  bets: Bet[]
+  teeTime: Date | null
+}
+
+// ============ BET TEMPLATES (Social) ============
+
+export interface BetTemplate {
+  id: string
+  userId: string
+  name: string
+  bets: Bet[]
+  createdAt: Date
+  isDefault: boolean
+}
+
+// ============ GROUP INVITES (Social) ============
+
+export interface GroupInvite {
+  groupId: string
+  groupName: string
+  invitedBy: string
+  invitedByName: string
+  expiresAt: Date
+  token: string
+}
+
 // ============ FIRESTORE CONVERTERS ============
 
 export type FirestoreUser = Omit<User, 'createdAt' | 'updatedAt' | 'lastActiveAt'> & {
@@ -241,5 +336,30 @@ export type FirestoreAuditEntry = Omit<AuditEntry, 'changedAt'> & {
 
 export type FirestoreInvite = Omit<Invite, 'createdAt' | 'expiresAt'> & {
   createdAt: Timestamp
+  expiresAt: Timestamp
+}
+
+// Social Feature Firestore Types
+
+export type FirestoreGroupStats = Omit<GroupStats, 'lastMatchDate'> & {
+  lastMatchDate: Timestamp | null
+}
+
+export type FirestoreGroup = Omit<Group, 'createdAt' | 'updatedAt' | 'stats'> & {
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  stats: FirestoreGroupStats
+}
+
+export type FirestoreSeason = Omit<Season, 'startDate' | 'endDate'> & {
+  startDate: Timestamp
+  endDate: Timestamp
+}
+
+export type FirestoreBetTemplate = Omit<BetTemplate, 'createdAt'> & {
+  createdAt: Timestamp
+}
+
+export type FirestoreGroupInvite = Omit<GroupInvite, 'expiresAt'> & {
   expiresAt: Timestamp
 }

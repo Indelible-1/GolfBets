@@ -20,9 +20,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stats UI components: `StatCard`, `StreakBadge`, `WinLossRatio`, `HeadToHeadRow`, `NetChart`, `WrappedCard`
 - Comprehensive unit tests for analytics functions (53 tests)
 
+#### Social Features (2026-01-05)
+
+- **Friend Groups**: Create named groups for recurring players
+  - Group creation, editing, and deletion
+  - Member management (add/remove)
+  - Default bet configurations per group
+  - Group statistics tracking
+  - Pages: `/groups`, `/groups/new`, `/groups/[id]`, `/groups/[id]/settings`
+- **Season Leaderboards**: Monthly/quarterly standings within groups
+  - Automatic season creation (monthly by default)
+  - Rankings with trend indicators (up/down/same)
+  - Win-loss records and net amounts
+  - Historical season data
+  - Page: `/groups/[id]/leaderboard`
+- **Quick Rematch**: One-tap to recreate completed matches
+  - Preserves participants, course, and bet configuration
+  - Allows modifications before starting
+  - Integrated into match results page
+- **Bet Templates**: Save and reuse favorite bet configurations
+  - Create templates from match setup
+  - Set default template for quick match creation
+  - Private templates (user-owned)
+  - Page: `/templates`
+- Social library (`src/lib/social/`) with groups, seasons, leaderboard, rematch, and templates modules
+- React hooks: `useGroups`, `useGroup`, `useSeasonStandings`, `useBetTemplates`
+- Social UI components: `GroupCard`, `GroupMemberList`, `LeaderboardTable`, `SeasonSelector`, `QuickRematchButton`, `TemplateSelector`
+- Firestore collections: `groups`, `seasons`, `betTemplates`
+- Unit tests for social features (groups, leaderboard, rematch, seasons)
+
 ### Changed
 
-- (Modifications to existing features go here)
+- Updated Firestore security rules for groups, seasons, and bet templates
 
 ### Fixed
 
@@ -34,7 +63,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- (Security fixes go here)
+- Firestore rules enforce group membership for reads
+- Only group creators can modify group settings
+- Bet templates are private to the owner
+- Season updates restricted to standings and status fields
 
 ---
 

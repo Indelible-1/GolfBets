@@ -20,6 +20,14 @@ import {
   FirestoreAuditEntry,
   Invite,
   FirestoreInvite,
+  Group,
+  FirestoreGroup,
+  Season,
+  FirestoreSeason,
+  BetTemplate,
+  FirestoreBetTemplate,
+  GroupInvite,
+  FirestoreGroupInvite,
 } from '@/types'
 
 // ============ TIMESTAMP HELPERS ============
@@ -185,6 +193,87 @@ export const inviteConverter: FirestoreDataConverter<Invite> = {
       ...data,
       id: snapshot.id,
       createdAt: data.createdAt.toDate(),
+      expiresAt: data.expiresAt.toDate(),
+    }
+  },
+}
+
+// ============ GROUP CONVERTER ============
+
+export const groupConverter: FirestoreDataConverter<Group> = {
+  toFirestore: (group: Group): FirestoreGroup => ({
+    ...group,
+    createdAt: Timestamp.fromDate(group.createdAt),
+    updatedAt: Timestamp.fromDate(group.updatedAt),
+    stats: {
+      ...group.stats,
+      lastMatchDate: group.stats.lastMatchDate
+        ? Timestamp.fromDate(group.stats.lastMatchDate)
+        : null,
+    },
+  }),
+  fromFirestore: (snapshot: QueryDocumentSnapshot<FirestoreGroup>): Group => {
+    const data = snapshot.data()
+    return {
+      ...data,
+      id: snapshot.id,
+      createdAt: data.createdAt.toDate(),
+      updatedAt: data.updatedAt.toDate(),
+      stats: {
+        ...data.stats,
+        lastMatchDate: data.stats.lastMatchDate?.toDate() ?? null,
+      },
+    }
+  },
+}
+
+// ============ SEASON CONVERTER ============
+
+export const seasonConverter: FirestoreDataConverter<Season> = {
+  toFirestore: (season: Season): FirestoreSeason => ({
+    ...season,
+    startDate: Timestamp.fromDate(season.startDate),
+    endDate: Timestamp.fromDate(season.endDate),
+  }),
+  fromFirestore: (snapshot: QueryDocumentSnapshot<FirestoreSeason>): Season => {
+    const data = snapshot.data()
+    return {
+      ...data,
+      id: snapshot.id,
+      startDate: data.startDate.toDate(),
+      endDate: data.endDate.toDate(),
+    }
+  },
+}
+
+// ============ BET TEMPLATE CONVERTER ============
+
+export const betTemplateConverter: FirestoreDataConverter<BetTemplate> = {
+  toFirestore: (template: BetTemplate): FirestoreBetTemplate => ({
+    ...template,
+    createdAt: Timestamp.fromDate(template.createdAt),
+  }),
+  fromFirestore: (snapshot: QueryDocumentSnapshot<FirestoreBetTemplate>): BetTemplate => {
+    const data = snapshot.data()
+    return {
+      ...data,
+      id: snapshot.id,
+      createdAt: data.createdAt.toDate(),
+    }
+  },
+}
+
+// ============ GROUP INVITE CONVERTER ============
+
+export const groupInviteConverter: FirestoreDataConverter<GroupInvite> = {
+  toFirestore: (invite: GroupInvite): FirestoreGroupInvite => ({
+    ...invite,
+    expiresAt: Timestamp.fromDate(invite.expiresAt),
+  }),
+  fromFirestore: (snapshot: QueryDocumentSnapshot<FirestoreGroupInvite>): GroupInvite => {
+    const data = snapshot.data()
+    return {
+      ...data,
       expiresAt: data.expiresAt.toDate(),
     }
   },
