@@ -1,7 +1,7 @@
 # GolfSettled MVP — Security Practices
 
 > **Version:** 0.1.0
-> **Last Updated:** 2025-01-01
+> **Last Updated:** 2026-01-04
 > **Audience:** All Engineers
 
 ---
@@ -454,6 +454,88 @@ Create `.claude/settings.json`:
 | High | Exploitable vulnerability | < 24 hours |
 | Medium | Potential vulnerability | < 1 week |
 | Low | Best practice violation | Next sprint |
+
+---
+
+## 📦 Dependency Security
+
+### OpenSSF Scorecard Analysis
+
+**Last Reviewed:** 2026-01-04
+
+The project uses GitHub's dependency review action with OpenSSF Scorecard integration. This section documents findings from the latest audit.
+
+#### Summary
+
+| Check | Status |
+|-------|--------|
+| Vulnerable packages | ✅ 0 |
+| Incompatible licenses | ✅ 0 |
+| Invalid SPDX licenses | ✅ 0 |
+| Unknown licenses | ✅ 0 |
+| OpenSSF Scorecard issues | ⚠️ 3 packages |
+
+#### Low-Scoring Dependencies
+
+All three flagged packages are **transitive dev dependencies** of `msw` (Mock Service Worker), a testing library. They do not ship to production.
+
+| Package | Score | Parent | Risk |
+|---------|-------|--------|------|
+| `strict-event-emitter` | 2.5 | msw | Dev-only, no active CVEs |
+| `outvariant` | 2.9 | msw | Dev-only, no active CVEs |
+| `signal-exit` | 2.6 | @inquirer/core → msw | Dev-only, no active CVEs |
+
+**Why These Scores Are Low:**
+- **Maintained: 0** — No commits in 90 days (may be "finished" stable code)
+- **Code-Review: Low** — Small projects often have single maintainers
+- **Token-Permissions: 0** — GitHub workflow config issues (not our problem)
+
+#### Risk Assessment
+
+**Low Risk** — These are:
+1. Development dependencies only (not bundled in production)
+2. Used only during testing (msw mocks API requests)
+3. Have no known vulnerabilities (0 CVEs)
+4. Part of a well-maintained parent package (msw score: 4.1, actively updated)
+
+**Mitigating Factors:**
+- msw itself is actively maintained (10/10 Maintained score)
+- These sub-dependencies are small, stable libraries
+- They only execute in dev/CI environments, not production
+- No code paths in production depend on them
+
+#### Recommendations
+
+1. **No immediate action required** — Continue using msw for testing
+2. **Monitor quarterly** — Check if msw updates these dependencies
+3. **Consider alternatives only if:**
+   - A CVE is published for these packages
+   - msw becomes unmaintained
+   - You need to reduce dev dependency attack surface
+
+#### Alternative Testing Libraries (If Needed)
+
+| Library | Use Case | Notes |
+|---------|----------|-------|
+| `nock` | HTTP mocking | Simpler, fewer dependencies |
+| `fetch-mock` | Fetch mocking | Lightweight |
+| `vitest` | Built-in mocking | If migrating from Jest |
+
+#### Dependency Audit Commands
+
+```bash
+# Check for vulnerabilities
+npm audit
+
+# View dependency tree for a package
+npm ls <package-name>
+
+# Check why a package is installed
+npm explain <package-name>
+
+# Update to latest compatible versions
+npm update
+```
 
 ---
 
