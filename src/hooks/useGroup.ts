@@ -18,7 +18,7 @@ interface UseGroupReturn {
 export function useGroup(groupId: string | null | undefined): UseGroupReturn {
   const [group, setGroup] = useState<Group | null>(null)
   const [users, setUsers] = useState<Map<string, User>>(new Map())
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(!!groupId)
   const [error, setError] = useState<Error | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
 
@@ -29,34 +29,38 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
   // Subscribe to group changes
   useEffect(() => {
     if (!groupId) {
-      // Return early - state is reset in the hook based on groupId
       return
     }
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsLoading(true)
-     
-    setError(null)
+    let isMounted = true
 
     const unsubscribe = onSnapshot(
       groupDoc(groupId),
       (snapshot) => {
-        if (!snapshot.exists()) {
-          setGroup(null)
-          setError(new Error('Group not found'))
-        } else {
-          setGroup(snapshot.data())
+        if (isMounted) {
+          if (!snapshot.exists()) {
+            setGroup(null)
+            setError(new Error('Group not found'))
+          } else {
+            setGroup(snapshot.data())
+            setError(null)
+          }
+          setIsLoading(false)
         }
-        setIsLoading(false)
       },
       (err) => {
-        console.error('Error fetching group:', err)
-        setError(err)
-        setIsLoading(false)
+        if (isMounted) {
+          console.error('Error fetching group:', err)
+          setError(err)
+          setIsLoading(false)
+        }
       }
     )
 
-    return () => unsubscribe()
+    return () => {
+      isMounted = false
+      unsubscribe()
+    }
   }, [groupId, refreshKey])
 
   // Memoize memberIds string for dependency tracking
@@ -65,9 +69,10 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
   // Fetch member user data when group changes
   useEffect(() => {
     if (!group || group.memberIds.length === 0) {
-      // Users map is reset via useMemo when group changes
       return
     }
+
+    let isMounted = true
 
     const fetchUsers = async () => {
       try {
@@ -87,13 +92,19 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
           })
         }
 
-        setUsers(allUsers)
+        if (isMounted) {
+          setUsers(allUsers)
+        }
       } catch (err) {
         console.error('Error fetching group members:', err)
       }
     }
 
     fetchUsers()
+
+    return () => {
+      isMounted = false
+    }
   }, [group, memberIdsKey])
 
   // Compute members with user data
@@ -118,5 +129,12 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
     return { ...group, members }
   }, [group, members])
 
-  return { group, members, groupWithMembers, isLoading, error, refetch }
+  // Derive state based on groupId - if no groupId, return empty defaults
+  const derivedGroup = groupId ? group : null
+  const derivedMembers = groupId ? members : []
+  const derivedGroupWithMembers = groupId ? groupWithMembers : null
+  const derivedLoading = groupId ? isLoading : false
+  const derivedError = groupId ? error : null
+
+  return { group: derivedGroup, members: derivedMembers, groupWithMembers: derivedGroupWithMembers, isLoading: derivedLoading, error: derivedError, refetch }
 }

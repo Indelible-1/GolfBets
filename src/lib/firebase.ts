@@ -12,24 +12,46 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
+// Validate required Firebase config
+const requiredConfigKeys = ['apiKey', 'authDomain', 'projectId', 'appId'] as const
+const missingKeys = requiredConfigKeys.filter(
+  (key) => !firebaseConfig[key]
+)
+
+if (missingKeys.length > 0 && typeof window !== 'undefined') {
+  console.error(
+    `Firebase configuration is incomplete. Missing: ${missingKeys.join(', ')}. ` +
+    'Please ensure your .env.local file contains the required NEXT_PUBLIC_FIREBASE_* variables.'
+  )
+}
+
+/** Check if Firebase is properly configured */
+export const isFirebaseConfigured = missingKeys.length === 0
+
 let app: FirebaseApp
 let auth: Auth
 let db: Firestore
 let functions: Functions
 
 if (typeof window !== 'undefined') {
-  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
-  auth = getAuth(app)
-  db = getFirestore(app)
-  functions = getFunctions(app)
+  // Only initialize if we have the minimum required config
+  if (isFirebaseConfigured) {
+    app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
+    auth = getAuth(app)
+    db = getFirestore(app)
+    functions = getFunctions(app)
 
-  enableIndexedDbPersistence(db).catch((err) => {
-    if (err.code === 'failed-precondition') {
-      console.warn('Firestore persistence: Multiple tabs open')
-    } else if (err.code === 'unimplemented') {
-      console.warn('Firestore persistence not supported')
-    }
-  })
+    enableIndexedDbPersistence(db).catch((err) => {
+      if (err.code === 'failed-precondition') {
+        console.warn('Firestore persistence: Multiple tabs open')
+      } else if (err.code === 'unimplemented') {
+        console.warn('Firestore persistence not supported')
+      }
+    })
+  } else {
+    // Create placeholder objects that will throw helpful errors when used
+    console.warn('Firebase not initialized due to missing configuration')
+  }
 }
 
 export { app, auth, db, functions }

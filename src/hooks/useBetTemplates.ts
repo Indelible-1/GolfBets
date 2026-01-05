@@ -15,7 +15,7 @@ interface UseBetTemplatesReturn {
 
 export function useBetTemplates(userId: string | null | undefined): UseBetTemplatesReturn {
   const [templates, setTemplates] = useState<BetTemplate[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(!!userId)
   const [error, setError] = useState<Error | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
 
@@ -25,14 +25,10 @@ export function useBetTemplates(userId: string | null | undefined): UseBetTempla
 
   useEffect(() => {
     if (!userId) {
-      // Reset state handled by early return in render
       return
     }
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsLoading(true)
-     
-    setError(null)
+    let isMounted = true
 
     const q = query(
       betTemplatesCollection(),
@@ -43,21 +39,34 @@ export function useBetTemplates(userId: string | null | undefined): UseBetTempla
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const templateData = snapshot.docs.map(doc => doc.data())
-        setTemplates(templateData)
-        setIsLoading(false)
+        if (isMounted) {
+          const templateData = snapshot.docs.map(doc => doc.data())
+          setTemplates(templateData)
+          setIsLoading(false)
+          setError(null)
+        }
       },
       (err) => {
-        console.error('Error fetching bet templates:', err)
-        setError(err)
-        setIsLoading(false)
+        if (isMounted) {
+          console.error('Error fetching bet templates:', err)
+          setError(err)
+          setIsLoading(false)
+        }
       }
     )
 
-    return () => unsubscribe()
+    return () => {
+      isMounted = false
+      unsubscribe()
+    }
   }, [userId, refreshKey])
 
-  const defaultTemplate = templates.find(t => t.isDefault) ?? null
+  // Derive state based on userId - if no userId, return empty defaults
+  const derivedTemplates = userId ? templates : []
+  const derivedLoading = userId ? isLoading : false
+  const derivedError = userId ? error : null
 
-  return { templates, defaultTemplate, isLoading, error, refetch }
+  const defaultTemplate = derivedTemplates.find(t => t.isDefault) ?? null
+
+  return { templates: derivedTemplates, defaultTemplate, isLoading: derivedLoading, error: derivedError, refetch }
 }

@@ -11,6 +11,15 @@ import { auth } from '@/lib/firebase'
 import { magicLinkSchema } from '@/lib/validation/schemas'
 import { logger } from '@/lib/logger'
 
+// ============ AUTH CONFIG ============
+
+export const AUTH_CONFIG = {
+  /** Key used to store email in localStorage for magic link verification */
+  EMAIL_STORAGE_KEY: 'emailForSignIn',
+  /** Callback URL path for magic link verification */
+  CALLBACK_PATH: '/callback',
+} as const
+
 // ============ UTILITY FUNCTIONS ============
 
 /**
@@ -65,7 +74,7 @@ export async function sendMagicLink(email: string): Promise<void> {
   try {
     await sendSignInLinkToEmail(auth, normalizedEmail, actionCodeSettings)
     // Store email in localStorage so user can confirm it after clicking link
-    localStorage.setItem('emailForSignIn', normalizedEmail)
+    localStorage.setItem(AUTH_CONFIG.EMAIL_STORAGE_KEY, normalizedEmail)
     logger.info('Magic link sent', { email: normalizedEmail })
   } catch (error) {
     logger.error('Error sending magic link', error instanceof Error ? error : new Error('Unknown error'), { email: normalizedEmail })
@@ -88,14 +97,14 @@ export async function completeMagicLink(): Promise<UserCredential | null> {
     return null
   }
 
-  const email = localStorage.getItem('emailForSignIn')
+  const email = localStorage.getItem(AUTH_CONFIG.EMAIL_STORAGE_KEY)
   if (!email) {
     throw new Error('No email found for magic link sign-in. Please request a new link.')
   }
 
   try {
     const result = await signInWithEmailLink(auth, email, currentUrl)
-    localStorage.removeItem('emailForSignIn')
+    localStorage.removeItem(AUTH_CONFIG.EMAIL_STORAGE_KEY)
 
     // Create session cookie for middleware
     const idToken = await result.user.getIdToken()

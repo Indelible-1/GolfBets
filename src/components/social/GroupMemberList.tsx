@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import type { GroupMember } from '@/types'
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/lib/utils'
@@ -35,10 +36,11 @@ export function GroupMemberList({ members, currentUserId, className }: GroupMemb
             <div className="flex items-center gap-3">
               {/* Avatar */}
               {member.avatarUrl ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
+                <Image
                   src={member.avatarUrl}
                   alt={member.displayName}
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full"
                 />
               ) : (
