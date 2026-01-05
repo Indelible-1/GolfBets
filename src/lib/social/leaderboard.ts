@@ -118,29 +118,23 @@ export function calculateStandingsFromLedger(
     matchesPerUser.set(id, new Set())
   }
 
-  // Process ledger entries - only count entries where BOTH users are group members
-  const memberIdSet = new Set(memberIds)
+  // Process ledger entries - only count entries where BOTH parties are group members
   for (const entry of ledgerEntries) {
-    // Skip entries that involve non-members on either side
-    if (!memberIdSet.has(entry.fromUserId) || !memberIdSet.has(entry.toUserId)) {
-      continue
-    }
+    const fromStats = stats.get(entry.fromUserId)
+    const toStats = stats.get(entry.toUserId)
+
+    // Skip entries where either party is not a group member
+    if (!fromStats || !toStats) continue
 
     // Process from user (they owe money, so negative)
-    const fromStats = stats.get(entry.fromUserId)
-    if (fromStats) {
-      fromStats.netAmount -= entry.amount
-      matchesPerUser.get(entry.fromUserId)?.add(entry.betId)
-      fromStats.losses++
-    }
+    fromStats.netAmount -= entry.amount
+    matchesPerUser.get(entry.fromUserId)?.add(entry.betId)
+    fromStats.losses++
 
     // Process to user (they receive money, so positive)
-    const toStats = stats.get(entry.toUserId)
-    if (toStats) {
-      toStats.netAmount += entry.amount
-      matchesPerUser.get(entry.toUserId)?.add(entry.betId)
-      toStats.wins++
-    }
+    toStats.netAmount += entry.amount
+    matchesPerUser.get(entry.toUserId)?.add(entry.betId)
+    toStats.wins++
   }
 
   // Update matches played counts

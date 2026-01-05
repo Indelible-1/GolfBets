@@ -116,15 +116,19 @@ describe('calculateStandings', () => {
       }),
     ]
 
-    // Only pass the 2 members that participated in matches
-    const standings = calculateStandings(matches, [USER_A, USER_B], users)
+    // Include all 3 members - USER_C didn't play but should appear with $0
+    const standings = calculateStandings(matches, [USER_A, USER_B, USER_C], users)
 
     expect(standings[0].playerId).toBe(USER_A)
     expect(standings[0].netAmount).toBe(10)
     expect(standings[0].rank).toBe(1)
 
-    expect(standings[1].playerId).toBe(USER_B)
-    expect(standings[1].netAmount).toBe(-10)
+    // USER_C (0) should be ranked between USER_A (+10) and USER_B (-10)
+    expect(standings[1].playerId).toBe(USER_C)
+    expect(standings[1].netAmount).toBe(0)
+
+    expect(standings[2].playerId).toBe(USER_B)
+    expect(standings[2].netAmount).toBe(-10)
   })
 
   it('handles ties correctly', () => {
