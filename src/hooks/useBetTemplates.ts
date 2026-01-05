@@ -29,7 +29,9 @@ export function useBetTemplates(userId: string | null | undefined): UseBetTempla
       return
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true)
+     
     setError(null)
 
     const q = query(

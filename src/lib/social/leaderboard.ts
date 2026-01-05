@@ -118,8 +118,14 @@ export function calculateStandingsFromLedger(
     matchesPerUser.set(id, new Set())
   }
 
-  // Process ledger entries
+  // Process ledger entries - only count entries where BOTH users are group members
+  const memberIdSet = new Set(memberIds)
   for (const entry of ledgerEntries) {
+    // Skip entries that involve non-members on either side
+    if (!memberIdSet.has(entry.fromUserId) || !memberIdSet.has(entry.toUserId)) {
+      continue
+    }
+
     // Process from user (they owe money, so negative)
     const fromStats = stats.get(entry.fromUserId)
     if (fromStats) {

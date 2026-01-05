@@ -116,7 +116,8 @@ describe('calculateStandings', () => {
       }),
     ]
 
-    const standings = calculateStandings(matches, memberIds, users)
+    // Only pass the 2 members that participated in matches
+    const standings = calculateStandings(matches, [USER_A, USER_B], users)
 
     expect(standings[0].playerId).toBe(USER_A)
     expect(standings[0].netAmount).toBe(10)

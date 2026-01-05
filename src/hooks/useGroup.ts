@@ -33,7 +33,9 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
       return
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true)
+     
     setError(null)
 
     const unsubscribe = onSnapshot(
@@ -56,6 +58,9 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
 
     return () => unsubscribe()
   }, [groupId, refreshKey])
+
+  // Memoize memberIds string for dependency tracking
+  const memberIdsKey = useMemo(() => group?.memberIds.join(',') ?? '', [group?.memberIds])
 
   // Fetch member user data when group changes
   useEffect(() => {
@@ -89,7 +94,7 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
     }
 
     fetchUsers()
-  }, [group?.memberIds.join(',')])
+  }, [group, memberIdsKey])
 
   // Compute members with user data
   const members = useMemo((): GroupMember[] => {

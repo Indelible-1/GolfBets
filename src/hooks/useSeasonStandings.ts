@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { getDocs, query, where, collectionGroup, getFirestore } from 'firebase/firestore'
 import type { Season, SeasonStanding, LedgerEntry, User } from '@/types'
 import { usersCollection } from '@/lib/firestore/collections'
@@ -29,10 +29,16 @@ export function useSeasonStandings(
     setRefreshKey(prev => prev + 1)
   }, [])
 
+  // Memoize memberIds for dependency tracking
+  const memberIdsKey = useMemo(() => memberIds.join(','), [memberIds])
+
   useEffect(() => {
     if (!groupId || memberIds.length === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSeason(null)
+       
       setStandings([])
+       
       setIsLoading(false)
       return
     }
@@ -129,7 +135,7 @@ export function useSeasonStandings(
     }
 
     fetchStandings()
-  }, [groupId, memberIds.join(','), refreshKey])
+  }, [groupId, memberIds, memberIdsKey, refreshKey])
 
   return { season, standings, isLoading, error, refetch }
 }

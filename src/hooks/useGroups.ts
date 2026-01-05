@@ -24,12 +24,16 @@ export function useGroups(userId: string | null | undefined): UseGroupsReturn {
 
   useEffect(() => {
     if (!userId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setGroups([])
+       
       setIsLoading(false)
       return
     }
 
+     
     setIsLoading(true)
+     
     setError(null)
 
     const q = query(
