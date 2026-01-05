@@ -15,6 +15,11 @@ This document defines the golf betting rules implemented in GolfSettled. These r
 2. Skins
 3. Match Play (basic)
 
+**Side Bets (Optional):**
+1. Greenies — Closest to pin on par 3s
+2. Sandies — Up and down from bunker for par or better
+3. Bingo Bango Bongo — 3 points per hole
+
 **Phase 2:**
 - Stableford
 - Four-Ball / Best Ball
@@ -269,6 +274,128 @@ A match is **closed** when lead > remaining holes:
 When lead = remaining holes:
 - Leader cannot lose (only win or tie)
 - Trailing player must win all remaining holes
+
+---
+
+## 🎲 Side Bets
+
+Side bets are optional, independent wagers that run alongside main bets (Nassau, Skins, etc.). They add variety without complexity.
+
+### Greenies
+
+**What it is:** Closest to the pin on par 3 holes.
+
+**Rules:**
+1. Only par 3 holes are eligible
+2. Player must hit the green in regulation (first shot)
+3. Closest to the pin wins the greenie
+4. If no one hits the green, no winner
+5. Ties result in no winner (or split by house rules)
+
+**Settlement:**
+- Each greenie winner collects from ALL other players
+- In a 4-player match with $5 greenies, winning 1 greenie = $15 (from 3 players)
+
+**Example:**
+```
+$5 Greenies, 4 players, 4 par 3s
+
+Hole 3: Player A wins (10 ft from pin) → A collects $15
+Hole 7: No one hits green → No payout
+Hole 12: Player B wins (5 ft from pin) → B collects $15
+Hole 16: Players C & D tie → No payout
+
+Net: A +$10, B +$10, C -$10, D -$10
+```
+
+---
+
+### Sandies
+
+**What it is:** Successfully getting up and down from a bunker for par or better.
+
+**Rules:**
+1. Player must be in a greenside bunker
+2. Player must get out and hole the next putt (up and down)
+3. Final score must be par or better to count
+4. Multiple players can make sandies on the same hole
+
+**Settlement:**
+- Each sandy winner collects from ALL other players
+- Same settlement model as greenies
+
+**Example:**
+```
+$5 Sandies, 2 players
+
+Hole 5: Player A in bunker, gets up and down for par → A collects $5
+Hole 10: Player B in bunker, 3-putts for bogey → No sandy (over par)
+Hole 15: Both players in bunker, both make par → Both collect $5 from other
+
+Net: A +$5 (hole 5) - $5 (hole 15) = $0
+Net: B +$5 (hole 15) - $5 (hole 5) = $0
+```
+
+---
+
+### Bingo Bango Bongo (BBB)
+
+**What it is:** Three points awarded on every hole.
+
+**Points:**
+- **BINGO:** First player to get their ball ON the green (regardless of strokes)
+- **BANGO:** Player CLOSEST to the pin when all balls are on the green
+- **BONGO:** First player to hole out (regardless of total strokes)
+
+**Key Strategy:** Playing order matters! Farthest from hole plays first, giving advantage to shorter hitters who may reach the green first.
+
+**Settlement:**
+- Points are totaled at the end of the round
+- Each player pays the point differential to players with more points
+- Amount = point differential × amount per point
+
+**Example:**
+```
+$1/point BBB, 18 holes, 2 players
+
+Final Points:
+- Player A: 22 points (9 bingos, 7 bangos, 6 bongos)
+- Player B: 32 points (9 bingos, 11 bangos, 12 bongos)
+
+Point differential: 10 points
+Settlement: A pays B $10
+```
+
+**Multi-Player Settlement:**
+```
+$1/point BBB, 3 players
+
+Final Points: A=30, B=24, C=18
+
+A vs B: A wins $6 (30-24)
+A vs C: A wins $12 (30-18)
+B vs C: B wins $6 (24-18)
+
+Net: A +$18, B $0, C -$18
+```
+
+---
+
+### Side Bet Configuration
+
+Side bets can be enabled independently:
+- Enable/disable each type
+- Set amount per occurrence (greenie, sandy) or per point (BBB)
+- Side bet results don't affect main bet calculations
+
+### Side Bet Edge Cases
+
+| Scenario | Resolution |
+|----------|------------|
+| Greenie tie | No winner (or split by house rules) |
+| Sandy claimed but bogey made | Not valid — must be par or better |
+| BBB point disputed | Majority rules or designated scorer decides |
+| Player quits mid-round | Completed side bets stand |
 
 ---
 
