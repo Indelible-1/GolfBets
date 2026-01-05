@@ -21,7 +21,7 @@ export function useSeasonStandings(
 ): UseSeasonStandingsReturn {
   const [season, setSeason] = useState<Season | null>(null)
   const [standings, setStandings] = useState<SeasonStanding[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(!!groupId && memberIds.length > 0)
   const [error, setError] = useState<Error | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
 
@@ -34,22 +34,17 @@ export function useSeasonStandings(
 
   useEffect(() => {
     if (!groupId || memberIds.length === 0) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSeason(null)
-       
-      setStandings([])
-       
-      setIsLoading(false)
       return
     }
 
-    const fetchStandings = async () => {
-      setIsLoading(true)
-      setError(null)
+    let isMounted = true
 
+    const fetchStandings = async () => {
       try {
         // Get or create current season
         const currentSeason = await getOrCreateCurrentSeason(groupId, 'monthly')
+        if (!isMounted) return
+
         setSeason(currentSeason)
 
         // Fetch user data for display names
@@ -69,6 +64,8 @@ export function useSeasonStandings(
             })
           }
         }
+
+        if (!isMounted) return
 
         // Fetch ledger entries for group members within season date range
         const db = getFirestore()
@@ -101,6 +98,8 @@ export function useSeasonStandings(
           })
         }
 
+        if (!isMounted) return
+
         // Filter to entries within season and between group members
         const memberIdSet = new Set(memberIds)
         const seasonEntries = allEntries.filter(entry => {
@@ -125,17 +124,33 @@ export function useSeasonStandings(
           currentSeason.standings
         )
 
-        setStandings(calculatedStandings)
-        setIsLoading(false)
+        if (isMounted) {
+          setStandings(calculatedStandings)
+          setIsLoading(false)
+          setError(null)
+        }
       } catch (err) {
-        console.error('Error fetching season standings:', err)
-        setError(err instanceof Error ? err : new Error('Failed to fetch standings'))
-        setIsLoading(false)
+        if (isMounted) {
+          console.error('Error fetching season standings:', err)
+          setError(err instanceof Error ? err : new Error('Failed to fetch standings'))
+          setIsLoading(false)
+        }
       }
     }
 
     fetchStandings()
+
+    return () => {
+      isMounted = false
+    }
   }, [groupId, memberIds, memberIdsKey, refreshKey])
 
-  return { season, standings, isLoading, error, refetch }
+  // Derive state based on groupId and memberIds - if no data, return empty defaults
+  const hasData = !!groupId && memberIds.length > 0
+  const derivedSeason = hasData ? season : null
+  const derivedStandings = hasData ? standings : []
+  const derivedLoading = hasData ? isLoading : false
+  const derivedError = hasData ? error : null
+
+  return { season: derivedSeason, standings: derivedStandings, isLoading: derivedLoading, error: derivedError, refetch }
 }

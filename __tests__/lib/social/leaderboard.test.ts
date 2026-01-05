@@ -123,8 +123,12 @@ describe('calculateStandings', () => {
     expect(standings[0].netAmount).toBe(10)
     expect(standings[0].rank).toBe(1)
 
-    expect(standings[1].playerId).toBe(USER_B)
-    expect(standings[1].netAmount).toBe(-10)
+    // USER_C (0) should be ranked between USER_A (+10) and USER_B (-10)
+    expect(standings[1].playerId).toBe(USER_C)
+    expect(standings[1].netAmount).toBe(0)
+
+    expect(standings[2].playerId).toBe(USER_B)
+    expect(standings[2].netAmount).toBe(-10)
   })
 
   it('handles ties correctly', () => {
