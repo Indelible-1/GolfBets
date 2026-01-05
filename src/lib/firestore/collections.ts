@@ -15,6 +15,9 @@ import {
   LedgerEntry,
   AuditEntry,
   Invite,
+  Group,
+  Season,
+  BetTemplate,
 } from '@/types'
 import {
   userConverter,
@@ -25,6 +28,9 @@ import {
   ledgerConverter,
   auditConverter,
   inviteConverter,
+  groupConverter,
+  seasonConverter,
+  betTemplateConverter,
 } from './converters'
 
 let db: Firestore | undefined
@@ -109,3 +115,31 @@ export const inviteDoc = (inviteId: string): DocumentReference<Invite> =>
   doc(collection(getDb(), 'invites'), inviteId).withConverter(
     inviteConverter,
   ) as DocumentReference<Invite>
+
+// ============ SOCIAL COLLECTIONS ============
+
+export const groupsCollection = (): CollectionReference<Group> =>
+  collection(getDb(), 'groups').withConverter(groupConverter)
+
+export const seasonsCollection = (): CollectionReference<Season> =>
+  collection(getDb(), 'seasons').withConverter(seasonConverter)
+
+export const betTemplatesCollection = (): CollectionReference<BetTemplate> =>
+  collection(getDb(), 'betTemplates').withConverter(betTemplateConverter)
+
+// ============ SOCIAL DOCUMENT REFERENCES ============
+
+export const groupDoc = (groupId: string): DocumentReference<Group> =>
+  doc(collection(getDb(), 'groups'), groupId).withConverter(
+    groupConverter,
+  ) as DocumentReference<Group>
+
+export const seasonDoc = (seasonId: string): DocumentReference<Season> =>
+  doc(collection(getDb(), 'seasons'), seasonId).withConverter(
+    seasonConverter,
+  ) as DocumentReference<Season>
+
+export const betTemplateDoc = (templateId: string): DocumentReference<BetTemplate> =>
+  doc(collection(getDb(), 'betTemplates'), templateId).withConverter(
+    betTemplateConverter,
+  ) as DocumentReference<BetTemplate>

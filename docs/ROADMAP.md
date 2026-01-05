@@ -51,7 +51,10 @@
 - [x] User stats dashboard — ✅ 2026-01-05
 - [x] Head-to-head records — ✅ 2026-01-05
 - [x] Golf Wrapped (year-end summary) — ✅ 2026-01-05
-- [ ] Season leaderboards
+- [x] Friend Groups — ✅ 2026-01-05
+- [x] Season leaderboards — ✅ 2026-01-05
+- [x] Quick Rematch — ✅ 2026-01-05
+- [x] Bet Templates — ✅ 2026-01-05
 - [ ] Team formats (Four-Ball)
 - [ ] Course database integration
 - [ ] Apple Watch companion
@@ -87,4 +90,4 @@
 
 ---
 
-*Last updated: 2025-01-01*
+*Last updated: 2026-01-05*
