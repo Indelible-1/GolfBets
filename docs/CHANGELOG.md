@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Side Bets Feature** - Three new side bet types for golf matches:
+  - **Greenies**: Closest to pin on par 3 holes
+  - **Sandies**: Up and down from bunker for par or better
+  - **Bingo Bango Bongo**: 3 points per hole (first on green, closest when all on, first in hole)
+- Side bet logic and settlement calculations (`src/lib/bets/sideBets/`)
+- Side bet UI components for score entry:
+  - `SideBetInput`: Main container for all side bet inputs
+  - `GreenieSelector`: Player selector for par 3 greenie winners
+  - `SandyToggle`: Toggle buttons for sandy claims
+  - `BBBScorer`: Bingo/Bango/Bongo point assignment
+- Side bet configuration UI (`SideBetSelector`) for match creation
+- Settlement integration for calculating combined side bet payouts
+- Comprehensive unit tests for side bet logic (60+ tests)
 - Stats dashboard page (`/stats`) with user statistics display
 - Head-to-head record tracking against all opponents
 - Head-to-head detail page (`/stats/[opponentId]`) with match history

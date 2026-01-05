@@ -51,6 +51,7 @@
 - [x] User stats dashboard — ✅ 2026-01-05
 - [x] Head-to-head records — ✅ 2026-01-05
 - [x] Golf Wrapped (year-end summary) — ✅ 2026-01-05
+- [x] Side bets (Greenies, Sandies, BBB) — ✅ 2026-01-05
 - [ ] Season leaderboards
 - [ ] Team formats (Four-Ball)
 - [ ] Course database integration
@@ -87,4 +88,4 @@
 
 ---
 
-*Last updated: 2025-01-01*
+*Last updated: 2026-01-05*
