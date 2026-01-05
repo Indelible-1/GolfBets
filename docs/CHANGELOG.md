@@ -11,7 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- (New features go here)
+- Stats dashboard page (`/stats`) with user statistics display
+- Head-to-head record tracking against all opponents
+- Head-to-head detail page (`/stats/[opponentId]`) with match history
+- Golf Wrapped year-end summary page (`/wrapped`)
+- Analytics utility functions for computing user stats, streaks, and H2H records
+- React hooks: `useUserStats`, `useHeadToHead`, `useHeadToHeadDetail`, `useGolfWrapped`
+- Stats UI components: `StatCard`, `StreakBadge`, `WinLossRatio`, `HeadToHeadRow`, `NetChart`, `WrappedCard`
+- Comprehensive unit tests for analytics functions (53 tests)
 
 ### Changed
 
