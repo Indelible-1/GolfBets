@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+out/
+build/
+dist/
+coverage/
+
+# Firebase
+functions/lib/
+.firebase/
+
+# PWA generated files
+public/sw.js
+public/workbox-*.js
+public/swe-worker-*.js
+
+# Lock files
+package-lock.json
+
+# Generated files
+*.min.js
+*.min.css
+
+# Environment files
+.env*
+
+# IDE
+.idea/
+.vscode/
+
+# Misc
+*.md
+*.log

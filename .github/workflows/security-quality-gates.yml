@@ -1,0 +1,307 @@
+# Security & Quality Gates - Pre-merge orchestration layer
+# Blocks PRs that fail code quality, security, or test coverage checks
+#
+# This workflow runs on all PRs and must pass before merge
+
+name: Security & Quality Gates
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
+  actions: read
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # ============================================
+  # CODE FORMATTING (Prettier)
+  # ============================================
+  format-check:
+    name: 🎨 Code Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check Prettier formatting
+        run: npm run format:check
+
+  # ============================================
+  # LINTING (ESLint)
+  # ============================================
+  lint:
+    name: 🔍 ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # ============================================
+  # TYPE CHECKING (TypeScript)
+  # ============================================
+  typecheck:
+    name: 📘 TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run TypeScript check
+        run: npm run typecheck
+
+  # ============================================
+  # SECURITY SCANNING (CodeQL SAST)
+  # ============================================
+  codeql:
+    name: 🛡️ CodeQL Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          # Security and quality queries
+          queries: security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"
+
+  # ============================================
+  # DEPENDENCY VULNERABILITY CHECK
+  # ============================================
+  dependency-audit:
+    name: 📦 Dependency Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+        continue-on-error: false
+
+      - name: Check for known vulnerabilities (functions)
+        run: |
+          cd functions
+          npm ci
+          npm audit --audit-level=high
+        continue-on-error: false
+
+  # ============================================
+  # SECRET SCANNING (gitleaks)
+  # ============================================
+  secrets-scan:
+    name: 🔐 Secrets Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ============================================
+  # TEST COVERAGE
+  # ============================================
+  test-coverage:
+    name: 🧪 Test Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: npm run test:ci
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
+
+      - name: Check coverage thresholds
+        run: |
+          # Extract coverage percentages from Jest output
+          # Fail if below minimum thresholds
+          npm run test -- --coverage --ci --maxWorkers=2 --coverageReporters=json-summary
+
+          node -e "
+            const coverage = require('./coverage/coverage-summary.json');
+            const totals = coverage.total;
+            const MIN_LINES = 60;
+            const MIN_BRANCHES = 50;
+            const MIN_FUNCTIONS = 60;
+            const MIN_STATEMENTS = 60;
+
+            console.log('Coverage Report:');
+            console.log('  Lines:', totals.lines.pct + '%');
+            console.log('  Branches:', totals.branches.pct + '%');
+            console.log('  Functions:', totals.functions.pct + '%');
+            console.log('  Statements:', totals.statements.pct + '%');
+
+            let failed = false;
+            if (totals.lines.pct < MIN_LINES) {
+              console.error('❌ Line coverage ' + totals.lines.pct + '% is below minimum ' + MIN_LINES + '%');
+              failed = true;
+            }
+            if (totals.branches.pct < MIN_BRANCHES) {
+              console.error('❌ Branch coverage ' + totals.branches.pct + '% is below minimum ' + MIN_BRANCHES + '%');
+              failed = true;
+            }
+            if (totals.functions.pct < MIN_FUNCTIONS) {
+              console.error('❌ Function coverage ' + totals.functions.pct + '% is below minimum ' + MIN_FUNCTIONS + '%');
+              failed = true;
+            }
+            if (totals.statements.pct < MIN_STATEMENTS) {
+              console.error('❌ Statement coverage ' + totals.statements.pct + '% is below minimum ' + MIN_STATEMENTS + '%');
+              failed = true;
+            }
+
+            if (failed) {
+              process.exit(1);
+            }
+            console.log('✅ All coverage thresholds passed!');
+          "
+
+  # ============================================
+  # BUILD VERIFICATION
+  # ============================================
+  build:
+    name: 🏗️ Build
+    runs-on: ubuntu-latest
+    needs: [format-check, lint, typecheck]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          NEXT_PUBLIC_APP_ENV: preview
+
+  # ============================================
+  # FINAL GATE - All checks must pass
+  # ============================================
+  quality-gate:
+    name: ✅ Quality Gate
+    runs-on: ubuntu-latest
+    needs:
+      - format-check
+      - lint
+      - typecheck
+      - codeql
+      - dependency-audit
+      - secrets-scan
+      - test-coverage
+      - build
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          echo "Checking job results..."
+          echo "format-check: ${{ needs.format-check.result }}"
+          echo "lint: ${{ needs.lint.result }}"
+          echo "typecheck: ${{ needs.typecheck.result }}"
+          echo "codeql: ${{ needs.codeql.result }}"
+          echo "dependency-audit: ${{ needs.dependency-audit.result }}"
+          echo "secrets-scan: ${{ needs.secrets-scan.result }}"
+          echo "test-coverage: ${{ needs.test-coverage.result }}"
+          echo "build: ${{ needs.build.result }}"
+
+          if [[ "${{ needs.format-check.result }}" != "success" ]] || \
+             [[ "${{ needs.lint.result }}" != "success" ]] || \
+             [[ "${{ needs.typecheck.result }}" != "success" ]] || \
+             [[ "${{ needs.codeql.result }}" != "success" ]] || \
+             [[ "${{ needs.dependency-audit.result }}" != "success" ]] || \
+             [[ "${{ needs.secrets-scan.result }}" != "success" ]] || \
+             [[ "${{ needs.test-coverage.result }}" != "success" ]] || \
+             [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "❌ Quality gate FAILED - one or more checks did not pass"
+            exit 1
+          fi
+
+          echo "✅ All quality gates passed!"
