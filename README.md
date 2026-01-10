@@ -4,10 +4,10 @@
 
 ### Track golf bets with friends. Settle up later.
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-Firestore-orange?logo=firebase)](https://firebase.google.com/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
 [![PWA](https://img.shields.io/badge/PWA-Enabled-5A0FC8?logo=pwa)](https://web.dev/progressive-web-apps/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -20,6 +20,10 @@
 <img src="./docs/assets/mockup.png" alt="GolfSettled App Mockup" width="600" />
 
 </div>
+
+> ⚠️ **Project Status:** Early Development
+> Authentication is the current blocker. Most features are documented but not yet implemented.
+> See [ROADMAP.md](./docs/ROADMAP.md) for current progress.
 
 ---
 
@@ -73,9 +77,9 @@ GolfSettled provides:
 
 | Layer | Technology | Why |
 |-------|------------|-----|
-| **Framework** | Next.js 15 (App Router) | React Server Components, edge-ready |
-| **Language** | TypeScript 5.3 | Type safety, better DX |
-| **Styling** | Tailwind CSS 3.4 | Utility-first, mobile responsive |
+| **Framework** | Next.js 16 (App Router) | React Server Components, edge-ready |
+| **Language** | TypeScript 5 | Type safety, better DX |
+| **Styling** | Tailwind CSS 4 | Utility-first, mobile responsive |
 | **Backend** | Firebase (Auth, Firestore) | Real-time sync, generous free tier |
 | **Hosting** | Vercel | Zero-config Next.js deployment |
 | **PWA** | next-pwa + Workbox | Offline support, installable |
@@ -329,18 +333,31 @@ See [SECURITY.md](./docs/SECURITY.md) for details.
 
 ## 🗺 Roadmap
 
-### Phase 1: MVP (Current)
+### Phase 1: MVP (In Progress)
+
+**✅ Completed**
 - [x] Project setup and architecture
-- [x] Authentication (Magic Link + Google)
-- [x] Match creation and management
-- [x] Basic scoring interface
-- [x] Nassau bet calculations
-- [x] Skins bet calculations
-- [x] Ledger with balances
-- [x] Offline support
-- [x] PWA installation
+- [x] PWA manifest and service worker scaffold
+- [x] Tailwind CSS configuration
+- [x] Project documentation
+
+**🏗️ In Progress**
+- [-] Authentication (Magic Link) — *Currently blocking*
+- [-] Firebase project initialization
+
+**📋 Up Next**
+- [ ] Protected routes and middleware
+- [ ] User profile creation
+- [ ] Match creation and management
+- [ ] Basic scoring interface
+- [ ] Nassau bet calculations
+- [ ] Skins bet calculations
+- [ ] Ledger with balances
+- [ ] Offline support
+- [ ] PWA installation (full)
 
 ### Phase 2: Enhanced UX
+- [ ] Google OAuth (secondary auth)
 - [ ] Course database integration
 - [ ] GHIN handicap lookup
 - [ ] Push notifications
@@ -353,12 +370,6 @@ See [SECURITY.md](./docs/SECURITY.md) for details.
 - [ ] Recurring games
 - [ ] Leaderboards
 - [ ] Stats dashboard
-
-### Phase 4: Growth
-- [ ] Public profiles
-- [ ] Course reviews
-- [ ] Tournament mode
-- [ ] API for integrations
 
 ---
 
