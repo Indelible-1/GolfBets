@@ -151,7 +151,7 @@ describe('getSuccessfulSandies', () => {
     ]
     const successful = getSuccessfulSandies(results)
     expect(successful).toHaveLength(2)
-    expect(successful.every(s => s.success)).toBe(true)
+    expect(successful.every((s) => s.success)).toBe(true)
   })
 })
 

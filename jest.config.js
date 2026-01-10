@@ -46,10 +46,7 @@ const customJestConfig = {
       statements: 85,
     },
   },
-  testMatch: [
-    '**/__tests__/**/*.(test|spec).(ts|tsx)',
-    '**/*.(test|spec).(ts|tsx)',
-  ],
+  testMatch: ['**/__tests__/**/*.(test|spec).(ts|tsx)', '**/*.(test|spec).(ts|tsx)'],
   // Ignore coverage threshold initially during development
   coverageThreshold: undefined,
 }

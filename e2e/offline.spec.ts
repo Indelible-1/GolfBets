@@ -22,10 +22,15 @@ test.describe('Offline Functionality', () => {
 
     // The app should detect offline status
     // (The specific indicator depends on implementation)
-    const offlineIndicator = page.locator('[data-testid="offline-indicator"], .offline-banner, text=Offline')
+    const offlineIndicator = page.locator(
+      '[data-testid="offline-indicator"], .offline-banner, text=Offline'
+    )
 
     // Check if any offline indicator is visible or the navigator.onLine is false
-    const isOfflineIndicatorVisible = await offlineIndicator.first().isVisible().catch(() => false)
+    const isOfflineIndicatorVisible = await offlineIndicator
+      .first()
+      .isVisible()
+      .catch(() => false)
     const isNavigatorOffline = await page.evaluate(() => !navigator.onLine)
 
     expect(isOfflineIndicatorVisible || isNavigatorOffline).toBe(true)

@@ -8,7 +8,13 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   size?: 'sm' | 'md'
 }
 
-export function Badge({ className, variant = 'default', size = 'md', children, ...props }: BadgeProps) {
+export function Badge({
+  className,
+  variant = 'default',
+  size = 'md',
+  children,
+  ...props
+}: BadgeProps) {
   const variants = {
     default: 'bg-gray-100 text-gray-700',
     success: 'bg-green-100 text-green-700',
@@ -24,7 +30,12 @@ export function Badge({ className, variant = 'default', size = 'md', children, .
 
   return (
     <span
-      className={cn('inline-flex items-center font-medium rounded-full', variants[variant], sizes[size], className)}
+      className={cn(
+        'inline-flex items-center rounded-full font-medium',
+        variants[variant],
+        sizes[size],
+        className
+      )}
       {...props}
     >
       {children}
