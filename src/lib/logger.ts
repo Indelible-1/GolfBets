@@ -7,21 +7,44 @@ interface LogContext {
   [key: string]: unknown
 }
 
+/**
+ * Mask email address to protect PII in logs
+ * e.g., "john@example.com" -> "jo***@example.com"
+ */
+export function maskEmail(email: string): string {
+  const atIndex = email.indexOf('@')
+  if (atIndex <= 0) return '***'
+  const localPart = email.slice(0, atIndex)
+  const domain = email.slice(atIndex)
+  const visibleChars = Math.min(2, localPart.length)
+  return localPart.slice(0, visibleChars) + '***' + domain
+}
+
 class Logger {
   private isDev = process.env.NODE_ENV === 'development'
 
+  private sanitizeContext(context?: LogContext): LogContext | undefined {
+    if (!context) return context
+    const sanitized = { ...context }
+    if (sanitized.email && typeof sanitized.email === 'string') {
+      sanitized.email = maskEmail(sanitized.email)
+    }
+    return sanitized
+  }
+
   private log(level: LogLevel, message: string, context?: LogContext) {
+    const sanitizedContext = this.sanitizeContext(context)
     const timestamp = new Date().toISOString()
     const logData = {
       timestamp,
       level,
       message,
-      ...context,
+      ...sanitizedContext,
     }
 
     // Console in dev, structured JSON in prod
     if (this.isDev) {
-      console[level === 'debug' ? 'log' : level](message, context)
+      console[level === 'debug' ? 'log' : level](message, sanitizedContext)
     } else {
       console.log(JSON.stringify(logData))
     }

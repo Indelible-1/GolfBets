@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
+import { randomUUID } from 'crypto'
 import { Bet, AuditEntry } from '../types'
 
 const db = admin.firestore()
@@ -28,7 +29,7 @@ export const onBetWrite = functions.firestore
       }
 
       const now = new Date()
-      const auditId = `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      const auditId = `audit_${Date.now()}_${randomUUID().slice(0, 9)}`
 
       const auditEntry: AuditEntry = {
         id: auditId,
