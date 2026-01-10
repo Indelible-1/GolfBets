@@ -365,6 +365,82 @@ Implement all golf betting calculations including Nassau, Skins, press mechanics
 
 ---
 
+## 📁 File Ownership Matrix
+
+### Exclusive Ownership (One Owner)
+
+| Path | Owner | Notes |
+|------|-------|-------|
+| `/.github/` | Manager | CI/CD, workflows |
+| `/.husky/` | Manager | Git hooks |
+| `/public/manifest.json` | Manager | PWA manifest |
+| `/public/icons/` | Manager | App icons |
+| `/firestore.rules` | Security | Must be reviewed |
+| `/firestore.indexes.json` | Backend | Index definitions |
+| `/.claude/` | Security | AI assistant restrictions |
+| `/functions/` | Backend | All Cloud Functions |
+| `/scripts/` | Backend | Seed data, migrations |
+| `/src/lib/firebase.ts` | Manager | Firebase init only |
+| `/src/lib/auth/` | Security | All auth logic |
+| `/src/lib/validators/` | Security | Zod schemas |
+| `/src/lib/firestore/` | Backend | Data access layer |
+| `/src/lib/bets/` | Betting Logic | All bet calculations |
+| `/src/lib/offline/` | PWA/Offline | IndexedDB, sync |
+| `/src/components/ui/` | Frontend | Design system |
+| `/src/components/layout/` | Frontend | Navigation, headers |
+| `/src/components/match/` | Frontend | Match UI |
+| `/src/components/scorecard/` | Frontend | Score entry UI |
+| `/src/components/results/` | Frontend | Results display |
+| `/src/components/ledger/` | Frontend | Balance UI |
+| `/src/components/offline/` | PWA/Offline | Sync indicators |
+
+### Shared Files (Coordinate Changes)
+
+| Path | Primary | Secondary | Coordination |
+|------|---------|-----------|--------------|
+| `/src/app/layout.tsx` | Manager | All | Notify before edit |
+| `/src/app/page.tsx` | Frontend | All | PR review required |
+| `/src/types/` | Backend | All | PR review required |
+| `/src/hooks/useAuth.ts` | Security | Frontend | Sync on interface changes |
+| `/src/hooks/useMatch.ts` | Backend | Frontend | Sync on interface changes |
+| `/package.json` | Manager | All | Coordinate dep changes |
+| `/tailwind.config.ts` | Manager | Frontend | Theme extensions only |
+| `/next.config.js` | Manager | PWA | PWA config section |
+| `/docs/` | Manager | All | Anyone can update |
+
+### Test File Ownership
+
+| Test Path | Owner | Mirrors |
+|-----------|-------|---------|
+| `/__tests__/lib/bets/` | Betting Logic | `/src/lib/bets/` |
+| `/__tests__/lib/firestore/` | Backend | `/src/lib/firestore/` |
+| `/__tests__/lib/auth/` | Security | `/src/lib/auth/` |
+| `/__tests__/lib/offline/` | PWA/Offline | `/src/lib/offline/` |
+| `/__tests__/components/` | Frontend | `/src/components/` |
+| `/__tests__/firestore.rules.test.ts` | Security | `/firestore.rules` |
+
+### Coordination Rules
+
+1. **Before editing a shared file:**
+   - Check if another engineer is working on it
+   - Create a small, focused PR
+   - Request review from the primary owner
+
+2. **When adding new files:**
+   - Follow the path patterns above
+   - Add to this matrix if creating new directories
+
+3. **Interface changes:**
+   - Changes to hooks, types, or validators require coordination
+   - Post in team channel before starting
+   - Update TypeScript interfaces atomically
+
+4. **Conflict resolution:**
+   - Primary owner has final say
+   - Manager is tiebreaker for cross-domain conflicts
+
+---
+
 ## 🔄 Execution Order
 
 ```
