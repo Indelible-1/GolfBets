@@ -74,7 +74,7 @@ export async function createInvite(
   options?: {
     maxUses?: number
     expiresInHours?: number
-  },
+  }
 ): Promise<Invite> {
   const now = new Date()
   const expiresAt = new Date(now.getTime() + (options?.expiresInHours || 24) * 60 * 60 * 1000)
@@ -169,10 +169,7 @@ export async function revokeInvite(inviteId: string): Promise<void> {
 /**
  * Update invite expiration time
  */
-export async function updateInviteExpiration(
-  inviteId: string,
-  expiresAt: Date,
-): Promise<void> {
+export async function updateInviteExpiration(inviteId: string, expiresAt: Date): Promise<void> {
   try {
     await updateDoc(inviteDoc(inviteId), {
       expiresAt,

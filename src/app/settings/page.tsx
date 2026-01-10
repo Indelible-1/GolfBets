@@ -60,14 +60,18 @@ export default function SettingsPage() {
       <Screen padBottom>
         <Header title="Settings" subtitle="Your Profile" />
 
-        <div className="p-4 pb-24 space-y-6">
+        <div className="space-y-6 p-4 pb-24">
           {/* Message */}
           {message && (
             <Card
               variant="outlined"
-              className={`p-4 ${message.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}
+              className={`p-4 ${message.type === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}
             >
-              <p className={message.type === 'success' ? 'text-green-700 text-sm' : 'text-red-700 text-sm'}>
+              <p
+                className={
+                  message.type === 'success' ? 'text-sm text-green-700' : 'text-sm text-red-700'
+                }
+              >
                 {message.text}
               </p>
             </Card>
@@ -75,14 +79,14 @@ export default function SettingsPage() {
 
           {/* Profile Card */}
           <Card variant="elevated" className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h2>
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">Profile Information</h2>
 
             {user && (
               <div className="space-y-4">
                 {/* Email (read-only) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <div className="px-4 py-3 bg-gray-50 rounded-lg text-gray-600 text-sm">
+                  <label className="mb-2 block text-sm font-medium text-gray-700">Email</label>
+                  <div className="rounded-lg bg-gray-50 px-4 py-3 text-sm text-gray-600">
                     {user.email || firebaseUser?.email || 'No email'}
                   </div>
                 </div>
@@ -99,25 +103,33 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Golf Profile (future enhancement) */}
-                <div className="pt-4 border-t border-gray-200">
-                  <p className="text-sm font-medium text-gray-700 mb-3">Golf Profile (Coming Soon)</p>
+                <div className="border-t border-gray-200 pt-4">
+                  <p className="mb-3 text-sm font-medium text-gray-700">
+                    Golf Profile (Coming Soon)
+                  </p>
                   <div className="space-y-3">
-                    <div className="px-4 py-3 bg-gray-50 rounded-lg">
+                    <div className="rounded-lg bg-gray-50 px-4 py-3">
                       <p className="text-sm text-gray-600">Handicap Index</p>
-                      <p className="text-lg font-semibold text-gray-900 mt-1">
+                      <p className="mt-1 text-lg font-semibold text-gray-900">
                         {user.handicapIndex || 'Not set'}
                       </p>
                     </div>
-                    <div className="px-4 py-3 bg-gray-50 rounded-lg">
+                    <div className="rounded-lg bg-gray-50 px-4 py-3">
                       <p className="text-sm text-gray-600">Home Club</p>
-                      <p className="text-lg font-semibold text-gray-900 mt-1">{user.homeClub || 'Not set'}</p>
+                      <p className="mt-1 text-lg font-semibold text-gray-900">
+                        {user.homeClub || 'Not set'}
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Save Button */}
                 <div className="pt-4">
-                  <Button onClick={handleSave} disabled={saving || displayName === user.displayName} fullWidth>
+                  <Button
+                    onClick={handleSave}
+                    disabled={saving || displayName === user.displayName}
+                    fullWidth
+                  >
                     {saving ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </div>
@@ -127,13 +139,13 @@ export default function SettingsPage() {
 
           {/* Account Section */}
           <Card variant="elevated" className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Account</h2>
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">Account</h2>
 
             <div className="space-y-3">
               {/* Account Info */}
-              <div className="px-4 py-3 bg-gray-50 rounded-lg">
+              <div className="rounded-lg bg-gray-50 px-4 py-3">
                 <p className="text-sm text-gray-600">Member Since</p>
-                <p className="text-base font-semibold text-gray-900 mt-1">
+                <p className="mt-1 text-base font-semibold text-gray-900">
                   {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown'}
                 </p>
               </div>
@@ -144,7 +156,7 @@ export default function SettingsPage() {
                 onClick={handleSignOut}
                 disabled={signingOut}
                 fullWidth
-                className="text-red-600 border-red-200 hover:bg-red-50"
+                className="border-red-200 text-red-600 hover:bg-red-50"
               >
                 {signingOut ? 'Signing Out...' : 'Sign Out'}
               </Button>
@@ -152,11 +164,12 @@ export default function SettingsPage() {
           </Card>
 
           {/* Info Card */}
-          <Card variant="outlined" className="bg-blue-50 border-blue-200 p-4">
-            <p className="text-blue-900 text-sm">
+          <Card variant="outlined" className="border-blue-200 bg-blue-50 p-4">
+            <p className="text-sm text-blue-900">
               <span className="font-medium">💡 Tips:</span>
               <br />
-              Update your display name so other players know who you are. Golf profile features coming soon.
+              Update your display name so other players know who you are. Golf profile features
+              coming soon.
             </p>
           </Card>
         </div>

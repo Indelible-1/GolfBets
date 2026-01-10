@@ -1,9 +1,4 @@
-import {
-  validateGroupName,
-  canDeleteGroup,
-  canEditGroup,
-  isGroupMember,
-} from '@/lib/social/groups'
+import { validateGroupName, canDeleteGroup, canEditGroup, isGroupMember } from '@/lib/social/groups'
 import type { Group } from '@/types'
 
 const CREATOR_ID = 'creator123'
@@ -33,15 +28,9 @@ function createGroup(overrides: Partial<Group> = {}): Group {
 
 describe('validateGroupName', () => {
   it('accepts valid group names', () => {
-    const validNames = [
-      'Weekend Crew',
-      'The Foursome',
-      'Saturday Morning Golf',
-      'CC',
-      'A-Team',
-    ]
+    const validNames = ['Weekend Crew', 'The Foursome', 'Saturday Morning Golf', 'CC', 'A-Team']
 
-    validNames.forEach(name => {
+    validNames.forEach((name) => {
       const result = validateGroupName(name)
       expect(result.valid).toBe(true)
       expect(result.error).toBeUndefined()

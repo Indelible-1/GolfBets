@@ -157,7 +157,7 @@ function deepEqual(a: unknown, b: unknown): boolean {
 
     if (aKeys.length !== bKeys.length) return false
 
-    return aKeys.every(key => deepEqual(aObj[key], bObj[key]))
+    return aKeys.every((key) => deepEqual(aObj[key], bObj[key]))
   }
 
   return false
@@ -170,10 +170,7 @@ import type { Score } from '@/types'
 /**
  * Detect conflict specifically for score entries
  */
-export function detectScoreConflict(
-  localScore: Score,
-  serverScore: Score
-): SyncConflict | null {
+export function detectScoreConflict(localScore: Score, serverScore: Score): SyncConflict | null {
   // Compare using syncedAt or updatedAt timestamp
   const localTimestamp = localScore.syncedAt?.getTime() || localScore.updatedAt.getTime()
   const serverTimestamp = serverScore.syncedAt?.getTime() || serverScore.updatedAt.getTime()

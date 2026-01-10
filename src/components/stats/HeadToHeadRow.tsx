@@ -23,21 +23,20 @@ export function HeadToHeadRow({ record, className }: HeadToHeadRowProps) {
     <Link
       href={`/stats/${record.opponentId}`}
       className={cn(
-        'flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors',
-        className,
+        'flex items-center justify-between rounded-lg p-3 transition-colors hover:bg-gray-50',
+        className
       )}
     >
       <div className="flex items-center gap-3">
         {/* Avatar */}
-        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-medium">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 font-medium text-gray-600">
           {record.opponentName.charAt(0).toUpperCase()}
         </div>
 
         <div>
           <p className="font-medium text-gray-900">{record.opponentName}</p>
           <p className="text-sm text-gray-500">
-            {record.wins}W - {record.losses}L
-            {record.pushes > 0 ? ` - ${record.pushes}P` : ''}
+            {record.wins}W - {record.losses}L{record.pushes > 0 ? ` - ${record.pushes}P` : ''}
           </p>
         </div>
       </div>

@@ -148,10 +148,7 @@ describe('syncManager', () => {
 
       await syncPendingChanges()
 
-      expect(mockMarkChangeRetried).toHaveBeenCalledWith(
-        failingChange.id,
-        expect.any(String)
-      )
+      expect(mockMarkChangeRetried).toHaveBeenCalledWith(failingChange.id, expect.any(String))
     })
 
     it('updates sync metadata after sync with pending changes', async () => {
