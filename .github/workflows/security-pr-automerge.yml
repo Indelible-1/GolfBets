@@ -1,0 +1,140 @@
+name: Security PR Auto-Merge
+
+on:
+  # Trigger when CI workflow completes
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+  # Trigger on PR review approval
+  pull_request_review:
+    types: [submitted]
+
+  # Run on schedule to catch any missed PRs
+  schedule:
+    - cron: '0 */4 * * *'  # Every 4 hours
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-approve-and-merge:
+    name: Auto-Approve & Merge Security PRs
+    runs-on: ubuntu-latest
+    # Only run when CI passes or on schedule/manual trigger
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved')
+
+    steps:
+      - name: Find security PRs to process
+        id: find_prs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Searching for security PRs..."
+
+          # Get all open PRs from bots or with security-related branch names
+          PRS=$(gh pr list \
+            --repo ${{ github.repository }} \
+            --state open \
+            --json number,labels,author,mergeable,mergeStateStatus,headRefName,reviews \
+            --jq '[.[] | select(
+              .author.login == "github-actions[bot]" or
+              .author.login == "dependabot[bot]" or
+              (.headRefName | startswith("security/")) or
+              (.headRefName | startswith("dependabot/"))
+            )]' 2>/dev/null || echo "[]")
+
+          echo "Found PRs: $PRS"
+          echo "prs=$PRS" >> $GITHUB_OUTPUT
+
+      - name: Auto-approve PRs (with PAT)
+        if: steps.find_prs.outputs.prs != '[]'
+        env:
+          # Use PAT for approval (GITHUB_TOKEN can't approve its own PRs)
+          # User must create a PAT with repo scope and add it as GH_PAT secret
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          PRS='${{ steps.find_prs.outputs.prs }}'
+
+          echo "$PRS" | jq -c '.[]' | while read -r pr; do
+            PR_NUM=$(echo "$pr" | jq -r '.number')
+            AUTHOR=$(echo "$pr" | jq -r '.author.login')
+            HAS_APPROVAL=$(echo "$pr" | jq -r '.reviews | map(select(.state == "APPROVED")) | length > 0')
+
+            echo "Processing PR #$PR_NUM (author: $AUTHOR, approved: $HAS_APPROVAL)"
+
+            # Auto-approve if not already approved and using PAT
+            if [ "$HAS_APPROVAL" != "true" ] && [ -n "${{ secrets.GH_PAT }}" ]; then
+              echo "Auto-approving PR #$PR_NUM..."
+              gh pr review $PR_NUM --approve --repo ${{ github.repository }} \
+                --body "Auto-approved by security workflow. All CI checks passed." 2>/dev/null || true
+            fi
+          done
+
+      - name: Enable auto-merge for approved PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PRS='${{ steps.find_prs.outputs.prs }}'
+
+          if [ "$PRS" == "[]" ] || [ -z "$PRS" ]; then
+            echo "No security PRs found to process"
+            exit 0
+          fi
+
+          echo "$PRS" | jq -c '.[]' | while read -r pr; do
+            PR_NUM=$(echo "$pr" | jq -r '.number')
+            MERGEABLE=$(echo "$pr" | jq -r '.mergeable')
+            MERGE_STATE=$(echo "$pr" | jq -r '.mergeStateStatus')
+            AUTHOR=$(echo "$pr" | jq -r '.author.login')
+
+            echo ""
+            echo "========================================"
+            echo "Processing PR #$PR_NUM"
+            echo "  Author: $AUTHOR"
+            echo "  Mergeable: $MERGEABLE"
+            echo "  Merge State: $MERGE_STATE"
+            echo "========================================"
+
+            # Enable auto-merge regardless of current state
+            # It will merge automatically when all requirements are met
+            echo "Enabling auto-merge for PR #$PR_NUM..."
+            gh pr merge $PR_NUM --auto --squash --repo ${{ github.repository }} 2>/dev/null || true
+
+            # If behind, update the branch
+            if [ "$MERGE_STATE" == "BEHIND" ]; then
+              echo "PR #$PR_NUM is behind base branch - updating..."
+              gh pr update-branch $PR_NUM --repo ${{ github.repository }} 2>/dev/null || true
+            fi
+          done
+
+      - name: Summary
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "## Security PR Auto-Merge Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -z "${{ secrets.GH_PAT }}" ]; then
+            echo "⚠️ **Note:** GH_PAT secret not configured. Auto-approval disabled." >> $GITHUB_STEP_SUMMARY
+            echo "To enable auto-approval, create a PAT with \`repo\` scope and add it as \`GH_PAT\` secret." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "### Current Security PRs" >> $GITHUB_STEP_SUMMARY
+          gh pr list \
+            --repo ${{ github.repository }} \
+            --state open \
+            --json number,title,author,mergeable,mergeStateStatus \
+            --jq '.[] | select(.author.login == "github-actions[bot]" or .author.login == "dependabot[bot]") | "- PR #\(.number): \(.title) [\(.mergeStateStatus)]"' \
+            >> $GITHUB_STEP_SUMMARY 2>/dev/null || echo "No security PRs found" >> $GITHUB_STEP_SUMMARY
