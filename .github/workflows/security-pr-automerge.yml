@@ -1,0 +1,117 @@
+name: Security PR Auto-Merge
+
+on:
+  # Trigger when CI checks complete on PRs
+  check_suite:
+    types: [completed]
+
+  # Trigger on PR review approval
+  pull_request_review:
+    types: [submitted]
+
+  # Run on schedule to catch any missed PRs
+  schedule:
+    - cron: '0 */4 * * *'  # Every 4 hours
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  auto-merge:
+    name: Auto-Merge Security PRs
+    runs-on: ubuntu-latest
+    # Only run when check suite passes or on schedule/manual trigger
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
+      (github.event_name == 'check_suite' && github.event.check_suite.conclusion == 'success') ||
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved')
+
+    steps:
+      - name: Find mergeable security PRs
+        id: find_prs
+        run: |
+          echo "Searching for mergeable security PRs..."
+
+          # Get all open PRs with security-related labels
+          PRS=$(gh pr list \
+            --repo ${{ github.repository }} \
+            --state open \
+            --json number,labels,author,mergeable,mergeStateStatus,headRefName \
+            --jq '[.[] | select(
+              (.labels | map(.name) | any(. == "security" or . == "automated" or . == "dependencies")) and
+              (.author.login == "github-actions[bot]" or .author.login == "dependabot[bot]" or .headRefName | startswith("security/"))
+            )]' 2>/dev/null || echo "[]")
+
+          echo "Found PRs: $PRS"
+          echo "prs=$PRS" >> $GITHUB_OUTPUT
+
+      - name: Process and merge PRs
+        run: |
+          PRS='${{ steps.find_prs.outputs.prs }}'
+
+          if [ "$PRS" == "[]" ] || [ -z "$PRS" ]; then
+            echo "No security PRs found to process"
+            exit 0
+          fi
+
+          echo "$PRS" | jq -c '.[]' | while read -r pr; do
+            PR_NUM=$(echo "$pr" | jq -r '.number')
+            MERGEABLE=$(echo "$pr" | jq -r '.mergeable')
+            MERGE_STATE=$(echo "$pr" | jq -r '.mergeStateStatus')
+            AUTHOR=$(echo "$pr" | jq -r '.author.login')
+
+            echo ""
+            echo "========================================"
+            echo "Processing PR #$PR_NUM"
+            echo "  Author: $AUTHOR"
+            echo "  Mergeable: $MERGEABLE"
+            echo "  Merge State: $MERGE_STATE"
+            echo "========================================"
+
+            # Check if PR can be merged
+            if [ "$MERGEABLE" == "MERGEABLE" ] && [ "$MERGE_STATE" == "CLEAN" ]; then
+              echo "PR #$PR_NUM is ready to merge"
+
+              # Enable auto-merge (will merge when all required checks pass)
+              if gh pr merge $PR_NUM --auto --squash --repo ${{ github.repository }}; then
+                echo "✅ Auto-merge enabled for PR #$PR_NUM"
+              else
+                echo "⚠️ Could not enable auto-merge for PR #$PR_NUM"
+              fi
+
+            elif [ "$MERGEABLE" == "MERGEABLE" ] && [ "$MERGE_STATE" == "BLOCKED" ]; then
+              echo "PR #$PR_NUM is blocked - waiting for required checks"
+              # Enable auto-merge so it merges when checks pass
+              gh pr merge $PR_NUM --auto --squash --repo ${{ github.repository }} 2>/dev/null || true
+
+            elif [ "$MERGE_STATE" == "BEHIND" ]; then
+              echo "PR #$PR_NUM is behind base branch - updating..."
+              gh pr update-branch $PR_NUM --repo ${{ github.repository }} 2>/dev/null || true
+
+            else
+              echo "PR #$PR_NUM is not in a mergeable state (mergeable=$MERGEABLE, state=$MERGE_STATE)"
+            fi
+          done
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Security PR Auto-Merge Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Trigger: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # List current security PRs status
+          gh pr list \
+            --repo ${{ github.repository }} \
+            --state open \
+            --json number,title,author,mergeable,mergeStateStatus \
+            --jq '.[] | select(.author.login == "github-actions[bot]" or .author.login == "dependabot[bot]") | "- PR #\(.number): \(.title) [\(.mergeStateStatus)]"' \
+            >> $GITHUB_STEP_SUMMARY 2>/dev/null || echo "No security PRs found" >> $GITHUB_STEP_SUMMARY

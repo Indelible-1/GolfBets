@@ -1,0 +1,267 @@
+name: CodeQL Auto-Remediation
+
+on:
+  # Trigger when code scanning alerts are created or reopened
+  code_scanning_alert:
+    types: [created, reopened]
+
+  # Also allow manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      alert_number:
+        description: 'Specific alert number to remediate (optional)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  security-events: write
+  actions: read
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  auto-remediate:
+    name: Auto-Remediate Security Alerts
+    runs-on: ubuntu-latest
+    # Only run for CodeQL alerts (not third-party scanners)
+    if: github.event_name == 'workflow_dispatch' || github.event.alert.tool.name == 'CodeQL'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Get alert details
+        id: alert
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "${{ inputs.alert_number }}" ]; then
+            ALERT_NUMBER="${{ inputs.alert_number }}"
+          else
+            ALERT_NUMBER="${{ github.event.alert.number }}"
+          fi
+
+          echo "alert_number=$ALERT_NUMBER" >> $GITHUB_OUTPUT
+
+          # Get alert details via API
+          ALERT_INFO=$(gh api repos/${{ github.repository }}/code-scanning/alerts/$ALERT_NUMBER 2>/dev/null || echo "{}")
+
+          if [ "$ALERT_INFO" != "{}" ]; then
+            RULE_ID=$(echo "$ALERT_INFO" | jq -r '.rule.id // "unknown"')
+            SEVERITY=$(echo "$ALERT_INFO" | jq -r '.rule.security_severity_level // .rule.severity // "medium"')
+            FILE_PATH=$(echo "$ALERT_INFO" | jq -r '.most_recent_instance.location.path // "unknown"')
+
+            echo "rule_id=$RULE_ID" >> $GITHUB_OUTPUT
+            echo "severity=$SEVERITY" >> $GITHUB_OUTPUT
+            echo "file_path=$FILE_PATH" >> $GITHUB_OUTPUT
+            echo "has_alert=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_alert=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check for Copilot Autofix suggestion
+        id: autofix
+        if: steps.alert.outputs.has_alert == 'true'
+        run: |
+          ALERT_NUMBER="${{ steps.alert.outputs.alert_number }}"
+
+          # Check if autofix is available for this alert
+          AUTOFIX=$(gh api repos/${{ github.repository }}/code-scanning/alerts/$ALERT_NUMBER/autofix 2>/dev/null || echo "{}")
+
+          if [ "$AUTOFIX" != "{}" ] && [ "$(echo "$AUTOFIX" | jq -r '.status')" == "ready" ]; then
+            echo "has_autofix=true" >> $GITHUB_OUTPUT
+            echo "Autofix available for alert #$ALERT_NUMBER"
+          else
+            echo "has_autofix=false" >> $GITHUB_OUTPUT
+            echo "No autofix available for alert #$ALERT_NUMBER"
+          fi
+
+      - name: Create fix branch
+        id: branch
+        if: steps.alert.outputs.has_alert == 'true'
+        run: |
+          ALERT_NUMBER="${{ steps.alert.outputs.alert_number }}"
+          RULE_ID="${{ steps.alert.outputs.rule_id }}"
+          BRANCH_NAME="security/codeql-fix-${ALERT_NUMBER}-$(date +%Y%m%d%H%M%S)"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "$BRANCH_NAME"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Apply Copilot Autofix
+        id: apply_fix
+        if: steps.autofix.outputs.has_autofix == 'true'
+        run: |
+          ALERT_NUMBER="${{ steps.alert.outputs.alert_number }}"
+
+          # Get and apply the autofix
+          gh api repos/${{ github.repository }}/code-scanning/alerts/$ALERT_NUMBER/autofix \
+            -X POST \
+            --field state=accepted 2>/dev/null || true
+
+          # The autofix creates a commit, we need to pull it
+          git pull origin ${{ steps.branch.outputs.branch_name }} 2>/dev/null || true
+
+          echo "fix_applied=true" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies (for validation)
+        if: steps.alert.outputs.has_alert == 'true'
+        run: npm ci
+
+      - name: Validate fix - Lint
+        id: lint
+        if: steps.alert.outputs.has_alert == 'true'
+        continue-on-error: true
+        run: |
+          if npm run lint; then
+            echo "lint_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "lint_passed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate fix - Type Check
+        id: typecheck
+        if: steps.alert.outputs.has_alert == 'true'
+        continue-on-error: true
+        run: |
+          if npm run typecheck; then
+            echo "typecheck_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "typecheck_passed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate fix - Tests
+        id: tests
+        if: steps.alert.outputs.has_alert == 'true'
+        continue-on-error: true
+        run: |
+          if npm run test -- --ci --maxWorkers=2; then
+            echo "tests_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_passed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Push branch
+        if: steps.alert.outputs.has_alert == 'true'
+        run: |
+          git push -u origin ${{ steps.branch.outputs.branch_name }} || true
+
+      - name: Create Pull Request
+        id: create_pr
+        if: steps.alert.outputs.has_alert == 'true'
+        run: |
+          ALERT_NUMBER="${{ steps.alert.outputs.alert_number }}"
+          RULE_ID="${{ steps.alert.outputs.rule_id }}"
+          SEVERITY="${{ steps.alert.outputs.severity }}"
+          FILE_PATH="${{ steps.alert.outputs.file_path }}"
+          LINT_STATUS="${{ steps.lint.outputs.lint_passed }}"
+          TYPE_STATUS="${{ steps.typecheck.outputs.typecheck_passed }}"
+          TEST_STATUS="${{ steps.tests.outputs.tests_passed }}"
+
+          # Determine if auto-merge should be enabled
+          ALL_CHECKS_PASS="false"
+          if [ "$LINT_STATUS" == "true" ] && [ "$TYPE_STATUS" == "true" ] && [ "$TEST_STATUS" == "true" ]; then
+            ALL_CHECKS_PASS="true"
+          fi
+
+          PR_BODY=$(cat <<EOF
+          ## Security Fix: CodeQL Alert #${ALERT_NUMBER}
+
+          **Rule:** \`${RULE_ID}\`
+          **Severity:** ${SEVERITY}
+          **File:** \`${FILE_PATH}\`
+
+          ### Validation Results
+
+          | Check | Status |
+          |-------|--------|
+          | Lint | $([ "$LINT_STATUS" == "true" ] && echo "✅ Passed" || echo "⚠️ Failed") |
+          | Type Check | $([ "$TYPE_STATUS" == "true" ] && echo "✅ Passed" || echo "⚠️ Failed") |
+          | Tests | $([ "$TEST_STATUS" == "true" ] && echo "✅ Passed" || echo "⚠️ Failed") |
+
+          ### Auto-Merge Status
+
+          $([ "$ALL_CHECKS_PASS" == "true" ] && echo "✅ All checks passed - PR will be auto-merged when CI completes" || echo "⚠️ Some checks failed - manual review required")
+
+          ---
+
+          *This PR was automatically generated by the CodeQL Auto-Remediation workflow.*
+
+          Closes security alert #${ALERT_NUMBER}
+          EOF
+          )
+
+          PR_URL=$(gh pr create \
+            --title "fix(security): remediate CodeQL alert #${ALERT_NUMBER} - ${RULE_ID}" \
+            --body "$PR_BODY" \
+            --base main \
+            --head ${{ steps.branch.outputs.branch_name }} \
+            --label "security,automated" 2>/dev/null || echo "")
+
+          if [ -n "$PR_URL" ]; then
+            echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+            echo "pr_created=true" >> $GITHUB_OUTPUT
+
+            # Enable auto-merge if all checks pass
+            if [ "$ALL_CHECKS_PASS" == "true" ]; then
+              gh pr merge "$PR_URL" --auto --squash || true
+              echo "Auto-merge enabled for $PR_URL"
+            fi
+          else
+            echo "pr_created=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## CodeQL Auto-Remediation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.alert.outputs.has_alert }}" == "true" ]; then
+            echo "- **Alert Number:** #${{ steps.alert.outputs.alert_number }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Rule ID:** ${{ steps.alert.outputs.rule_id }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Severity:** ${{ steps.alert.outputs.severity }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **File:** ${{ steps.alert.outputs.file_path }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Autofix Available:** ${{ steps.autofix.outputs.has_autofix }}" >> $GITHUB_STEP_SUMMARY
+
+            if [ "${{ steps.create_pr.outputs.pr_created }}" == "true" ]; then
+              echo "- **PR Created:** ${{ steps.create_pr.outputs.pr_url }}" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "No alert details available" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # Auto-merge job for PRs from this workflow
+  auto-merge-security-prs:
+    name: Auto-Merge Security PRs
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Find and merge ready security PRs
+        run: |
+          # Find all open PRs with security label from github-actions bot
+          PRS=$(gh pr list \
+            --repo ${{ github.repository }} \
+            --label "security,automated" \
+            --state open \
+            --json number,mergeable,mergeStateStatus,statusCheckRollup \
+            --jq '.[] | select(.mergeable == "MERGEABLE" and .mergeStateStatus == "CLEAN") | .number' 2>/dev/null || echo "")
+
+          for PR_NUM in $PRS; do
+            echo "Attempting to merge PR #$PR_NUM"
+            gh pr merge $PR_NUM --auto --squash --repo ${{ github.repository }} || true
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
