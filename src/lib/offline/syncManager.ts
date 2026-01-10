@@ -6,6 +6,7 @@ import {
   PendingChange,
 } from './pendingChanges'
 import { markScoresSynced, ScoreData } from './scoreCache'
+import { logger } from '@/lib/logger'
 
 export type SyncStatus = 'idle' | 'syncing' | 'error' | 'offline'
 
@@ -81,7 +82,11 @@ export async function syncPendingChanges(): Promise<SyncResult> {
         await markChangeRetried(change.id, errorMessage)
       } else {
         // Too many retries, log and remove
-        console.error('Dropping change after 5 retries:', change)
+        logger.error('Dropping change after max retries', new Error('Max retries exceeded'), {
+          changeId: change.id,
+          changeType: change.type,
+          retryCount: change.retryCount,
+        })
         await removePendingChange(change.id)
       }
     }
@@ -153,7 +158,7 @@ async function syncScore(change: PendingChange): Promise<void> {
       break
     case 'delete':
       // Scores typically aren't deleted, but handle if needed
-      console.warn('Score deletion not implemented')
+      logger.warn('Score deletion not implemented', { matchId: change.matchId })
       break
   }
 }
@@ -164,7 +169,7 @@ async function syncScore(change: PendingChange): Promise<void> {
 async function syncMatch(change: PendingChange): Promise<void> {
   // Match sync logic - typically not needed for MVP
   // Matches are usually created online
-  console.warn('Match sync not implemented:', change)
+  logger.warn('Match sync not implemented', { matchId: change.matchId })
 }
 
 /**
@@ -172,7 +177,7 @@ async function syncMatch(change: PendingChange): Promise<void> {
  */
 async function syncParticipant(change: PendingChange): Promise<void> {
   // Participant sync logic
-  console.warn('Participant sync not implemented:', change)
+  logger.warn('Participant sync not implemented', { matchId: change.matchId })
 }
 
 /**
