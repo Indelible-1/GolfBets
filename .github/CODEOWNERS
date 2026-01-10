@@ -1,0 +1,34 @@
+# CODEOWNERS - Defines code ownership for review requirements
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
+* @Indelible-1
+
+# Security-sensitive files - require explicit review
+/firestore.rules @Indelible-1
+/firestore.indexes.json @Indelible-1
+/.env.example @Indelible-1
+
+# Authentication and security code
+/src/lib/firebase.ts @Indelible-1
+/src/lib/auth/ @Indelible-1
+
+# Cloud Functions (server-side logic)
+/functions/ @Indelible-1
+
+# Test files
+/__tests__/ @Indelible-1
+/src/**/*.test.ts @Indelible-1
+/src/**/*.test.tsx @Indelible-1
+/jest.config.* @Indelible-1
+
+# CI/CD and GitHub configuration
+/.github/ @Indelible-1
+
+# Core betting logic
+/src/lib/bets/ @Indelible-1
+
+# Package dependencies
+/package.json @Indelible-1
+/package-lock.json @Indelible-1
+/functions/package.json @Indelible-1
