@@ -20,25 +20,25 @@ export function WrappedCard({ wrapped, onShare, className }: WrappedCardProps) {
   return (
     <div
       className={cn(
-        'bg-gradient-to-br from-green-600 to-green-800 rounded-2xl p-6 text-white shadow-xl',
-        className,
+        'rounded-2xl bg-gradient-to-br from-green-600 to-green-800 p-6 text-white shadow-xl',
+        className
       )}
     >
       {/* Header */}
-      <div className="text-center mb-6">
-        <p className="text-green-200 text-sm font-medium">Golf Wrapped</p>
+      <div className="mb-6 text-center">
+        <p className="text-sm font-medium text-green-200">Golf Wrapped</p>
         <h2 className="text-3xl font-bold">{wrapped.year}</h2>
       </div>
 
       {/* Main stat */}
-      <div className="text-center mb-6">
+      <div className="mb-6 text-center">
         <span className="text-6xl">{wrapped.resultEmoji}</span>
-        <h3 className="text-xl font-bold mt-2">{wrapped.headline}</h3>
-        <p className="text-green-200 text-sm mt-1">{wrapped.subhead}</p>
+        <h3 className="mt-2 text-xl font-bold">{wrapped.headline}</h3>
+        <p className="mt-1 text-sm text-green-200">{wrapped.subhead}</p>
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="mb-6 grid grid-cols-2 gap-4">
         <WrappedStat label="Matches Played" value={wrapped.totalMatches.toString()} />
         <WrappedStat
           label="Net Result"
@@ -51,8 +51,8 @@ export function WrappedCard({ wrapped, onShare, className }: WrappedCardProps) {
 
       {/* Biggest results */}
       {(wrapped.biggestWin.amount > 0 || wrapped.biggestLoss.amount > 0) && (
-        <div className="bg-white/10 rounded-xl p-4 mb-4">
-          <h4 className="text-sm font-medium text-green-200 mb-2">Highlights</h4>
+        <div className="mb-4 rounded-xl bg-white/10 p-4">
+          <h4 className="mb-2 text-sm font-medium text-green-200">Highlights</h4>
           {wrapped.biggestWin.amount > 0 && (
             <p className="text-sm">
               <span className="text-green-300">Best win:</span>{' '}
@@ -70,10 +70,10 @@ export function WrappedCard({ wrapped, onShare, className }: WrappedCardProps) {
 
       {/* Top opponent */}
       {wrapped.topOpponents.length > 0 && (
-        <div className="bg-white/10 rounded-xl p-4 mb-4">
-          <h4 className="text-sm font-medium text-green-200 mb-2">Your Rivals</h4>
+        <div className="mb-4 rounded-xl bg-white/10 p-4">
+          <h4 className="mb-2 text-sm font-medium text-green-200">Your Rivals</h4>
           {wrapped.topOpponents.slice(0, 3).map((opp, i) => (
-            <p key={i} className="text-sm flex justify-between">
+            <p key={i} className="flex justify-between text-sm">
               <span>
                 {i + 1}. {opp.name}
               </span>
@@ -90,14 +90,14 @@ export function WrappedCard({ wrapped, onShare, className }: WrappedCardProps) {
       {onShare && (
         <button
           onClick={onShare}
-          className="w-full py-3 bg-white text-green-700 font-semibold rounded-xl hover:bg-green-50 transition-colors"
+          className="w-full rounded-xl bg-white py-3 font-semibold text-green-700 transition-colors hover:bg-green-50"
         >
           Share Your Wrapped
         </button>
       )}
 
       {/* Footer */}
-      <p className="text-center text-green-300 text-xs mt-4">GolfSettled</p>
+      <p className="mt-4 text-center text-xs text-green-300">GolfSettled</p>
     </div>
   )
 }
@@ -110,8 +110,8 @@ interface WrappedStatProps {
 
 function WrappedStat({ label, value, valueClass }: WrappedStatProps) {
   return (
-    <div className="bg-white/10 rounded-xl p-3 text-center">
-      <p className="text-green-200 text-xs">{label}</p>
+    <div className="rounded-xl bg-white/10 p-3 text-center">
+      <p className="text-xs text-green-200">{label}</p>
       <p className={cn('text-lg font-bold', valueClass)}>{value}</p>
     </div>
   )
@@ -126,13 +126,13 @@ export function WrappedMiniCard({ wrapped, className }: WrappedMiniCardProps) {
   return (
     <div
       className={cn(
-        'bg-gradient-to-br from-green-600 to-green-800 rounded-xl p-4 text-white',
-        className,
+        'rounded-xl bg-gradient-to-br from-green-600 to-green-800 p-4 text-white',
+        className
       )}
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-green-200 text-xs">Your {wrapped.year} Wrapped</p>
+          <p className="text-xs text-green-200">Your {wrapped.year} Wrapped</p>
           <p className="font-bold">{wrapped.totalMatches} matches</p>
         </div>
         <span className="text-3xl">{wrapped.resultEmoji}</span>

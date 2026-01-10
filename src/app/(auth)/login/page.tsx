@@ -88,15 +88,15 @@ export default function LoginPage() {
   if (success) {
     return (
       <Screen gradient={true} padBottom={false} className="flex items-center justify-center">
-        <div className="px-6 w-full max-w-sm">
-          <div className="bg-white rounded-2xl p-8 text-center space-y-4 shadow-xl">
-            <div className="w-16 h-16 mx-auto bg-emerald-100 rounded-full flex items-center justify-center">
+        <div className="w-full max-w-sm px-6">
+          <div className="space-y-4 rounded-2xl bg-white p-8 text-center shadow-xl">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
               <span className="text-3xl">✅</span>
             </div>
             <div className="space-y-2">
               <h2 className="text-xl font-bold text-gray-900">Check your email</h2>
-              <p className="text-gray-600 text-sm">We sent a magic link to sign you in.</p>
-              <p className="text-gray-500 text-xs">Click the link in your email to continue.</p>
+              <p className="text-sm text-gray-600">We sent a magic link to sign you in.</p>
+              <p className="text-xs text-gray-500">Click the link in your email to continue.</p>
             </div>
           </div>
         </div>
@@ -106,25 +106,25 @@ export default function LoginPage() {
 
   return (
     <Screen gradient={true} padBottom={false} className="flex items-center justify-center">
-      <div className="px-6 w-full max-w-sm space-y-8">
+      <div className="w-full max-w-sm space-y-8 px-6">
         {/* Logo section */}
-        <div className="text-center space-y-4">
+        <div className="space-y-4 text-center">
           <div className="relative inline-block">
-            <div className="absolute inset-0 blur-3xl bg-emerald-400/40 scale-[2] rounded-full" />
+            <div className="absolute inset-0 scale-[2] rounded-full bg-emerald-400/40 blur-3xl" />
             <span className="relative text-6xl drop-shadow-2xl">⛳</span>
           </div>
           <div className="space-y-1">
-            <h1 className="text-4xl font-bold text-white tracking-tight">Sign In</h1>
-            <p className="text-emerald-200 text-sm">Enter your email to continue</p>
+            <h1 className="text-4xl font-bold tracking-tight text-white">Sign In</h1>
+            <p className="text-sm text-emerald-200">Enter your email to continue</p>
           </div>
         </div>
 
         {/* Login form */}
-        <div className="bg-white rounded-2xl p-6 shadow-xl space-y-5">
+        <div className="space-y-5 rounded-2xl bg-white p-6 shadow-xl">
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
-                <p className="text-sm text-red-700 font-medium">{error}</p>
+              <div className="rounded-xl border border-red-200 bg-red-50 p-3">
+                <p className="text-sm font-medium text-red-700">{error}</p>
               </div>
             )}
 
@@ -141,14 +141,14 @@ export default function LoginPage() {
                 disabled={loading}
                 autoFocus
                 required
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white outline-none transition-all text-gray-900 placeholder-gray-400"
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-400 transition-all outline-none focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading || googleLoading}
-              className="w-full py-3 px-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white transition-colors hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? 'Sending...' : 'Send Magic Link'}
             </button>
@@ -159,7 +159,7 @@ export default function LoginPage() {
               <div className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">or</span>
+              <span className="bg-white px-2 text-gray-500">or</span>
             </div>
           </div>
 
@@ -167,9 +167,9 @@ export default function LoginPage() {
             type="button"
             onClick={handleGoogleSignIn}
             disabled={loading || googleLoading}
-            className="w-full py-3 px-4 bg-white text-gray-700 font-semibold rounded-xl border border-gray-300 hover:bg-gray-50 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-50 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -190,13 +190,13 @@ export default function LoginPage() {
             {googleLoading ? 'Signing in...' : 'Continue with Google'}
           </button>
 
-          <p className="text-center text-gray-500 text-xs">
+          <p className="text-center text-xs text-gray-500">
             No password needed — use magic link or Google.
           </p>
         </div>
 
         {/* Footer note */}
-        <p className="text-center text-emerald-200/60 text-xs">
+        <p className="text-center text-xs text-emerald-200/60">
           New here? Enter your email to create an account.
         </p>
       </div>

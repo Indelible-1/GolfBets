@@ -56,7 +56,11 @@ export function CardTitle({ className, children, ...props }: HTMLAttributes<HTML
 }
 
 // Card Description
-export function CardDescription({ className, children, ...props }: HTMLAttributes<HTMLParagraphElement>) {
+export function CardDescription({
+  className,
+  children,
+  ...props
+}: HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p className={cn('text-sm text-gray-500', className)} {...props}>
       {children}
@@ -76,7 +80,7 @@ export function CardContent({ className, children, ...props }: HTMLAttributes<HT
 // Card Footer
 export function CardFooter({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn('mt-4 pt-4 border-t border-gray-100', className)} {...props}>
+    <div className={cn('mt-4 border-t border-gray-100 pt-4', className)} {...props}>
       {children}
     </div>
   )

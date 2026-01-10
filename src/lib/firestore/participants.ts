@@ -9,7 +9,7 @@ import { participantDoc, participantsCollection } from './collections'
  */
 export async function getParticipant(
   matchId: string,
-  participantId: string,
+  participantId: string
 ): Promise<Participant | null> {
   try {
     const snapshot = await getDoc(participantDoc(matchId, participantId))
@@ -38,7 +38,7 @@ export async function getMatchParticipants(matchId: string): Promise<Participant
  */
 export async function getParticipantsByStatus(
   matchId: string,
-  status: ParticipantStatus,
+  status: ParticipantStatus
 ): Promise<Participant[]> {
   try {
     const participants = await getMatchParticipants(matchId)
@@ -63,7 +63,7 @@ export async function createParticipant(
   data?: {
     displayName?: string
     courseHandicap?: number
-  },
+  }
 ): Promise<Participant> {
   const now = new Date()
   const participant: Participant = {
@@ -96,7 +96,7 @@ export async function createParticipant(
 export async function updateParticipantStatus(
   matchId: string,
   participantId: string,
-  status: ParticipantStatus,
+  status: ParticipantStatus
 ): Promise<void> {
   try {
     const updates: Record<string, unknown> = {
@@ -124,7 +124,7 @@ export async function updateParticipantHandicap(
     handicapIndex?: number
     playingHandicap?: number
     teeBox?: string
-  },
+  }
 ): Promise<void> {
   try {
     await updateDoc(participantDoc(matchId, participantId), handicapData)
@@ -140,7 +140,7 @@ export async function updateParticipantHandicap(
 export async function updateParticipantDisplayName(
   matchId: string,
   participantId: string,
-  displayName: string,
+  displayName: string
 ): Promise<void> {
   try {
     await updateDoc(participantDoc(matchId, participantId), { displayName })

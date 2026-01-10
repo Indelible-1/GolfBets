@@ -59,13 +59,15 @@ export class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback || (
-        <DefaultErrorFallback
-          error={this.state.error}
-          errorId={this.state.errorId}
-          onReset={this.handleReset}
-          onReload={this.handleReload}
-        />
+      return (
+        this.props.fallback || (
+          <DefaultErrorFallback
+            error={this.state.error}
+            errorId={this.state.errorId}
+            onReset={this.handleReset}
+            onReload={this.handleReload}
+          />
+        )
       )
     }
 
@@ -86,42 +88,32 @@ function DefaultErrorFallback({ error, errorId, onReset, onReload }: DefaultErro
   const isDev = process.env.NODE_ENV === 'development'
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
-      <div className="max-w-md w-full text-center">
-        <div className="text-6xl mb-4" role="img" aria-label="Warning">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md text-center">
+        <div className="mb-4 text-6xl" role="img" aria-label="Warning">
           ⚠️
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Something went wrong
-        </h1>
-        <p className="text-gray-600 mb-6">
-          {error?.message || 'An unexpected error occurred'}
-        </p>
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">Something went wrong</h1>
+        <p className="mb-6 text-gray-600">{error?.message || 'An unexpected error occurred'}</p>
 
-        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
+        <div className="mb-6 flex flex-col justify-center gap-3 sm:flex-row">
           <button
             onClick={onReset}
-            className="px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition-colors"
+            className="rounded-lg bg-gray-200 px-6 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-300"
           >
             Try again
           </button>
           <button
             onClick={onReload}
-            className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
+            className="rounded-lg bg-green-600 px-6 py-3 font-medium text-white transition-colors hover:bg-green-700"
           >
             Reload page
           </button>
         </div>
 
-        {errorId && (
-          <p className="text-xs text-gray-400 mb-2">
-            Error ID: {errorId}
-          </p>
-        )}
+        {errorId && <p className="mb-2 text-xs text-gray-400">Error ID: {errorId}</p>}
 
-        <p className="text-sm text-gray-500">
-          If this problem persists, please contact support.
-        </p>
+        <p className="text-sm text-gray-500">If this problem persists, please contact support.</p>
 
         {/* Show stack trace in development */}
         {isDev && error?.stack && (
@@ -129,7 +121,7 @@ function DefaultErrorFallback({ error, errorId, onReset, onReload }: DefaultErro
             <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
               Show error details
             </summary>
-            <pre className="mt-2 p-3 bg-gray-100 rounded text-xs overflow-auto max-h-48 text-red-600">
+            <pre className="mt-2 max-h-48 overflow-auto rounded bg-gray-100 p-3 text-xs text-red-600">
               {error.stack}
             </pre>
           </details>

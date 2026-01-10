@@ -29,8 +29,8 @@ export default function ScorecardPage() {
       <ProtectedRoute>
         <Screen>
           <Header title="Scorecard" />
-          <div className="p-4 flex items-center justify-center h-96">
-            <div className="text-center space-y-2">
+          <div className="flex h-96 items-center justify-center p-4">
+            <div className="space-y-2 text-center">
               <div className="animate-spin text-4xl">⛳</div>
               <p className="text-gray-500">Loading match...</p>
             </div>
@@ -46,8 +46,8 @@ export default function ScorecardPage() {
         <Screen>
           <Header title="Scorecard" />
           <div className="p-4">
-            <Card variant="outlined" className="bg-red-50 border-red-200">
-              <p className="text-red-700 text-sm">Match not found or not authenticated</p>
+            <Card variant="outlined" className="border-red-200 bg-red-50">
+              <p className="text-sm text-red-700">Match not found or not authenticated</p>
             </Card>
           </div>
         </Screen>
@@ -81,16 +81,12 @@ export default function ScorecardPage() {
 
     try {
       if (score !== undefined) {
-        await createOrUpdateScore(
-          matchId,
-          user.id,
-          {
-            holeNumber: hole,
-            strokes: score,
-            enteredBy: user.id,
-            deviceId: 'web', // Could be enhanced with device detection
-          }
-        )
+        await createOrUpdateScore(matchId, user.id, {
+          holeNumber: hole,
+          strokes: score,
+          enteredBy: user.id,
+          deviceId: 'web', // Could be enhanced with device detection
+        })
       }
 
       // Update local state
@@ -120,22 +116,21 @@ export default function ScorecardPage() {
     }
   }
 
-  const totalHolesEntered = Object.values(currentUserScoresMap).filter((s) => s !== undefined).length
+  const totalHolesEntered = Object.values(currentUserScoresMap).filter(
+    (s) => s !== undefined
+  ).length
   const roundComplete = totalHolesEntered === match.holes
 
   return (
     <ProtectedRoute>
       <Screen padBottom>
-        <Header
-          title={match.courseName}
-          subtitle="Enter Scores"
-        />
+        <Header title={match.courseName} subtitle="Enter Scores" />
 
-        <div className="p-4 pb-24 space-y-6">
+        <div className="space-y-6 p-4 pb-24">
           {/* Error Banner */}
           {error && (
-            <Card variant="outlined" className="bg-red-50 border-red-200 p-4">
-              <p className="text-red-700 text-sm">{error}</p>
+            <Card variant="outlined" className="border-red-200 bg-red-50 p-4">
+              <p className="text-sm text-red-700">{error}</p>
             </Card>
           )}
 
@@ -156,8 +151,8 @@ export default function ScorecardPage() {
               loading={savingScores}
             />
           ) : (
-            <div className="text-center py-8">
-              <div className="animate-spin text-4xl mb-2">⛳</div>
+            <div className="py-8 text-center">
+              <div className="mb-2 animate-spin text-4xl">⛳</div>
               <p className="text-gray-500">Loading scores...</p>
             </div>
           )}
@@ -184,9 +179,7 @@ export default function ScorecardPage() {
 
             {match.status === 'completed' && (
               <Link href={`/match/${matchId}/results`} className="block">
-                <Button fullWidth>
-                  View Results
-                </Button>
+                <Button fullWidth>View Results</Button>
               </Link>
             )}
 
@@ -208,11 +201,12 @@ export default function ScorecardPage() {
           size="md"
         >
           <div className="space-y-4">
-            <p className="text-gray-600 text-sm">
-              Are you sure you want to complete this round? You can still view and modify scores afterward.
+            <p className="text-sm text-gray-600">
+              Are you sure you want to complete this round? You can still view and modify scores
+              afterward.
             </p>
 
-            <div className="bg-gray-50 p-3 rounded-lg space-y-2">
+            <div className="space-y-2 rounded-lg bg-gray-50 p-3">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Course</span>
                 <span className="font-semibold text-gray-900">{match.courseName}</span>

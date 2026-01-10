@@ -30,7 +30,7 @@ function createLedgerEntry(
   fromUserId: string,
   toUserId: string,
   amount: number,
-  overrides: Partial<LedgerEntry> = {},
+  overrides: Partial<LedgerEntry> = {}
 ): LedgerEntry {
   const now = new Date()
   return {
@@ -57,19 +57,25 @@ function createBet(type: 'nassau' | 'skins' = 'nassau'): Bet {
     type,
     unitValue: 5,
     scoringMode: 'net',
-    nassauConfig: type === 'nassau' ? {
-      frontAmount: 5,
-      backAmount: 5,
-      overallAmount: 5,
-      autoPress: true,
-      pressTrigger: 2,
-      maxPresses: 3,
-    } : null,
-    skinsConfig: type === 'skins' ? {
-      skinValue: 1,
-      carryover: true,
-      validation: true,
-    } : null,
+    nassauConfig:
+      type === 'nassau'
+        ? {
+            frontAmount: 5,
+            backAmount: 5,
+            overallAmount: 5,
+            autoPress: true,
+            pressTrigger: 2,
+            maxPresses: 3,
+          }
+        : null,
+    skinsConfig:
+      type === 'skins'
+        ? {
+            skinValue: 1,
+            carryover: true,
+            validation: true,
+          }
+        : null,
     createdAt: now,
     createdBy: USER_ID,
   }
@@ -191,10 +197,7 @@ describe('computeUserStats', () => {
   })
 
   it('calculates average payout', () => {
-    const matches = [
-      createMatch({ id: 'match1' }),
-      createMatch({ id: 'match2' }),
-    ]
+    const matches = [createMatch({ id: 'match1' }), createMatch({ id: 'match2' })]
     // Use a Map to properly associate entries with matches
     const entriesByMatch = new Map<string, LedgerEntry[]>([
       ['match1', [createLedgerEntry(OPPONENT_ID, USER_ID, 20)]], // +20
@@ -271,9 +274,7 @@ describe('getMatchResult', () => {
 
   it('calculates negative net (loss)', () => {
     const match = createMatch()
-    const entries = [
-      createLedgerEntry(USER_ID, OPPONENT_ID, 20),
-    ]
+    const entries = [createLedgerEntry(USER_ID, OPPONENT_ID, 20)]
     const bets = [createBet()]
 
     const result = getMatchResult(match, entries, bets, USER_ID)

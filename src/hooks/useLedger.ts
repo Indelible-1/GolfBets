@@ -3,7 +3,12 @@
 import { useEffect, useState } from 'react'
 import { collectionGroup, onSnapshot, query, where, getFirestore } from 'firebase/firestore'
 import { LedgerEntry } from '@/types'
-import { calculateMatchBalances, calculateUnsettledBalances, getDebtors, getCreditors } from '@/lib/ledger/balances'
+import {
+  calculateMatchBalances,
+  calculateUnsettledBalances,
+  getDebtors,
+  getCreditors,
+} from '@/lib/ledger/balances'
 
 const db = getFirestore()
 
@@ -39,10 +44,7 @@ export function useLedger(userId: string | null): UseLedgerReturn {
 
     try {
       // Query where user is the debtor (fromUserId)
-      const fromUserQuery = query(
-        collectionGroup(db, 'ledger'),
-        where('fromUserId', '==', userId),
-      )
+      const fromUserQuery = query(collectionGroup(db, 'ledger'), where('fromUserId', '==', userId))
 
       // Query where user is the creditor (toUserId)
       const toUserQuery = query(collectionGroup(db, 'ledger'), where('toUserId', '==', userId))
@@ -62,7 +64,7 @@ export function useLedger(userId: string | null): UseLedgerReturn {
           console.error('Error subscribing to ledger (from):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setLoading(false)
-        },
+        }
       )
 
       unsubscribeTo = onSnapshot(
@@ -80,7 +82,7 @@ export function useLedger(userId: string | null): UseLedgerReturn {
           console.error('Error subscribing to ledger (to):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setLoading(false)
-        },
+        }
       )
 
       return () => {
@@ -147,7 +149,7 @@ export function useMatchLedger(matchId: string | null) {
           console.error('Error subscribing to match ledger:', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setLoading(false)
-        },
+        }
       )
 
       return () => unsubscribe()
@@ -156,7 +158,9 @@ export function useMatchLedger(matchId: string | null) {
       console.error('Error setting up match ledger subscription:', err)
       // Schedule state update to avoid synchronous setState in effect
       queueMicrotask(() => {
-        setError(err instanceof Error ? err : new Error('Failed to initialize match ledger subscription'))
+        setError(
+          err instanceof Error ? err : new Error('Failed to initialize match ledger subscription')
+        )
         setLoading(false)
       })
     }

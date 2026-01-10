@@ -1,7 +1,14 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { collectionGroup, onSnapshot, query, where, getFirestore, getDocs } from 'firebase/firestore'
+import {
+  collectionGroup,
+  onSnapshot,
+  query,
+  where,
+  getFirestore,
+  getDocs,
+} from 'firebase/firestore'
 import type { Match, LedgerEntry, Bet, User } from '@/types'
 import type { HeadToHeadSummary } from '@/lib/analytics/types'
 import { computeHeadToHead, getHeadToHeadDetail } from '@/lib/analytics/headToHead'
@@ -78,7 +85,7 @@ export function useHeadToHead(userId: string | null | undefined): UseHeadToHeadR
           completedMatches.map(async (match) => {
             const matchBets = await getMatchBets(match.id)
             betsMap.set(match.id, matchBets)
-          }),
+          })
         )
 
         if (cancelled) return
@@ -126,7 +133,7 @@ export function useHeadToHead(userId: string | null | undefined): UseHeadToHeadR
           console.error('Error subscribing to ledger (from):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setIsLoading(false)
-        },
+        }
       )
 
       unsubscribeTo = onSnapshot(
@@ -142,7 +149,7 @@ export function useHeadToHead(userId: string | null | undefined): UseHeadToHeadR
           console.error('Error subscribing to ledger (to):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setIsLoading(false)
-        },
+        }
       )
 
       return () => {
@@ -171,7 +178,7 @@ export function useHeadToHead(userId: string | null | undefined): UseHeadToHeadR
         bets,
         users,
       },
-      userId,
+      userId
     )
   }, [userId, matches, ledgerEntries, bets, users])
 
@@ -203,7 +210,7 @@ interface UseHeadToHeadDetailReturn {
  */
 export function useHeadToHeadDetail(
   userId: string | null | undefined,
-  opponentId: string | null | undefined,
+  opponentId: string | null | undefined
 ): UseHeadToHeadDetailReturn {
   const [matches, setMatches] = useState<Match[]>([])
   const [ledgerEntries, setLedgerEntries] = useState<LedgerEntry[]>([])
@@ -251,7 +258,7 @@ export function useHeadToHeadDetail(
           completedMatches.map(async (match) => {
             const matchBets = await getMatchBets(match.id)
             betsMap.set(match.id, matchBets)
-          }),
+          })
         )
 
         if (cancelled) return
@@ -299,7 +306,7 @@ export function useHeadToHeadDetail(
         (err) => {
           console.error('Error subscribing to ledger (from):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
-        },
+        }
       )
 
       unsubscribeTo = onSnapshot(
@@ -313,7 +320,7 @@ export function useHeadToHeadDetail(
         (err) => {
           console.error('Error subscribing to ledger (to):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
-        },
+        }
       )
 
       return () => {
@@ -339,7 +346,7 @@ export function useHeadToHeadDetail(
         users,
       },
       userId,
-      opponentId,
+      opponentId
     )
   }, [userId, opponentId, matches, ledgerEntries, bets, users])
 

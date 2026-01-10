@@ -19,7 +19,6 @@
     "firebase-functions": "^7.0.2"
   },
   "devDependencies": {
-    "@types/firebase-functions": "^1.0.7",
     "@types/node": "^25.0.3",
     "typescript": "^5.3.3"
   }

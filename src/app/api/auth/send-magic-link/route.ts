@@ -20,7 +20,8 @@ const limiter = rateLimit({
 export async function POST(request: NextRequest) {
   try {
     // Get client IP for rate limiting
-    const identifier = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'anonymous'
+    const identifier =
+      request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'anonymous'
 
     // Check rate limit
     const { success, remaining } = await limiter.check(identifier, 3)
@@ -41,20 +42,14 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json(
-        { error: 'Invalid request body' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
     }
 
     // Validate input
     const validation = magicLinkSchema.safeParse(body)
     if (!validation.success) {
       const errorMessage = validation.error.issues[0]?.message || 'Invalid request'
-      return NextResponse.json(
-        { error: errorMessage },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: errorMessage }, { status: 400 })
     }
 
     // Send magic link
@@ -67,11 +62,11 @@ export async function POST(request: NextRequest) {
       { headers: { 'X-RateLimit-Remaining': remaining.toString() } }
     )
   } catch (error) {
-    logger.error('Magic link API error', error instanceof Error ? error : new Error('Unknown error'))
-
-    return NextResponse.json(
-      { error: 'Failed to send magic link' },
-      { status: 500 }
+    logger.error(
+      'Magic link API error',
+      error instanceof Error ? error : new Error('Unknown error')
     )
+
+    return NextResponse.json({ error: 'Failed to send magic link' }, { status: 500 })
   }
 }

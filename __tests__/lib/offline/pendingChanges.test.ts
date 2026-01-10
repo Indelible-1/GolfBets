@@ -140,10 +140,7 @@ describe('pendingChanges', () => {
 
       const changes = await getPendingChanges()
 
-      expect(mockGetAllFromIndex).toHaveBeenCalledWith(
-        'pendingChanges',
-        'by-timestamp'
-      )
+      expect(mockGetAllFromIndex).toHaveBeenCalledWith('pendingChanges', 'by-timestamp')
       expect(changes).toEqual(mockChanges)
     })
 
@@ -175,11 +172,7 @@ describe('pendingChanges', () => {
 
       const changes = await getPendingChangesForMatch(matchId)
 
-      expect(mockGetAllFromIndex).toHaveBeenCalledWith(
-        'pendingChanges',
-        'by-match',
-        matchId
-      )
+      expect(mockGetAllFromIndex).toHaveBeenCalledWith('pendingChanges', 'by-match', matchId)
       expect(changes).toEqual(mockChanges)
     })
   })
