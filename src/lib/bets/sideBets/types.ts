@@ -12,7 +12,7 @@ export type SideBetType = 'greenie' | 'sandy' | 'bingo_bango_bongo'
  */
 export interface SideBetConfig {
   type: SideBetType
-  amount: number      // Per occurrence (greenie/sandy) or per point (BBB)
+  amount: number // Per occurrence (greenie/sandy) or per point (BBB)
   enabled: boolean
 }
 
@@ -25,8 +25,8 @@ export interface SideBetConfig {
  */
 export interface GreenieResult {
   holeNumber: number
-  winnerId: string | null  // null = no winner (missed green, etc.)
-  par: 3                   // Greenies only on par 3s
+  winnerId: string | null // null = no winner (missed green, etc.)
+  par: 3 // Greenies only on par 3s
 }
 
 // ============================================
@@ -39,8 +39,8 @@ export interface GreenieResult {
 export interface SandyResult {
   holeNumber: number
   playerId: string
-  success: boolean         // Did they get up and down from bunker?
-  scoreRelativeToPar: number  // Must be <= 0 (par or better)
+  success: boolean // Did they get up and down from bunker?
+  scoreRelativeToPar: number // Must be <= 0 (par or better)
 }
 
 // ============================================
@@ -55,9 +55,9 @@ export interface SandyResult {
  */
 export interface BBBHoleResult {
   holeNumber: number
-  bingo: string | null    // First on green
-  bango: string | null    // Closest when all on green
-  bongo: string | null    // First in hole
+  bingo: string | null // First on green
+  bango: string | null // Closest when all on green
+  bongo: string | null // First in hole
 }
 
 /**
@@ -82,8 +82,8 @@ export interface SideBetSettlement {
   type: SideBetType
   results: Array<{
     playerId: string
-    wins: number          // Number of greenies/sandies or BBB points
-    amount: number        // Total won from this side bet
+    wins: number // Number of greenies/sandies or BBB points
+    amount: number // Total won from this side bet
   }>
   totalPot: number
 }
@@ -98,7 +98,7 @@ export interface SideBetSettlement {
 export interface HoleSideBets {
   holeNumber: number
   greenie?: string | null
-  sandy?: Record<string, boolean>  // playerId -> success
+  sandy?: Record<string, boolean> // playerId -> success
   bingo?: string | null
   bango?: string | null
   bongo?: string | null

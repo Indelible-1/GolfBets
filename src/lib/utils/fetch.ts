@@ -51,7 +51,7 @@ export async function fetchWithRetry(
       if (!response.ok && retryStatusCodes.includes(response.status) && attempt < retries) {
         lastError = new Error(`HTTP ${response.status}: ${response.statusText}`)
         const delay = retryDelay * Math.pow(2, attempt)
-        await new Promise(resolve => setTimeout(resolve, delay))
+        await new Promise((resolve) => setTimeout(resolve, delay))
         continue
       }
 
@@ -62,7 +62,7 @@ export async function fetchWithRetry(
       // Only retry on network errors, not on final attempt
       if (attempt < retries) {
         const delay = retryDelay * Math.pow(2, attempt)
-        await new Promise(resolve => setTimeout(resolve, delay))
+        await new Promise((resolve) => setTimeout(resolve, delay))
         continue
       }
     }
@@ -76,8 +76,10 @@ export async function fetchWithRetry(
  */
 export function isNetworkError(error: unknown): boolean {
   if (error instanceof TypeError) {
-    return error.message.toLowerCase().includes('network') ||
-           error.message.toLowerCase().includes('fetch')
+    return (
+      error.message.toLowerCase().includes('network') ||
+      error.message.toLowerCase().includes('fetch')
+    )
   }
   return false
 }
@@ -87,8 +89,7 @@ export function isNetworkError(error: unknown): boolean {
  */
 export function isTimeoutError(error: unknown): boolean {
   if (error instanceof Error) {
-    return error.name === 'AbortError' ||
-           error.message.toLowerCase().includes('timeout')
+    return error.name === 'AbortError' || error.message.toLowerCase().includes('timeout')
   }
   return false
 }

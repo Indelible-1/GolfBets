@@ -72,8 +72,8 @@ export default function InvitePage() {
     return (
       <Screen>
         <Header title="Invite" />
-        <div className="p-4 flex items-center justify-center h-96">
-          <div className="text-center space-y-2">
+        <div className="flex h-96 items-center justify-center p-4">
+          <div className="space-y-2 text-center">
             <div className="animate-spin text-4xl">⛳</div>
             <p className="text-gray-500">Loading invite...</p>
           </div>
@@ -86,15 +86,16 @@ export default function InvitePage() {
     return (
       <Screen>
         <Header title="Invite" />
-        <div className="p-4 pb-24 space-y-4">
-          <Card variant="outlined" className="bg-red-50 border-red-200 p-4">
-            <p className="text-red-700 font-medium mb-2">Invalid Invite</p>
-            <p className="text-red-600 text-sm">{error || 'Match not found'}</p>
+        <div className="space-y-4 p-4 pb-24">
+          <Card variant="outlined" className="border-red-200 bg-red-50 p-4">
+            <p className="mb-2 font-medium text-red-700">Invalid Invite</p>
+            <p className="text-sm text-red-600">{error || 'Match not found'}</p>
           </Card>
 
-          <Card variant="outlined" className="bg-blue-50 border-blue-200 p-4">
-            <p className="text-blue-900 text-sm">
-              The invite link may have expired or been removed. Try asking the organizer for a new link.
+          <Card variant="outlined" className="border-blue-200 bg-blue-50 p-4">
+            <p className="text-sm text-blue-900">
+              The invite link may have expired or been removed. Try asking the organizer for a new
+              link.
             </p>
           </Card>
         </div>

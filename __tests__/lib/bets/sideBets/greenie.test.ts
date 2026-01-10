@@ -96,9 +96,7 @@ describe('settleGreenies', () => {
   })
 
   it('settles correctly in 4-player match', () => {
-    const results: GreenieResult[] = [
-      { holeNumber: 3, winnerId: 'A', par: 3 },
-    ]
+    const results: GreenieResult[] = [{ holeNumber: 3, winnerId: 'A', par: 3 }]
     const payouts = settleGreenies(results, config, ['A', 'B', 'C', 'D'])
 
     // A wins 1 greenie from 3 players: +15
@@ -121,9 +119,7 @@ describe('settleGreenies', () => {
   })
 
   it('handles single player (no payout)', () => {
-    const results: GreenieResult[] = [
-      { holeNumber: 3, winnerId: 'A', par: 3 },
-    ]
+    const results: GreenieResult[] = [{ holeNumber: 3, winnerId: 'A', par: 3 }]
     const payouts = settleGreenies(results, config, ['A'])
 
     expect(payouts.get('A')).toBe(0)
@@ -131,9 +127,7 @@ describe('settleGreenies', () => {
 
   it('handles decimal amounts', () => {
     const decimalConfig: SideBetConfig = { type: 'greenie', amount: 0.5, enabled: true }
-    const results: GreenieResult[] = [
-      { holeNumber: 3, winnerId: 'A', par: 3 },
-    ]
+    const results: GreenieResult[] = [{ holeNumber: 3, winnerId: 'A', par: 3 }]
     const payouts = settleGreenies(results, decimalConfig, ['A', 'B'])
 
     expect(payouts.get('A')).toBe(0.5)

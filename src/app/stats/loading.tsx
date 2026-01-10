@@ -7,36 +7,36 @@ export default function StatsLoading() {
     <Screen padBottom>
       <Header title="Stats" subtitle="Your Performance" />
 
-      <div className="p-4 pb-24 space-y-6 animate-pulse">
+      <div className="animate-pulse space-y-6 p-4 pb-24">
         {/* Title skeleton */}
         <div className="flex items-center justify-between">
-          <div className="h-7 bg-gray-200 rounded w-1/3" />
-          <div className="h-6 bg-gray-200 rounded-full w-24" />
+          <div className="h-7 w-1/3 rounded bg-gray-200" />
+          <div className="h-6 w-24 rounded-full bg-gray-200" />
         </div>
 
         {/* Stats grid skeleton */}
         <div className="grid grid-cols-2 gap-3">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-24 bg-gray-200 rounded-lg" />
+            <div key={i} className="h-24 rounded-lg bg-gray-200" />
           ))}
         </div>
 
         {/* Win/Loss bar skeleton */}
-        <div className="h-20 bg-gray-200 rounded-lg" />
+        <div className="h-20 rounded-lg bg-gray-200" />
 
         {/* More stats skeleton */}
         <div className="grid grid-cols-2 gap-3">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-24 bg-gray-200 rounded-lg" />
+            <div key={i} className="h-24 rounded-lg bg-gray-200" />
           ))}
         </div>
 
         {/* H2H skeleton */}
         <div className="space-y-2">
-          <div className="h-5 bg-gray-200 rounded w-1/4" />
+          <div className="h-5 w-1/4 rounded bg-gray-200" />
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+              <div key={i} className="h-16 rounded-lg bg-gray-200" />
             ))}
           </div>
         </div>

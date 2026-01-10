@@ -25,20 +25,20 @@ export type BetErrorCode =
  * User-friendly messages for bet error codes
  */
 const BET_ERROR_MESSAGES: Record<BetErrorCode, string> = {
-  'INVALID_HOLE_NUMBER': 'Invalid hole number',
-  'MATCH_NOT_ACTIVE': "This match isn't active yet",
-  'MATCH_NOT_FOUND': 'Match not found',
-  'SCORE_ALREADY_ENTERED': 'Score already entered for this hole',
-  'PRESS_LIMIT_EXCEEDED': 'Maximum presses reached for this segment',
-  'INVALID_PLAYER_COUNT': 'This bet type requires exactly 2 players',
-  'INVALID_BET_AMOUNT': 'Bet amount must be greater than zero',
-  'BET_NOT_FOUND': 'Bet not found',
-  'PARTICIPANT_NOT_FOUND': 'Participant not found in match',
-  'INVALID_SCORING_MODE': 'Invalid scoring mode for this bet type',
-  'MATCH_ALREADY_STARTED': 'Cannot modify bets after match has started',
-  'MATCH_COMPLETED': 'Match has already been completed',
-  'INVALID_PRESS_TIMING': 'Press can only be made on holes 2-9 or 11-18',
-  'INSUFFICIENT_HOLES': 'Not enough holes remaining for this bet',
+  INVALID_HOLE_NUMBER: 'Invalid hole number',
+  MATCH_NOT_ACTIVE: "This match isn't active yet",
+  MATCH_NOT_FOUND: 'Match not found',
+  SCORE_ALREADY_ENTERED: 'Score already entered for this hole',
+  PRESS_LIMIT_EXCEEDED: 'Maximum presses reached for this segment',
+  INVALID_PLAYER_COUNT: 'This bet type requires exactly 2 players',
+  INVALID_BET_AMOUNT: 'Bet amount must be greater than zero',
+  BET_NOT_FOUND: 'Bet not found',
+  PARTICIPANT_NOT_FOUND: 'Participant not found in match',
+  INVALID_SCORING_MODE: 'Invalid scoring mode for this bet type',
+  MATCH_ALREADY_STARTED: 'Cannot modify bets after match has started',
+  MATCH_COMPLETED: 'Match has already been completed',
+  INVALID_PRESS_TIMING: 'Press can only be made on holes 2-9 or 11-18',
+  INSUFFICIENT_HOLES: 'Not enough holes remaining for this bet',
 }
 
 /**
@@ -49,11 +49,7 @@ export class BetError extends Error {
   public readonly code: BetErrorCode
   public readonly context?: Record<string, unknown>
 
-  constructor(
-    code: BetErrorCode,
-    context?: Record<string, unknown>,
-    customMessage?: string
-  ) {
+  constructor(code: BetErrorCode, context?: Record<string, unknown>, customMessage?: string) {
     const message = customMessage || BET_ERROR_MESSAGES[code]
     super(message)
     this.name = 'BetError'
@@ -161,10 +157,7 @@ export function validateHoleNumber(holeNumber: number, totalHoles: 9 | 18): void
 /**
  * Validate press action for Nassau bet
  */
-export function validatePressAction(
-  matchState: MatchState,
-  config: NassauConfig
-): void {
+export function validatePressAction(matchState: MatchState, config: NassauConfig): void {
   validateMatchActive(matchState)
 
   const presses = matchState.presses || []

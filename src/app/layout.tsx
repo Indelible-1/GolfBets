@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
-      <body className="font-sans safe-top safe-bottom">
+      <body className="safe-top safe-bottom font-sans">
         <ErrorBoundary>
           <PWAProvider>
             <SyncIndicator />

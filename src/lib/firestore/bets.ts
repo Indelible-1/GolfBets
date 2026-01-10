@@ -60,7 +60,7 @@ export async function createBet(
     scoringMode: ScoringMode
     nassauConfig?: NassauConfig
     skinsConfig?: SkinsConfig
-  },
+  }
 ): Promise<Bet> {
   const now = new Date()
   const betId = `bet_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
@@ -96,7 +96,7 @@ export async function createBet(
 export async function updateBet(
   matchId: string,
   betId: string,
-  updates: Partial<Omit<Bet, 'id' | 'createdAt' | 'createdBy'>>,
+  updates: Partial<Omit<Bet, 'id' | 'createdAt' | 'createdBy'>>
 ): Promise<void> {
   try {
     const updateData: Record<string, unknown> = {}

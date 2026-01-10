@@ -105,15 +105,13 @@ export default function GroupSettingsPage({ params }: SettingsPageProps) {
     return (
       <ProtectedRoute>
         <Screen padBottom>
-          <div className="flex flex-col items-center justify-center min-h-[60vh] p-4 text-center">
-            <span className="text-5xl mb-4">🔒</span>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Access Denied</h2>
-            <p className="text-gray-500 mb-4">
-              Only the group creator can edit settings.
-            </p>
+          <div className="flex min-h-[60vh] flex-col items-center justify-center p-4 text-center">
+            <span className="mb-4 text-5xl">🔒</span>
+            <h2 className="mb-2 text-xl font-bold text-gray-900">Access Denied</h2>
+            <p className="mb-4 text-gray-500">Only the group creator can edit settings.</p>
             <Link
               href={`/groups/${id}`}
-              className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium"
+              className="rounded-lg bg-emerald-600 px-4 py-2 font-medium text-white"
             >
               Back to Group
             </Link>
@@ -126,19 +124,21 @@ export default function GroupSettingsPage({ params }: SettingsPageProps) {
   return (
     <ProtectedRoute>
       <Screen padBottom>
-        <Header
-          title="Group Settings"
-          subtitle={group?.name ?? 'Loading...'}
-        />
+        <Header title="Group Settings" subtitle={group?.name ?? 'Loading...'} />
 
-        <div className="p-4 pb-24 space-y-6">
+        <div className="space-y-6 p-4 pb-24">
           {/* Back Link */}
           <Link
             href={`/groups/${id}`}
             className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-800"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             Back to Group
           </Link>
@@ -150,23 +150,23 @@ export default function GroupSettingsPage({ params }: SettingsPageProps) {
             <>
               {/* Success/Error Messages */}
               {success && (
-                <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+                <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-700">
                   {success}
                 </div>
               )}
               {error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                   {error}
                 </div>
               )}
 
               {/* Group Name */}
               <Card variant="outlined" padding="md">
-                <h3 className="font-medium text-gray-900 mb-3">Group Name</h3>
+                <h3 className="mb-3 font-medium text-gray-900">Group Name</h3>
                 <div className="flex gap-2">
                   <Input
                     value={name}
-                    onChange={e => setName(e.target.value)}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="Group name"
                     maxLength={50}
                     className="flex-1"
@@ -184,31 +184,26 @@ export default function GroupSettingsPage({ params }: SettingsPageProps) {
 
               {/* Members */}
               <Card variant="outlined" padding="md">
-                <h3 className="font-medium text-gray-900 mb-3">
-                  Members ({members.length})
-                </h3>
+                <h3 className="mb-3 font-medium text-gray-900">Members ({members.length})</h3>
                 <div className="space-y-2">
-                  {members.map(member => {
+                  {members.map((member) => {
                     const isCreator = member.id === group.createdBy
                     const isCurrentUser = member.id === userId
 
                     return (
-                      <div
-                        key={member.id}
-                        className="flex items-center justify-between py-2"
-                      >
+                      <div key={member.id} className="flex items-center justify-between py-2">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-sm font-medium">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-sm font-medium text-emerald-700">
                             {member.displayName.charAt(0).toUpperCase()}
                           </div>
                           <div>
                             <p className="font-medium text-gray-900">
                               {member.displayName}
-                              {isCurrentUser && <span className="text-gray-500 text-xs ml-1">(You)</span>}
+                              {isCurrentUser && (
+                                <span className="ml-1 text-xs text-gray-500">(You)</span>
+                              )}
                             </p>
-                            {isCreator && (
-                              <p className="text-xs text-gray-500">Creator</p>
-                            )}
+                            {isCreator && <p className="text-xs text-gray-500">Creator</p>}
                           </div>
                         </div>
                         {!isCreator && canEdit && (
@@ -228,17 +223,14 @@ export default function GroupSettingsPage({ params }: SettingsPageProps) {
               {/* Danger Zone */}
               {canDelete && (
                 <Card variant="outlined" padding="md" className="border-red-200">
-                  <h3 className="font-medium text-red-700 mb-2">Danger Zone</h3>
-                  <p className="text-sm text-gray-500 mb-4">
-                    Deleting a group is permanent and cannot be undone. All group data
-                    including leaderboards and season history will be lost.
+                  <h3 className="mb-2 font-medium text-red-700">Danger Zone</h3>
+                  <p className="mb-4 text-sm text-gray-500">
+                    Deleting a group is permanent and cannot be undone. All group data including
+                    leaderboards and season history will be lost.
                   </p>
 
                   {!showDeleteConfirm ? (
-                    <Button
-                      variant="danger"
-                      onClick={() => setShowDeleteConfirm(true)}
-                    >
+                    <Button variant="danger" onClick={() => setShowDeleteConfirm(true)}>
                       Delete Group
                     </Button>
                   ) : (
@@ -247,11 +239,7 @@ export default function GroupSettingsPage({ params }: SettingsPageProps) {
                         Are you sure? This cannot be undone.
                       </p>
                       <div className="flex gap-2">
-                        <Button
-                          variant="danger"
-                          onClick={handleDeleteGroup}
-                          loading={isDeleting}
-                        >
+                        <Button variant="danger" onClick={handleDeleteGroup} loading={isDeleting}>
                           Yes, Delete
                         </Button>
                         <Button
@@ -276,9 +264,9 @@ export default function GroupSettingsPage({ params }: SettingsPageProps) {
 
 function SettingsSkeleton() {
   return (
-    <div className="space-y-6 animate-pulse">
-      <div className="h-24 bg-gray-200 rounded-lg" />
-      <div className="h-48 bg-gray-200 rounded-lg" />
+    <div className="animate-pulse space-y-6">
+      <div className="h-24 rounded-lg bg-gray-200" />
+      <div className="h-48 rounded-lg bg-gray-200" />
     </div>
   )
 }

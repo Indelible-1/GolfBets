@@ -12,11 +12,7 @@ interface LeaderboardTableProps {
 
 export function LeaderboardTable({ standings, currentUserId, className }: LeaderboardTableProps) {
   if (standings.length === 0) {
-    return (
-      <div className="text-center py-8 text-gray-500">
-        No matches played yet this season.
-      </div>
-    )
+    return <div className="py-8 text-center text-gray-500">No matches played yet this season.</div>
   }
 
   return (
@@ -24,64 +20,71 @@ export function LeaderboardTable({ standings, currentUserId, className }: Leader
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
               Rank
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
               Player
             </th>
-            <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
               Net
             </th>
-            <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-4 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
               W-L
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200 bg-white">
           {standings.map((standing) => {
             const isCurrentUser = standing.playerId === currentUserId
 
             return (
-              <tr
-                key={standing.playerId}
-                className={isCurrentUser ? 'bg-emerald-50' : ''}
-              >
+              <tr key={standing.playerId} className={isCurrentUser ? 'bg-emerald-50' : ''}>
                 <td className="px-4 py-3 whitespace-nowrap">
                   <div className="flex items-center gap-1">
                     <span className="text-lg">{getRankEmoji(standing.rank)}</span>
                     <span className="font-medium text-gray-900">{standing.rank}</span>
-                    <span className={cn(
-                      'text-xs',
-                      standing.trend === 'up' ? 'text-green-600' :
-                      standing.trend === 'down' ? 'text-red-600' :
-                      'text-gray-400'
-                    )}>
+                    <span
+                      className={cn(
+                        'text-xs',
+                        standing.trend === 'up'
+                          ? 'text-green-600'
+                          : standing.trend === 'down'
+                            ? 'text-red-600'
+                            : 'text-gray-400'
+                      )}
+                    >
                       {formatRankChange(standing)}
                     </span>
                   </div>
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap">
-                  <span className={cn(
-                    'font-medium',
-                    isCurrentUser ? 'text-emerald-700' : 'text-gray-900'
-                  )}>
+                  <span
+                    className={cn(
+                      'font-medium',
+                      isCurrentUser ? 'text-emerald-700' : 'text-gray-900'
+                    )}
+                  >
                     {standing.displayName}
                     {isCurrentUser && <span className="ml-1 text-xs text-gray-500">(You)</span>}
                   </span>
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-right">
-                  <span className={cn(
-                    'font-bold',
-                    standing.netAmount > 0 ? 'text-green-600' :
-                    standing.netAmount < 0 ? 'text-red-600' :
-                    'text-gray-500'
-                  )}>
+                <td className="px-4 py-3 text-right whitespace-nowrap">
+                  <span
+                    className={cn(
+                      'font-bold',
+                      standing.netAmount > 0
+                        ? 'text-green-600'
+                        : standing.netAmount < 0
+                          ? 'text-red-600'
+                          : 'text-gray-500'
+                    )}
+                  >
                     {standing.netAmount > 0 ? '+' : ''}
                     {formatCurrency(standing.netAmount)}
                   </span>
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap text-right text-sm text-gray-500">
+                <td className="px-4 py-3 text-right text-sm whitespace-nowrap text-gray-500">
                   {standing.wins}-{standing.losses}
                 </td>
               </tr>
@@ -105,16 +108,12 @@ export function LeaderboardCompact({
   standings,
   limit = 3,
   currentUserId,
-  className
+  className,
 }: LeaderboardCompactProps) {
   const displayStandings = standings.slice(0, limit)
 
   if (displayStandings.length === 0) {
-    return (
-      <div className="text-center py-4 text-gray-500 text-sm">
-        No standings yet
-      </div>
-    )
+    return <div className="py-4 text-center text-sm text-gray-500">No standings yet</div>
   }
 
   return (
@@ -132,16 +131,20 @@ export function LeaderboardCompact({
           >
             <div className="flex items-center gap-2">
               <span className="text-sm">{getRankEmoji(standing.rank) || standing.rank}</span>
-              <span className="text-sm font-medium truncate max-w-[120px]">
+              <span className="max-w-[120px] truncate text-sm font-medium">
                 {standing.displayName}
               </span>
             </div>
-            <span className={cn(
-              'text-sm font-medium',
-              standing.netAmount > 0 ? 'text-green-600' :
-              standing.netAmount < 0 ? 'text-red-600' :
-              'text-gray-500'
-            )}>
+            <span
+              className={cn(
+                'text-sm font-medium',
+                standing.netAmount > 0
+                  ? 'text-green-600'
+                  : standing.netAmount < 0
+                    ? 'text-red-600'
+                    : 'text-gray-500'
+              )}
+            >
               {standing.netAmount > 0 ? '+' : ''}
               {formatCurrency(standing.netAmount)}
             </span>
