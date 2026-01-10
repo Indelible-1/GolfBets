@@ -12,14 +12,7 @@ interface ModalProps {
   className?: string
 }
 
-export function Modal({
-  isOpen,
-  onClose,
-  title,
-  children,
-  size = 'md',
-  className,
-}: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, size = 'md', className }: ModalProps) {
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -52,17 +45,17 @@ export function Modal({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
+        className="bg-opacity-50 fixed inset-0 z-40 bg-black transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Container */}
-      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center">
         <div
           className={cn(
-            'bg-white rounded-t-2xl sm:rounded-lg shadow-lg w-full',
-            'max-h-[85vh] sm:max-h-[90vh] overflow-y-auto',
+            'w-full rounded-t-2xl bg-white shadow-lg sm:rounded-lg',
+            'max-h-[85vh] overflow-y-auto sm:max-h-[90vh]',
             'animate-in fade-in slide-in-from-bottom-4 sm:slide-in-from-center',
             'duration-300',
             sizeClasses[size],
@@ -74,25 +67,20 @@ export function Modal({
         >
           {/* Header */}
           {title && (
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 sticky top-0 bg-white rounded-t-2xl sm:rounded-t-lg">
+            <div className="sticky top-0 flex items-center justify-between rounded-t-2xl border-b border-gray-200 bg-white p-4 sm:rounded-t-lg">
               <h2 id="modal-title" className="text-lg font-bold text-gray-900">
                 {title}
               </h2>
               <button
                 onClick={onClose}
                 className={cn(
-                  'p-2 hover:bg-gray-100 rounded-lg transition-colors',
+                  'rounded-lg p-2 transition-colors hover:bg-gray-100',
                   'tap-target',
-                  'focus:outline-none focus:ring-2 focus:ring-fairway-500'
+                  'focus:ring-fairway-500 focus:ring-2 focus:outline-none'
                 )}
                 aria-label="Close modal"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"

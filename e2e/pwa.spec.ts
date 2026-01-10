@@ -25,9 +25,7 @@ test.describe('PWA Features', () => {
     expect(manifest.icons.length).toBeGreaterThan(0)
 
     // Should have 192x192 icon (required for PWA)
-    const has192 = manifest.icons.some(
-      (icon: { sizes: string }) => icon.sizes === '192x192'
-    )
+    const has192 = manifest.icons.some((icon: { sizes: string }) => icon.sizes === '192x192')
     expect(has192).toBe(true)
   })
 
@@ -46,7 +44,10 @@ test.describe('PWA Features', () => {
     const appleTouchIcon = page.locator('link[rel="apple-touch-icon"]')
 
     // Should have an apple touch icon for iOS (check in head)
-    const iconHref = await appleTouchIcon.first().getAttribute('href').catch(() => null)
+    const iconHref = await appleTouchIcon
+      .first()
+      .getAttribute('href')
+      .catch(() => null)
 
     // Either has the icon or is using default - both are acceptable for MVP
     // Just verify the element exists in the DOM

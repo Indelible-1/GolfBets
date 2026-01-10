@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
+import { Timestamp } from 'firebase-admin/firestore'
 import { Invite, Participant } from '../types'
 
 const db = admin.firestore()
@@ -37,11 +38,7 @@ export const consumeInvite = functions.https.onCall(async (data, context) => {
 
   try {
     // Find invite by token
-    const inviteSnap = await db
-      .collection('invites')
-      .where('token', '==', token)
-      .limit(1)
-      .get()
+    const inviteSnap = await db.collection('invites').where('token', '==', token).limit(1).get()
 
     if (inviteSnap.empty) {
       throw new functions.https.HttpsError('not-found', 'Invite not found')
@@ -87,9 +84,8 @@ export const consumeInvite = functions.https.onCall(async (data, context) => {
       })
 
       // Add participant to match (status: confirmed since they used invite link)
-      const participantRef = db.doc(
-        `matches/${invite.matchId}/participants/${userId}`
-      )
+      const participantRef = db.doc(`matches/${invite.matchId}/participants/${userId}`)
+      const nowTimestamp = Timestamp.fromDate(now)
       const participant: Participant = {
         id: userId,
         userId,
@@ -99,8 +95,8 @@ export const consumeInvite = functions.https.onCall(async (data, context) => {
         courseHandicap: null,
         team: null,
         status: 'confirmed',
-        invitedAt: now,
-        confirmedAt: now,
+        invitedAt: nowTimestamp,
+        confirmedAt: nowTimestamp,
       }
 
       transaction.set(participantRef, participant, { merge: true })
@@ -123,9 +119,6 @@ export const consumeInvite = functions.https.onCall(async (data, context) => {
     }
 
     functions.logger.error('Error consuming invite:', error)
-    throw new functions.https.HttpsError(
-      'internal',
-      'Failed to consume invite'
-    )
+    throw new functions.https.HttpsError('internal', 'Failed to consume invite')
   }
 })

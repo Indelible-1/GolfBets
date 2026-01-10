@@ -42,12 +42,7 @@ const BBB_CATEGORIES: Array<{
   },
 ]
 
-export function BBBScorer({
-  participants,
-  value,
-  onChange,
-  disabled = false,
-}: BBBScorerProps) {
+export function BBBScorer({ participants, value, onChange, disabled = false }: BBBScorerProps) {
   const handleSelect = (category: keyof BBBValue, playerId: string) => {
     const newValue = { ...value }
     // Toggle: if already selected, deselect
@@ -60,10 +55,7 @@ export function BBBScorer({
       {BBB_CATEGORIES.map((cat) => (
         <div key={cat.key} className="flex items-center gap-2">
           <div className="w-20 shrink-0">
-            <span
-              className="text-sm text-gray-600"
-              title={cat.description}
-            >
+            <span className="text-sm text-gray-600" title={cat.description}>
               {cat.label}
             </span>
           </div>
@@ -77,13 +69,13 @@ export function BBBScorer({
                   onClick={() => handleSelect(cat.key, p.id)}
                   disabled={disabled}
                   className={cn(
-                    'px-2 py-1 rounded text-xs font-medium transition-colors',
+                    'rounded px-2 py-1 text-xs font-medium transition-colors',
                     'min-h-[32px] min-w-[40px]', // Touch-friendly
-                    'focus:outline-none focus:ring-2 focus:ring-offset-1',
+                    'focus:ring-2 focus:ring-offset-1 focus:outline-none',
                     isSelected
                       ? `${cat.activeColor} text-white focus:ring-gray-500`
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200 focus:ring-gray-400',
-                    disabled && 'opacity-50 cursor-not-allowed'
+                    disabled && 'cursor-not-allowed opacity-50'
                   )}
                   aria-pressed={isSelected}
                 >

@@ -44,9 +44,7 @@ export function calculateUserBalance(userId: string, entries: LedgerEntry[]): nu
  * @param entries Ledger entries for the match
  * @returns Map of userId -> net balance
  */
-export function calculateMatchBalances(
-  entries: LedgerEntry[],
-): Map<string, number> {
+export function calculateMatchBalances(entries: LedgerEntry[]): Map<string, number> {
   const balances = new Map<string, number>()
 
   // Initialize all users with 0 balance
@@ -73,9 +71,7 @@ export function calculateMatchBalances(
  * @param entries Ledger entries for the match
  * @returns Map of userId -> unsettled balance
  */
-export function calculateUnsettledBalances(
-  entries: LedgerEntry[],
-): Map<string, number> {
+export function calculateUnsettledBalances(entries: LedgerEntry[]): Map<string, number> {
   const unsettledEntries = entries.filter((entry) => !entry.settled)
   return calculateMatchBalances(unsettledEntries)
 }
@@ -124,12 +120,12 @@ export function getCreditors(balances: Map<string, number>): UserBalance[] {
 export function calculatePairwiseBalance(
   userId1: string,
   userId2: string,
-  entries: LedgerEntry[],
+  entries: LedgerEntry[]
 ): number {
   const relevantEntries = entries.filter(
     (entry) =>
       (entry.fromUserId === userId1 && entry.toUserId === userId2) ||
-      (entry.fromUserId === userId2 && entry.toUserId === userId1),
+      (entry.fromUserId === userId2 && entry.toUserId === userId1)
   )
 
   let balance = 0

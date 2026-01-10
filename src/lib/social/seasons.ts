@@ -57,7 +57,7 @@ export async function getGroupSeasons(groupId: string): Promise<Season[]> {
   )
   const snapshot = await getDocs(q)
 
-  return snapshot.docs.map(doc => doc.data())
+  return snapshot.docs.map((doc) => doc.data())
 }
 
 export async function getActiveGroupSeason(groupId: string): Promise<Season | null> {
@@ -162,11 +162,7 @@ export function getSeasonDates(
 
 export function isSeasonActive(season: Season): boolean {
   const now = new Date()
-  return (
-    season.status === 'active' &&
-    now >= season.startDate &&
-    now <= season.endDate
-  )
+  return season.status === 'active' && now >= season.startDate && now <= season.endDate
 }
 
 export function getSeasonProgress(season: Season): number {
