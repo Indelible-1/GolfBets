@@ -54,9 +54,9 @@ export function ResultsCard({
   return (
     <Card className={cn('overflow-hidden', className)}>
       {/* Header with gradient */}
-      <div className="bg-gradient-to-r from-fairway-600 to-fairway-700 p-6 text-white">
-        <h2 className="text-2xl font-bold mb-1">{courseName}</h2>
-        <p className="text-fairway-100 text-sm mb-4">
+      <div className="from-fairway-600 to-fairway-700 bg-gradient-to-r p-6 text-white">
+        <h2 className="mb-1 text-2xl font-bold">{courseName}</h2>
+        <p className="text-fairway-100 mb-4 text-sm">
           {date.toLocaleDateString('en-US', {
             weekday: 'short',
             month: 'short',
@@ -70,7 +70,7 @@ export function ResultsCard({
         {/* Share Button */}
         <button
           onClick={handleShare}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white text-sm font-medium transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30"
           aria-label="Share results"
         >
           <span>📤</span>
@@ -81,34 +81,46 @@ export function ResultsCard({
       {/* Settlements */}
       <CardContent className="pt-6">
         {settlements.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500 text-sm">No bets to settle</p>
+          <div className="py-8 text-center">
+            <p className="text-sm text-gray-500">No bets to settle</p>
           </div>
         ) : (
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Settlements</h3>
+            <h3 className="mb-4 text-sm font-semibold text-gray-900">Settlements</h3>
 
             {settlements.map((settlement) => {
-              const fromName = participantNames[settlement.fromUserId] || `Player ${settlement.fromUserId.slice(0, 6)}`
-              const toName = participantNames[settlement.toUserId] || `Player ${settlement.toUserId.slice(0, 6)}`
+              const fromName =
+                participantNames[settlement.fromUserId] ||
+                `Player ${settlement.fromUserId.slice(0, 6)}`
+              const toName =
+                participantNames[settlement.toUserId] || `Player ${settlement.toUserId.slice(0, 6)}`
 
               return (
                 <div
                   key={settlement.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between rounded-lg bg-gray-50 p-3"
                 >
                   <div className="flex-1 text-sm">
-                    <p className="text-gray-900 font-medium">
+                    <p className="font-medium text-gray-900">
                       {fromName} → {toName}
                     </p>
-                    <p className="text-gray-500 text-xs mt-1">
-                      {settlement.betType === 'nassau' ? 'Nassau' : settlement.betType === 'skins' ? 'Skins' : 'Bet'}
+                    <p className="mt-1 text-xs text-gray-500">
+                      {settlement.betType === 'nassau'
+                        ? 'Nassau'
+                        : settlement.betType === 'skins'
+                          ? 'Skins'
+                          : 'Bet'}
                       {settlement.settled && ' • Settled'}
                     </p>
                   </div>
 
                   <div className="text-right">
-                    <p className={cn('font-bold text-lg', settlement.settled ? 'text-gray-400' : 'text-fairway-600')}>
+                    <p
+                      className={cn(
+                        'text-lg font-bold',
+                        settlement.settled ? 'text-gray-400' : 'text-fairway-600'
+                      )}
+                    >
                       ${settlement.amount.toFixed(2)}
                     </p>
                   </div>
@@ -117,9 +129,10 @@ export function ResultsCard({
             })}
 
             {unsettledCount > 0 && (
-              <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="mt-4 border-t border-gray-200 pt-4">
                 <p className="text-xs text-gray-500 italic">
-                  💡 Settle up offline via Venmo, Zelle, or cash. Mark as settled in the ledger when done.
+                  💡 Settle up offline via Venmo, Zelle, or cash. Mark as settled in the ledger when
+                  done.
                 </p>
               </div>
             )}

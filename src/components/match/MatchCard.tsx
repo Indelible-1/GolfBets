@@ -20,7 +20,11 @@ export function MatchCard({ match, className }: MatchCardProps) {
 
   const formatDate = (timestamp: unknown) => {
     const date =
-      timestamp instanceof Date ? timestamp : typeof timestamp === 'object' && timestamp !== null && 'toDate' in timestamp ? (timestamp as { toDate: () => Date }).toDate() : new Date(String(timestamp))
+      timestamp instanceof Date
+        ? timestamp
+        : typeof timestamp === 'object' && timestamp !== null && 'toDate' in timestamp
+          ? (timestamp as { toDate: () => Date }).toDate()
+          : new Date(String(timestamp))
     return new Intl.DateTimeFormat('en-US', {
       weekday: 'short',
       month: 'short',
@@ -34,12 +38,12 @@ export function MatchCard({ match, className }: MatchCardProps) {
     <Link href={`/match/${match.id}`}>
       <Card
         variant="outlined"
-        className={cn('hover:border-fairway-300 transition-colors cursor-pointer', className)}
+        className={cn('hover:border-fairway-300 cursor-pointer transition-colors', className)}
       >
         <div className="flex items-start justify-between">
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 truncate">{match.courseName}</h3>
-            <p className="text-sm text-gray-500 mt-1">{formatDate(match.teeTime)}</p>
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate font-semibold text-gray-900">{match.courseName}</h3>
+            <p className="mt-1 text-sm text-gray-500">{formatDate(match.teeTime)}</p>
             <p className="text-sm text-gray-500">
               {match.holes} holes • {match.participantIds.length} players
             </p>
@@ -48,10 +52,10 @@ export function MatchCard({ match, className }: MatchCardProps) {
         </div>
 
         {match.status === 'active' && match.currentHole && (
-          <div className="mt-3 pt-3 border-t border-gray-100">
+          <div className="mt-3 border-t border-gray-100 pt-3">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-500">Current hole</span>
-              <span className="text-lg font-bold text-fairway-600">{match.currentHole}</span>
+              <span className="text-fairway-600 text-lg font-bold">{match.currentHole}</span>
             </div>
           </div>
         )}

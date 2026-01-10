@@ -37,13 +37,13 @@ export function RunningTotal({
   return (
     <div
       className={cn(
-        'grid grid-cols-3 gap-2 p-4 bg-gray-50 rounded-lg border border-gray-200',
+        'grid grid-cols-3 gap-2 rounded-lg border border-gray-200 bg-gray-50 p-4',
         className
       )}
     >
       {/* Thru X Holes */}
       <div className="flex flex-col items-center gap-1">
-        <span className="text-xs text-gray-600 uppercase font-semibold">Thru</span>
+        <span className="text-xs font-semibold text-gray-600 uppercase">Thru</span>
         <span className="text-xl font-bold text-gray-900">
           {currentHole}/{totalHoles}
         </span>
@@ -51,7 +51,7 @@ export function RunningTotal({
 
       {/* Total Strokes */}
       <div className="flex flex-col items-center gap-1">
-        <span className="text-xs text-gray-600 uppercase font-semibold">Total</span>
+        <span className="text-xs font-semibold text-gray-600 uppercase">Total</span>
         <span className="text-xl font-bold text-gray-900">
           {totalStrokes === undefined ? '-' : totalStrokes}
         </span>
@@ -59,10 +59,8 @@ export function RunningTotal({
 
       {/* To Par */}
       <div className="flex flex-col items-center gap-1">
-        <span className="text-xs text-gray-600 uppercase font-semibold">To Par</span>
-        <span className={cn('text-xl font-bold', toParColor)}>
-          {formatToPar()}
-        </span>
+        <span className="text-xs font-semibold text-gray-600 uppercase">To Par</span>
+        <span className={cn('text-xl font-bold', toParColor)}>{formatToPar()}</span>
       </div>
     </div>
   )

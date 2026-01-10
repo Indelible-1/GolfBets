@@ -55,36 +55,29 @@ export default function NewGroupPage() {
             <Card variant="outlined" padding="md">
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="name" className="mb-1 block text-sm font-medium text-gray-700">
                     Group Name
                   </label>
                   <Input
                     id="name"
                     type="text"
                     value={name}
-                    onChange={e => setName(e.target.value)}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="e.g., Saturday Morning Crew"
                     maxLength={50}
                     required
                   />
-                  <p className="mt-1 text-xs text-gray-500">
-                    {name.length}/50 characters
-                  </p>
+                  <p className="mt-1 text-xs text-gray-500">{name.length}/50 characters</p>
                 </div>
 
                 {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                  <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                     {error}
                   </div>
                 )}
 
                 <div className="pt-2">
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    fullWidth
-                    loading={isSubmitting}
-                  >
+                  <Button type="submit" variant="primary" fullWidth loading={isSubmitting}>
                     Create Group
                   </Button>
                 </div>
@@ -94,7 +87,7 @@ export default function NewGroupPage() {
             {/* Tips */}
             <div className="mt-6 space-y-3">
               <h3 className="text-sm font-medium text-gray-700">Tips</h3>
-              <div className="text-sm text-gray-500 space-y-2">
+              <div className="space-y-2 text-sm text-gray-500">
                 <p>• You can invite members after creating the group</p>
                 <p>• Set default bet configurations for quick match setup</p>
                 <p>• Track season standings and leaderboards</p>

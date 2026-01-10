@@ -48,7 +48,7 @@ export function useScores(matchId: string | null): UseScoresReturn {
           console.error('Error subscribing to scores:', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setLoading(false)
-        },
+        }
       )
 
       return () => unsubscribe()
@@ -79,7 +79,7 @@ export function useScores(matchId: string | null): UseScoresReturn {
  */
 export function useParticipantScores(
   matchId: string | null,
-  participantId: string | null,
+  participantId: string | null
 ): UseScoresReturn {
   const [scores, setScores] = useState<Score[]>([])
   const [loading, setLoading] = useState(true)
@@ -106,7 +106,7 @@ export function useParticipantScores(
           console.error('Error subscribing to participant scores:', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setLoading(false)
-        },
+        }
       )
 
       return () => unsubscribe()
@@ -115,7 +115,11 @@ export function useParticipantScores(
       console.error('Error setting up participant scores subscription:', err)
       // Schedule state update to avoid synchronous setState in effect
       queueMicrotask(() => {
-        setError(err instanceof Error ? err : new Error('Failed to initialize participant scores subscription'))
+        setError(
+          err instanceof Error
+            ? err
+            : new Error('Failed to initialize participant scores subscription')
+        )
         setLoading(false)
       })
     }

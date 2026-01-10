@@ -42,9 +42,5 @@ function getServerSnapshot() {
  * }
  */
 export function useOnlineStatus(): boolean {
-  return useSyncExternalStore(
-    subscribeOnlineStatus,
-    getOnlineSnapshot,
-    getServerSnapshot
-  )
+  return useSyncExternalStore(subscribeOnlineStatus, getOnlineSnapshot, getServerSnapshot)
 }

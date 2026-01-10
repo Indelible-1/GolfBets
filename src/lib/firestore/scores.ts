@@ -8,10 +8,7 @@ import { scoreDoc, scoresCollection } from './collections'
 /**
  * Fetch score document by composite ID (participantId_holeNumber)
  */
-export async function getScore(
-  matchId: string,
-  scoreId: string,
-): Promise<Score | null> {
+export async function getScore(matchId: string, scoreId: string): Promise<Score | null> {
   try {
     const snapshot = await getDoc(scoreDoc(matchId, scoreId))
     return snapshot.exists() ? snapshot.data() : null
@@ -24,15 +21,10 @@ export async function getScore(
 /**
  * Get all scores for a specific hole across all participants
  */
-export async function getScoresForHole(
-  matchId: string,
-  holeNumber: number,
-): Promise<Score[]> {
+export async function getScoresForHole(matchId: string, holeNumber: number): Promise<Score[]> {
   try {
     const snapshot = await getDocs(scoresCollection(matchId))
-    return snapshot.docs
-      .map((doc) => doc.data())
-      .filter((score) => score.holeNumber === holeNumber)
+    return snapshot.docs.map((doc) => doc.data()).filter((score) => score.holeNumber === holeNumber)
   } catch (error) {
     console.error('Error fetching scores for hole:', error)
     throw error
@@ -44,7 +36,7 @@ export async function getScoresForHole(
  */
 export async function getScoresForParticipant(
   matchId: string,
-  participantId: string,
+  participantId: string
 ): Promise<Score[]> {
   try {
     const snapshot = await getDocs(scoresCollection(matchId))
@@ -105,7 +97,7 @@ export async function createOrUpdateScore(
     enteredBy: string
     deviceId: string
   },
-  expectedVersion?: number,
+  expectedVersion?: number
 ): Promise<Score> {
   const scoreId = `${participantId}_${data.holeNumber}`
 
@@ -122,7 +114,7 @@ export async function createOrUpdateScore(
         // Optimistic locking: check version matches
         if (expectedVersion !== undefined && existingScore.version !== expectedVersion) {
           throw new Error(
-            `Version mismatch: expected ${expectedVersion}, got ${existingScore.version}`,
+            `Version mismatch: expected ${expectedVersion}, got ${existingScore.version}`
           )
         }
 
@@ -187,7 +179,7 @@ export async function createOrUpdateScore(
  */
 export async function batchUpdateScores(
   matchId: string,
-  scores: Array<Score & { expectedVersion: number }>,
+  scores: Array<Score & { expectedVersion: number }>
 ): Promise<void> {
   try {
     await runTransaction(db, async (transaction) => {
@@ -200,7 +192,7 @@ export async function batchUpdateScores(
           const existing = snapshot.data()
           if (existing.version !== expectedVersion) {
             throw new Error(
-              `Version mismatch for ${scoreItem.id}: expected ${expectedVersion}, got ${existing.version}`,
+              `Version mismatch for ${scoreItem.id}: expected ${expectedVersion}, got ${existing.version}`
             )
           }
         }

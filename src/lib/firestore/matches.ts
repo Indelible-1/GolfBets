@@ -1,4 +1,15 @@
-import { getDoc, setDoc, updateDoc, query, where, getDocs, collection, doc, getFirestore, DocumentReference } from 'firebase/firestore'
+import {
+  getDoc,
+  setDoc,
+  updateDoc,
+  query,
+  where,
+  getDocs,
+  collection,
+  doc,
+  getFirestore,
+  DocumentReference,
+} from 'firebase/firestore'
 import { Match, MatchStatus, Invite } from '@/types'
 import { matchDoc, matchesCollection } from './collections'
 
@@ -22,15 +33,9 @@ export async function getMatch(matchId: string): Promise<Match | null> {
  * @param userId The user ID to query
  * @param statusFilter Optional status filter (pending, active, completed)
  */
-export async function getUserMatches(
-  userId: string,
-  statusFilter?: MatchStatus,
-): Promise<Match[]> {
+export async function getUserMatches(userId: string, statusFilter?: MatchStatus): Promise<Match[]> {
   try {
-    const q = query(
-      matchesCollection(),
-      where('participantIds', 'array-contains', userId),
-    )
+    const q = query(matchesCollection(), where('participantIds', 'array-contains', userId))
 
     const snapshot = await getDocs(q)
     let matches = snapshot.docs.map((doc) => doc.data())
@@ -74,7 +79,7 @@ export async function createMatch(
     teeTime: Date
     courseId?: string
     holes?: 9 | 18
-  },
+  }
 ): Promise<Match> {
   const now = new Date()
   const matchId = `match_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
@@ -111,10 +116,7 @@ export async function createMatch(
 /**
  * Update match status (pending → active → completed)
  */
-export async function updateMatchStatus(
-  matchId: string,
-  status: MatchStatus,
-): Promise<void> {
+export async function updateMatchStatus(matchId: string, status: MatchStatus): Promise<void> {
   try {
     const updates: Record<string, unknown> = {
       status,
@@ -137,10 +139,7 @@ export async function updateMatchStatus(
 /**
  * Add participant to match (updates participantIds array)
  */
-export async function addParticipantToMatch(
-  matchId: string,
-  userId: string,
-): Promise<void> {
+export async function addParticipantToMatch(matchId: string, userId: string): Promise<void> {
   try {
     const match = await getMatch(matchId)
     if (!match) {
@@ -165,10 +164,7 @@ export async function addParticipantToMatch(
 /**
  * Remove participant from match (only if pending status)
  */
-export async function removeParticipantFromMatch(
-  matchId: string,
-  userId: string,
-): Promise<void> {
+export async function removeParticipantFromMatch(matchId: string, userId: string): Promise<void> {
   try {
     const match = await getMatch(matchId)
     if (!match) {
@@ -204,10 +200,7 @@ function generateInviteToken(): string {
  * @param createdBy User creating the invite
  * @returns Invite object with shareable token
  */
-export async function createMatchInvite(
-  matchId: string,
-  createdBy: string,
-): Promise<Invite> {
+export async function createMatchInvite(matchId: string, createdBy: string): Promise<Invite> {
   try {
     const match = await getMatch(matchId)
     if (!match) {
