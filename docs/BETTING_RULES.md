@@ -489,6 +489,450 @@ When running Nassau + Skins simultaneously:
 
 ---
 
+## ⚠️ Edge Cases (Expanded)
+
+### Incomplete Rounds
+
+#### Player Picks Up (No Score)
+
+**Scenario:** Player picks up their ball mid-hole without finishing.
+
+| Bet Type | Treatment | Rationale |
+|----------|-----------|-----------|
+| Nassau | Hole counted as **loss** for picker | Match play rules |
+| Skins | Hole **carries over** (treated as tie) | No clear winner |
+| Match Play | Hole conceded to opponent | Standard rules |
+
+**Implementation:**
+```typescript
+interface Score {
+  strokes: number | null  // null = picked up
+  pickedUp: boolean
+}
+
+function resolveHole(scores: Score[]): HoleResult {
+  const pickedUp = scores.filter(s => s.pickedUp)
+
+  if (pickedUp.length === scores.length) {
+    // Everyone picked up - all tie
+    return { winner: null, carried: true }
+  }
+
+  if (pickedUp.length > 0) {
+    // Some picked up - they lose
+    const remaining = scores.filter(s => !s.pickedUp)
+    return { winner: findLowestScore(remaining), carried: false }
+  }
+
+  // Normal scoring
+  return normalHoleResolution(scores)
+}
+```
+
+---
+
+#### Mid-Round Withdrawal
+
+**Scenario:** Player withdraws after hole 7 of front 9.
+
+| Segment | Treatment |
+|---------|-----------|
+| Front 9 | Remaining holes awarded to opponent |
+| Back 9 | Player who withdrew forfeits |
+| Overall | Based on completed + forfeited holes |
+| Skins | Remaining skins awarded to other players |
+| Presses | Active presses resolved in favor of opponent |
+
+**Implementation:**
+```typescript
+function handleWithdrawal(
+  match: Match,
+  withdrawingPlayer: string,
+  afterHole: number
+): MatchResult {
+  // Award remaining holes to opponents
+  const remainingHoles = match.holes - afterHole
+
+  // Update match status
+  return {
+    ...calculateCompletedHoles(match, afterHole),
+    forfeited: {
+      player: withdrawingPlayer,
+      afterHole,
+      holesForfeited: remainingHoles,
+    },
+  }
+}
+```
+
+---
+
+### Player Count Variations
+
+#### 3-Player Skins
+
+**Scenario:** Playing skins with 3 players instead of 2.
+
+| Situation | Treatment |
+|-----------|-----------|
+| Clear winner | That player wins the skin |
+| 2-way tie | Third player wins if lowest |
+| 3-way tie | Skin carries over |
+
+**Example:**
+```
+Hole 5: A=4, B=4, C=5
+→ A and B tie, but C doesn't win
+→ Skin carries over
+
+Hole 6: A=3, B=4, C=4
+→ A wins (lowest), gets 2 skins
+```
+
+---
+
+#### 4-Player Nassau
+
+**Scenario:** 4-player Nassau (often played as 2v2 teams or individual).
+
+**Option 1: Team Play (2v2)**
+- Each team's better ball per hole
+- Standard Nassau scoring applies
+
+**Option 2: Individual (Round-Robin)**
+- Each player has 3 opponents
+- 3 separate Nassau matches running simultaneously
+- Complex but accurate
+
+**MVP Recommendation:** Support 2v2 only. Document individual as Phase 2.
+
+```typescript
+type NassauFormat =
+  | { type: '1v1' }
+  | { type: '2v2', teams: [string[], string[]] }
+  // | { type: 'individual_4way' } // Phase 2
+```
+
+---
+
+### Handicap Edge Cases
+
+#### Handicap Difference > 36
+
+**Scenario:** 45-handicap playing against scratch golfer (0).
+
+**Problem:** Standard allocation only handles up to 36 strokes.
+
+**Solution:**
+```typescript
+function allocateStrokes(handicap: number, strokeIndex: number): number {
+  if (handicap <= 18) {
+    return strokeIndex <= handicap ? 1 : 0
+  } else if (handicap <= 36) {
+    return 1 + (strokeIndex <= handicap - 18 ? 1 : 0)
+  } else if (handicap <= 54) {
+    // 37-54: 2 strokes on all holes, 3 on hardest holes
+    return 2 + (strokeIndex <= handicap - 36 ? 1 : 0)
+  } else {
+    // Cap at 54 (USGA max)
+    return 3
+  }
+}
+```
+
+---
+
+#### No Handicap Entered
+
+**Scenario:** Player doesn't have/enter a handicap.
+
+| Mode | Treatment |
+|------|-----------|
+| Gross scoring | Normal - handicap not needed |
+| Net scoring | **Block bet creation** - require handicap |
+
+**UI Flow:**
+1. User selects "Net" scoring
+2. System checks all players have handicaps
+3. If missing: "Please enter handicap for [Player]"
+4. Block "Start Match" until resolved
+
+---
+
+### Timing & Order Edge Cases
+
+#### Scores Entered Out of Order
+
+**Scenario:** Player enters hole 9 score before hole 5.
+
+**Treatment:** Allow it, but:
+1. Presses can only activate after earlier holes are complete
+2. Show warning: "Hole 5-8 scores missing"
+3. Calculate results only when all holes complete
+
+```typescript
+function canCalculateSegment(scores: Score[], segment: 'front' | 'back'): boolean {
+  const holeRange = segment === 'front' ? [1, 9] : [10, 18]
+  const segmentScores = scores.filter(
+    s => s.holeNumber >= holeRange[0] && s.holeNumber <= holeRange[1]
+  )
+
+  return segmentScores.length === 9
+}
+```
+
+---
+
+#### Late Score Edit
+
+**Scenario:** Player edits hole 3 score after match is on hole 14.
+
+**Treatment:**
+1. Allow edit (scores can be wrong)
+2. Recalculate all affected bets
+3. Log to audit trail
+4. Notify other players: "[Player] updated Hole 3 score"
+
+**Recalculation cascade:**
+- Front 9 result may change
+- Overall result may change
+- Press triggers may change
+- Skins for that hole may change
+
+```typescript
+function handleScoreEdit(
+  match: Match,
+  edit: ScoreEdit
+): RecalculationResult {
+  // Snapshot before
+  const before = calculateAllBets(match)
+
+  // Apply edit
+  const updated = applyEdit(match, edit)
+
+  // Recalculate
+  const after = calculateAllBets(updated)
+
+  // Return changes
+  return {
+    changes: diffResults(before, after),
+    auditEntry: createAuditEntry(edit, before, after),
+  }
+}
+```
+
+---
+
+### Payout Edge Cases
+
+#### Everyone Ties Everything
+
+**Scenario:** All 18 holes are halved (all ties).
+
+| Bet Type | Result |
+|----------|--------|
+| Nassau | All segments push - $0 |
+| Skins (carryover) | All 18 skins to hole 18, which is also a tie = **unclaimed pot** |
+| Match Play | Halved match - each gets half bet |
+
+**Skins unclaimed pot:**
+- Option 1: Split equally among all players
+- Option 2: Carry to next round (if playing multiple)
+- **MVP:** Split equally
+
+---
+
+#### Payout Exceeds Reasonable Amount
+
+**Scenario:** Runaway presses result in $500+ owed.
+
+**Protection:**
+```typescript
+interface BetConfig {
+  // ...
+  maxExposure?: number  // e.g., $100
+}
+
+function validatePayout(
+  payouts: Payout[],
+  config: BetConfig
+): ValidationResult {
+  const maxOwed = Math.max(...payouts.map(p => Math.abs(p.amount)))
+
+  if (config.maxExposure && maxOwed > config.maxExposure) {
+    return {
+      valid: false,
+      warning: `Payout ($${maxOwed}) exceeds max exposure ($${config.maxExposure})`,
+    }
+  }
+
+  return { valid: true }
+}
+```
+
+**UI Treatment:**
+- Show warning when approaching limit
+- Don't block, just inform
+- Include disclaimer: "Settle amounts at your own discretion"
+
+---
+
+### Data Integrity Edge Cases
+
+#### Duplicate Score Entry
+
+**Scenario:** Two devices enter score for same hole at same time.
+
+**Prevention:**
+```typescript
+// Use composite key constraint
+const scoreKey = `${matchId}:${participantId}:${holeNumber}`
+
+// Check before write
+const existing = await db.collection('scores')
+  .where('matchId', '==', matchId)
+  .where('participantId', '==', participantId)
+  .where('holeNumber', '==', holeNumber)
+  .get()
+
+if (!existing.empty) {
+  throw new Error('Score already exists for this hole')
+}
+```
+
+---
+
+#### Score Value Tampering
+
+**Scenario:** User manipulates client to send invalid score.
+
+**Defense layers:**
+1. Client-side Zod validation (convenience)
+2. Firestore rules validation (security)
+3. Cloud Function validation (authoritative)
+
+```javascript
+// firestore.rules
+match /scores/{scoreId} {
+  allow create: if isParticipant(matchId)
+    && request.resource.data.strokes >= 1
+    && request.resource.data.strokes <= 20
+    && request.resource.data.holeNumber >= 1
+    && request.resource.data.holeNumber <= 18
+    // Prevent duplicate
+    && !exists(/databases/$(database)/documents/matches/$(matchId)/scores/$(request.auth.uid + '_' + request.resource.data.holeNumber));
+}
+```
+
+---
+
+### Display Edge Cases
+
+#### Very Long Course Name
+
+**Scenario:** User enters "The Magnificent Royal Ancient Golf Club of St. Andrews Old Course"
+
+**Treatment:**
+- Truncate display to 25 chars + "..."
+- Store full name
+- Show full name on detail screen
+
+```typescript
+function truncateName(name: string, maxLength: number = 25): string {
+  if (name.length <= maxLength) return name
+  return name.slice(0, maxLength - 3) + '...'
+}
+```
+
+---
+
+#### Negative Net Score
+
+**Scenario:** With high handicap, net score could theoretically be negative.
+
+**Example:**
+- Gross: 3 on a par 3
+- Handicap strokes: 4 (very rare but possible with 50+ handicap)
+- Net: -1
+
+**Treatment:**
+```typescript
+function calculateNetScore(gross: number, strokes: number): number {
+  const net = gross - strokes
+  // Allow negative but flag as unusual
+  return net
+}
+
+// In results display
+function formatNetScore(net: number): string {
+  if (net < 0) return `${net} 🎯` // Exceptional result indicator
+  return net.toString()
+}
+```
+
+---
+
+## Test Cases for Edge Cases
+
+```typescript
+describe('edge cases', () => {
+  describe('incomplete rounds', () => {
+    it('handles player pickup as loss in Nassau', () => {
+      const scores = [
+        { player: 'A', strokes: 4 },
+        { player: 'B', strokes: null, pickedUp: true },
+      ]
+      expect(resolveHole(scores).winner).toBe('A')
+    })
+
+    it('handles withdrawal mid-round', () => {
+      const result = handleWithdrawal(mockMatch, 'playerB', 7)
+      expect(result.forfeited.holesForfeited).toBe(11) // Remaining of 18
+    })
+  })
+
+  describe('handicap edge cases', () => {
+    it('handles handicap > 36', () => {
+      expect(allocateStrokes(45, 1)).toBe(3) // 2 + extra on hardest
+      expect(allocateStrokes(45, 18)).toBe(2) // 2 on easiest
+    })
+  })
+
+  describe('payout edge cases', () => {
+    it('splits unclaimed skins pot equally', () => {
+      // All holes tied
+      const scores = Array(9).fill({ A: 4, B: 4 })
+      const result = calculateSkins(scores, { carryover: true, skinValue: 1 })
+      expect(result.unclaimed).toBe(9)
+      expect(result.split).toEqual({ A: 4.5, B: 4.5 })
+    })
+  })
+})
+```
+
+---
+
+## Summary of Edge Case Additions
+
+| Edge Case | Added Treatment | Test Required |
+|-----------|-----------------|---------------|
+| Player pickup | Loss/carryover | Yes |
+| Mid-round withdrawal | Forfeit remaining | Yes |
+| 3-player skins | Three-way resolution | Yes |
+| 4-player Nassau | 2v2 only (MVP) | Yes |
+| Handicap > 36 | Extended allocation | Yes |
+| No handicap | Block net scoring | Yes |
+| Out-of-order entry | Allow, recalc on complete | Yes |
+| Late score edit | Recalculate cascade | Yes |
+| All ties | Split/push | Yes |
+| Max exposure | Warning only | Yes |
+| Duplicate entry | Prevent | Yes |
+| Score tampering | Multi-layer validation | Yes |
+| Long course name | Truncate display | Yes |
+| Negative net score | Allow, flag | Yes |
+
+---
+
 ## 🧪 Test Cases
 
 ### Nassau Calculator Tests
