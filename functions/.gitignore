@@ -1,0 +1,7 @@
+# Compiled output
+lib/
+node_modules/
+
+# Local Emulator Data
+firebase-debug.log
+ui-debug.log

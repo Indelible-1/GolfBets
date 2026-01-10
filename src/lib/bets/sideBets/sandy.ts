@@ -96,15 +96,12 @@ export function settleSandies(
   }
 
   // Only successful sandies count
-  const successfulSandies = results.filter(r => r.success)
+  const successfulSandies = results.filter((r) => r.success)
 
   // Count sandies per player
   const sandyCounts = new Map<string, number>()
   for (const result of successfulSandies) {
-    sandyCounts.set(
-      result.playerId,
-      (sandyCounts.get(result.playerId) ?? 0) + 1
-    )
+    sandyCounts.set(result.playerId, (sandyCounts.get(result.playerId) ?? 0) + 1)
   }
 
   // Calculate payouts
@@ -131,36 +128,27 @@ export function settleSandies(
 /**
  * Count sandies for a player
  */
-export function countSandies(
-  results: SandyResult[],
-  playerId: string
-): number {
-  return results.filter(r => r.playerId === playerId && r.success).length
+export function countSandies(results: SandyResult[], playerId: string): number {
+  return results.filter((r) => r.playerId === playerId && r.success).length
 }
 
 /**
  * Get all sandy results for a hole
  */
-export function getHoleSandies(
-  results: SandyResult[],
-  holeNumber: number
-): SandyResult[] {
-  return results.filter(r => r.holeNumber === holeNumber)
+export function getHoleSandies(results: SandyResult[], holeNumber: number): SandyResult[] {
+  return results.filter((r) => r.holeNumber === holeNumber)
 }
 
 /**
  * Get all successful sandies in a match
  */
 export function getSuccessfulSandies(results: SandyResult[]): SandyResult[] {
-  return results.filter(r => r.success)
+  return results.filter((r) => r.success)
 }
 
 /**
  * Check if any player made a sandy on a specific hole
  */
-export function holeSandyMade(
-  results: SandyResult[],
-  holeNumber: number
-): boolean {
-  return results.some(r => r.holeNumber === holeNumber && r.success)
+export function holeSandyMade(results: SandyResult[], holeNumber: number): boolean {
+  return results.some((r) => r.holeNumber === holeNumber && r.success)
 }

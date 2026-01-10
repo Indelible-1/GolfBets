@@ -70,10 +70,10 @@ export function SettlementList({
 
   if (balances.length === 0) {
     return (
-      <div className={cn('text-center py-12', className)}>
-        <p className="text-3xl mb-2">✅</p>
-        <p className="text-gray-600 font-medium">All settled up!</p>
-        <p className="text-gray-500 text-sm mt-1">No pending settlements</p>
+      <div className={cn('py-12 text-center', className)}>
+        <p className="mb-2 text-3xl">✅</p>
+        <p className="font-medium text-gray-600">All settled up!</p>
+        <p className="mt-1 text-sm text-gray-500">No pending settlements</p>
       </div>
     )
   }
@@ -81,15 +81,15 @@ export function SettlementList({
   return (
     <div className={cn('space-y-3', className)}>
       {settleError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-          <p className="text-red-700 text-sm">{settleError.message}</p>
+        <div className="rounded-lg border border-red-200 bg-red-50 p-3">
+          <p className="text-sm text-red-700">{settleError.message}</p>
         </div>
       )}
 
       {loading && (
-        <div className="text-center py-8">
-          <div className="animate-spin text-4xl mb-2">⛳</div>
-          <p className="text-gray-500 text-sm">Loading settlements...</p>
+        <div className="py-8 text-center">
+          <div className="mb-2 animate-spin text-4xl">⛳</div>
+          <p className="text-sm text-gray-500">Loading settlements...</p>
         </div>
       )}
 

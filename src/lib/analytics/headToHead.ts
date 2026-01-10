@@ -43,7 +43,7 @@ export function computeHeadToHead(data: HeadToHeadData, userId: string): HeadToH
       userId,
       opponentId,
       opponent?.displayName ?? 'Unknown',
-      opponent?.avatarUrl ?? null,
+      opponent?.avatarUrl ?? null
     )
     records.push(record)
   }
@@ -69,7 +69,7 @@ export function computeOpponentRecord(
   userId: string,
   opponentId: string,
   opponentName: string,
-  opponentAvatar: string | null,
+  opponentAvatar: string | null
 ): HeadToHeadRecord {
   // Only completed matches
   const completedMatches = matches.filter((m) => m.status === 'completed')
@@ -156,7 +156,7 @@ export function computeOpponentRecord(
 function calculateNetAgainstOpponent(
   entries: LedgerEntry[],
   userId: string,
-  opponentId: string,
+  opponentId: string
 ): number {
   let net = 0
 
@@ -240,7 +240,7 @@ function findBiggestCreditor(records: HeadToHeadRecord[]): HeadToHeadRecord | nu
 export function getHeadToHeadDetail(
   data: HeadToHeadData,
   userId: string,
-  opponentId: string,
+  opponentId: string
 ): {
   record: HeadToHeadRecord | null
   matchHistory: Array<{
@@ -258,7 +258,7 @@ export function getHeadToHeadDetail(
     (m) =>
       m.participantIds.includes(userId) &&
       m.participantIds.includes(opponentId) &&
-      m.status === 'completed',
+      m.status === 'completed'
   )
 
   if (opponentMatches.length === 0) {
@@ -276,7 +276,7 @@ export function getHeadToHeadDetail(
     userId,
     opponentId,
     opponent?.displayName ?? 'Unknown',
-    opponent?.avatarUrl ?? null,
+    opponent?.avatarUrl ?? null
   )
 
   // Build match history

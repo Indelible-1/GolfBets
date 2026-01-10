@@ -28,29 +28,26 @@ export default function HeadToHeadDetailPage() {
           backHref="/stats"
         />
 
-        <div className="p-4 pb-24 space-y-6">
+        <div className="space-y-6 p-4 pb-24">
           {/* Loading State */}
           {isLoading && <H2HDetailSkeleton />}
 
           {/* Error State */}
           {error && (
-            <Card variant="outlined" className="bg-red-50 border-red-200 p-4">
-              <p className="text-red-700 text-sm">{error.message}</p>
+            <Card variant="outlined" className="border-red-200 bg-red-50 p-4">
+              <p className="text-sm text-red-700">{error.message}</p>
             </Card>
           )}
 
           {/* No Record State */}
           {!isLoading && !record && !error && (
-            <div className="text-center py-12">
-              <span className="text-5xl mb-4 block">🔍</span>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">No History</h2>
-              <p className="text-gray-500 mb-4">
+            <div className="py-12 text-center">
+              <span className="mb-4 block text-5xl">🔍</span>
+              <h2 className="mb-2 text-xl font-bold text-gray-900">No History</h2>
+              <p className="mb-4 text-gray-500">
                 You haven&apos;t played any matches against this player yet.
               </p>
-              <Link
-                href="/stats"
-                className="text-green-600 hover:text-green-700 font-medium"
-              >
+              <Link href="/stats" className="font-medium text-green-600 hover:text-green-700">
                 Back to Stats
               </Link>
             </div>
@@ -61,7 +58,7 @@ export default function HeadToHeadDetailPage() {
             <>
               {/* Opponent Header */}
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-2xl font-bold">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-200 text-2xl font-bold text-gray-600">
                   {record.opponentName.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1">
@@ -78,14 +75,10 @@ export default function HeadToHeadDetailPage() {
                 variant="elevated"
                 className={cn(
                   'p-6 text-center',
-                  record.netAmount > 0
-                    ? 'bg-green-50'
-                    : record.netAmount < 0
-                      ? 'bg-red-50'
-                      : '',
+                  record.netAmount > 0 ? 'bg-green-50' : record.netAmount < 0 ? 'bg-red-50' : ''
                 )}
               >
-                <p className="text-gray-500 text-sm mb-1">
+                <p className="mb-1 text-sm text-gray-500">
                   {record.netAmount >= 0 ? "You're up" : "You're down"}
                 </p>
                 <p
@@ -95,7 +88,7 @@ export default function HeadToHeadDetailPage() {
                       ? 'text-green-600'
                       : record.netAmount < 0
                         ? 'text-red-600'
-                        : 'text-gray-600',
+                        : 'text-gray-600'
                   )}
                 >
                   {formatCurrency(Math.abs(record.netAmount))}
@@ -104,7 +97,7 @@ export default function HeadToHeadDetailPage() {
 
               {/* Win/Loss Record */}
               <Card variant="outlined" padding="md">
-                <h3 className="text-sm font-medium text-gray-500 mb-3">Record</h3>
+                <h3 className="mb-3 text-sm font-medium text-gray-500">Record</h3>
                 <WinLossRatio
                   wins={record.wins}
                   losses={record.losses}
@@ -117,11 +110,7 @@ export default function HeadToHeadDetailPage() {
               <div className="grid grid-cols-2 gap-3">
                 <StatCard label="Wins" value={record.wins} trend="up" />
                 <StatCard label="Losses" value={record.losses} trend="down" />
-                <StatCard
-                  label="Total Won"
-                  value={formatCurrency(record.totalWon)}
-                  trend="up"
-                />
+                <StatCard label="Total Won" value={formatCurrency(record.totalWon)} trend="up" />
                 <StatCard
                   label="Total Lost"
                   value={formatCurrency(record.totalLost)}
@@ -132,14 +121,11 @@ export default function HeadToHeadDetailPage() {
               {/* Game Breakdown */}
               {Object.keys(record.resultsByGame).length > 0 && (
                 <section>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">By Game Type</h3>
+                  <h3 className="mb-3 text-lg font-semibold text-gray-900">By Game Type</h3>
                   <Card variant="outlined" padding="none">
                     <div className="divide-y divide-gray-100">
                       {Object.entries(record.resultsByGame).map(([game, results]) => (
-                        <div
-                          key={game}
-                          className="flex items-center justify-between p-3"
-                        >
+                        <div key={game} className="flex items-center justify-between p-3">
                           <div>
                             <p className="font-medium capitalize">{game}</p>
                             <p className="text-sm text-gray-500">
@@ -154,7 +140,7 @@ export default function HeadToHeadDetailPage() {
                                 ? 'text-green-600'
                                 : results.net < 0
                                   ? 'text-red-600'
-                                  : 'text-gray-600',
+                                  : 'text-gray-600'
                             )}
                           >
                             {results.net >= 0 ? '+' : ''}
@@ -170,7 +156,7 @@ export default function HeadToHeadDetailPage() {
               {/* Match History */}
               {matchHistory.length > 0 && (
                 <section>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Match History</h3>
+                  <h3 className="mb-3 text-lg font-semibold text-gray-900">Match History</h3>
                   <Card variant="outlined" padding="none">
                     <div className="divide-y divide-gray-100">
                       {matchHistory.map((match) => (
@@ -193,7 +179,7 @@ export default function HeadToHeadDetailPage() {
                                   ? 'text-green-600'
                                   : match.result === 'loss'
                                     ? 'text-red-600'
-                                    : 'text-gray-600',
+                                    : 'text-gray-600'
                               )}
                             >
                               {match.net >= 0 ? '+' : ''}
@@ -206,7 +192,7 @@ export default function HeadToHeadDetailPage() {
                                   ? 'text-green-500'
                                   : match.result === 'loss'
                                     ? 'text-red-500'
-                                    : 'text-gray-500',
+                                    : 'text-gray-500'
                               )}
                             >
                               {match.result}
@@ -228,19 +214,19 @@ export default function HeadToHeadDetailPage() {
 
 function H2HDetailSkeleton() {
   return (
-    <div className="space-y-6 animate-pulse">
+    <div className="animate-pulse space-y-6">
       <div className="flex items-center gap-4">
-        <div className="w-16 h-16 rounded-full bg-gray-200" />
+        <div className="h-16 w-16 rounded-full bg-gray-200" />
         <div className="flex-1">
-          <div className="h-8 bg-gray-200 rounded w-1/2 mb-2" />
-          <div className="h-4 bg-gray-200 rounded w-1/3" />
+          <div className="mb-2 h-8 w-1/2 rounded bg-gray-200" />
+          <div className="h-4 w-1/3 rounded bg-gray-200" />
         </div>
       </div>
-      <div className="h-32 bg-gray-200 rounded-lg" />
-      <div className="h-20 bg-gray-200 rounded-lg" />
+      <div className="h-32 rounded-lg bg-gray-200" />
+      <div className="h-20 rounded-lg bg-gray-200" />
       <div className="grid grid-cols-2 gap-3">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-24 bg-gray-200 rounded-lg" />
+          <div key={i} className="h-24 rounded-lg bg-gray-200" />
         ))}
       </div>
     </div>

@@ -23,7 +23,7 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
   const [refreshKey, setRefreshKey] = useState(0)
 
   const refetch = useCallback(() => {
-    setRefreshKey(prev => prev + 1)
+    setRefreshKey((prev) => prev + 1)
   }, [])
 
   // Subscribe to group changes
@@ -87,7 +87,7 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
         for (const chunk of chunks) {
           const q = query(usersCollection(), where('__name__', 'in', chunk))
           const snapshot = await getDocs(q)
-          snapshot.docs.forEach(doc => {
+          snapshot.docs.forEach((doc) => {
             allUsers.set(doc.id, doc.data())
           })
         }
@@ -111,7 +111,7 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
   const members = useMemo((): GroupMember[] => {
     if (!group) return []
 
-    return group.memberIds.map(id => {
+    return group.memberIds.map((id) => {
       const user = users.get(id)
       return {
         id,
@@ -136,5 +136,12 @@ export function useGroup(groupId: string | null | undefined): UseGroupReturn {
   const derivedLoading = groupId ? isLoading : false
   const derivedError = groupId ? error : null
 
-  return { group: derivedGroup, members: derivedMembers, groupWithMembers: derivedGroupWithMembers, isLoading: derivedLoading, error: derivedError, refetch }
+  return {
+    group: derivedGroup,
+    members: derivedMembers,
+    groupWithMembers: derivedGroupWithMembers,
+    isLoading: derivedLoading,
+    error: derivedError,
+    refetch,
+  }
 }

@@ -19,21 +19,25 @@ export function GreenieSelector({
   disabled = false,
 }: GreenieSelectorProps) {
   return (
-    <div className="flex items-center gap-2" role="group" aria-label={`Greenie selector for hole ${holeNumber}`}>
-      <span className="text-sm text-gray-600 w-20 shrink-0">Greenie:</span>
+    <div
+      className="flex items-center gap-2"
+      role="group"
+      aria-label={`Greenie selector for hole ${holeNumber}`}
+    >
+      <span className="w-20 shrink-0 text-sm text-gray-600">Greenie:</span>
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
           onClick={() => onChange(null)}
           disabled={disabled}
           className={cn(
-            'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
+            'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
             'min-h-[36px] min-w-[44px]', // Touch-friendly
-            'focus:outline-none focus:ring-2 focus:ring-fairway-500 focus:ring-offset-1',
+            'focus:ring-fairway-500 focus:ring-2 focus:ring-offset-1 focus:outline-none',
             value === null
               ? 'bg-gray-800 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
-            disabled && 'opacity-50 cursor-not-allowed'
+            disabled && 'cursor-not-allowed opacity-50'
           )}
           aria-pressed={value === null}
         >
@@ -46,13 +50,13 @@ export function GreenieSelector({
             onClick={() => onChange(p.id)}
             disabled={disabled}
             className={cn(
-              'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
+              'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
               'min-h-[36px] min-w-[44px]', // Touch-friendly
-              'focus:outline-none focus:ring-2 focus:ring-fairway-500 focus:ring-offset-1',
+              'focus:ring-fairway-500 focus:ring-2 focus:ring-offset-1 focus:outline-none',
               value === p.id
                 ? 'bg-green-600 text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
-              disabled && 'opacity-50 cursor-not-allowed'
+              disabled && 'cursor-not-allowed opacity-50'
             )}
             aria-pressed={value === p.id}
           >
