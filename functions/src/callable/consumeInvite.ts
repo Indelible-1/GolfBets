@@ -37,11 +37,7 @@ export const consumeInvite = functions.https.onCall(async (data, context) => {
 
   try {
     // Find invite by token
-    const inviteSnap = await db
-      .collection('invites')
-      .where('token', '==', token)
-      .limit(1)
-      .get()
+    const inviteSnap = await db.collection('invites').where('token', '==', token).limit(1).get()
 
     if (inviteSnap.empty) {
       throw new functions.https.HttpsError('not-found', 'Invite not found')
@@ -87,9 +83,7 @@ export const consumeInvite = functions.https.onCall(async (data, context) => {
       })
 
       // Add participant to match (status: confirmed since they used invite link)
-      const participantRef = db.doc(
-        `matches/${invite.matchId}/participants/${userId}`
-      )
+      const participantRef = db.doc(`matches/${invite.matchId}/participants/${userId}`)
       const participant: Participant = {
         id: userId,
         userId,
@@ -123,9 +117,6 @@ export const consumeInvite = functions.https.onCall(async (data, context) => {
     }
 
     functions.logger.error('Error consuming invite:', error)
-    throw new functions.https.HttpsError(
-      'internal',
-      'Failed to consume invite'
-    )
+    throw new functions.https.HttpsError('internal', 'Failed to consume invite')
   }
 })

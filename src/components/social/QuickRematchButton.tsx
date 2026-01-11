@@ -21,7 +21,7 @@ export function QuickRematchButton({
   onRematch,
   className,
   size = 'md',
-  variant = 'primary'
+  variant = 'primary',
 }: QuickRematchButtonProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -77,7 +77,7 @@ export function QuickRematchButton({
         onClick={handleRematch}
         disabled={isLoading}
         className={cn(
-          'flex items-center justify-center gap-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+          'flex items-center justify-center gap-2 rounded-lg font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50',
           sizeClasses[size],
           variantClasses[variant],
           className
@@ -85,7 +85,7 @@ export function QuickRematchButton({
       >
         {isLoading ? (
           <>
-            <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+            <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle
                 className="opacity-25"
                 cx="12"
@@ -117,9 +117,7 @@ export function QuickRematchButton({
         )}
       </button>
 
-      {error && (
-        <p className="mt-1 text-xs text-red-600">{error}</p>
-      )}
+      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
     </div>
   )
 }
@@ -149,7 +147,7 @@ export function RematchLink({ match, bets, className }: RematchLinkProps) {
     <a
       href={`/match/new?${params.toString()}`}
       className={cn(
-        'text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1',
+        'flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700',
         className
       )}
     >

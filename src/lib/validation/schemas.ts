@@ -6,10 +6,7 @@ export const emailSchema = z
   .string()
   .transform((s) => s.trim().toLowerCase())
   .pipe(
-    z.string()
-      .email('Invalid email address')
-      .min(5, 'Email too short')
-      .max(254, 'Email too long')
+    z.string().email('Invalid email address').min(5, 'Email too short').max(254, 'Email too long')
   )
 
 export const magicLinkSchema = z.object({
@@ -47,10 +44,7 @@ export const updateUserProfileSchema = z.object({
 export const createMatchSchema = z.object({
   courseName: z.string().min(1, 'Course name required').max(100, 'Course name too long'),
   courseId: z.string().nullable().optional(),
-  teeTime: z.coerce.date().refine(
-    (date) => date > new Date(),
-    'Tee time must be in the future'
-  ),
+  teeTime: z.coerce.date().refine((date) => date > new Date(), 'Tee time must be in the future'),
   holes: z.union([z.literal(9), z.literal(18)]),
 })
 
@@ -103,10 +97,7 @@ export const createInviteSchema = z
     maxUses: z.number().int().min(1).max(100).default(10),
     expiresInDays: z.number().int().min(1).max(30).default(7),
   })
-  .refine(
-    (data) => data.matchId || data.groupId,
-    'Either matchId or groupId must be provided'
-  )
+  .refine((data) => data.matchId || data.groupId, 'Either matchId or groupId must be provided')
 
 // ============ UTILITY FUNCTION ============
 

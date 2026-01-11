@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         // Golf-inspired palette
-        'fairway': {
+        fairway: {
           50: '#f0fdf4',
           100: '#dcfce7',
           200: '#bbf7d0',
@@ -22,7 +22,7 @@ const config: Config = {
           800: '#166534',
           900: '#14532d',
         },
-        'bunker': {
+        bunker: {
           50: '#fafaf9',
           100: '#f5f5f4',
           200: '#e7e5e4',
@@ -37,28 +37,28 @@ const config: Config = {
       },
       fontSize: {
         // Minimum 16px base for mobile readability
-        'score': ['1.125rem', { lineHeight: '1.75rem', fontWeight: '600' }],
+        score: ['1.125rem', { lineHeight: '1.75rem', fontWeight: '600' }],
         'score-lg': ['1.5rem', { lineHeight: '2rem', fontWeight: '700' }],
         'score-xl': ['2rem', { lineHeight: '2.5rem', fontWeight: '700' }],
       },
       spacing: {
         // 48px minimum tap target (golf gloves make tapping harder)
-        'tap': '3rem',
+        tap: '3rem',
         'tap-lg': '3.5rem',
       },
       minHeight: {
-        'tap': '3rem',
+        tap: '3rem',
         'tap-lg': '3.5rem',
       },
       minWidth: {
-        'tap': '3rem',
+        tap: '3rem',
         'tap-lg': '3.5rem',
       },
       borderRadius: {
-        'card': '0.75rem',
+        card: '0.75rem',
       },
       boxShadow: {
-        'card': '0 2px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06)',
+        card: '0 2px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06)',
         'card-hover': '0 4px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1)',
       },
     },

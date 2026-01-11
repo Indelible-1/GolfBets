@@ -23,7 +23,7 @@ export default function StatsPage() {
       <Screen padBottom>
         <Header title="Stats" subtitle="Your Performance" />
 
-        <div className="p-4 pb-24 space-y-6">
+        <div className="space-y-6 p-4 pb-24">
           {/* Loading State */}
           {isLoading && <StatsPageSkeleton />}
 
@@ -61,7 +61,7 @@ export default function StatsPage() {
 
               {/* Win/Loss Visual */}
               <Card variant="outlined" padding="md">
-                <h3 className="text-sm font-medium text-gray-500 mb-3">Record</h3>
+                <h3 className="mb-3 text-sm font-medium text-gray-500">Record</h3>
                 <WinLossRatio
                   wins={stats.wins}
                   losses={stats.losses}
@@ -89,7 +89,7 @@ export default function StatsPage() {
               {/* Favorite Game */}
               {stats.favoriteGame && (
                 <Card variant="outlined" padding="md">
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Favorite Game</h3>
+                  <h3 className="mb-1 text-sm font-medium text-gray-500">Favorite Game</h3>
                   <p className="text-xl font-bold capitalize">{stats.favoriteGame}</p>
                   <p className="text-sm text-gray-500">
                     {stats.matchesByGame[stats.favoriteGame]} matches played
@@ -99,13 +99,13 @@ export default function StatsPage() {
 
               {/* Head-to-Head Section */}
               <section>
-                <div className="flex items-center justify-between mb-3">
+                <div className="mb-3 flex items-center justify-between">
                   <h2 className="text-lg font-semibold text-gray-900">Head-to-Head</h2>
                 </div>
 
                 {summary?.records.length === 0 ? (
                   <Card variant="outlined" padding="md">
-                    <p className="text-gray-500 text-center py-4">
+                    <p className="py-4 text-center text-gray-500">
                       No opponents yet. Play some matches!
                     </p>
                   </Card>
@@ -122,7 +122,7 @@ export default function StatsPage() {
                 {(summary?.records.length ?? 0) > 5 && (
                   <Link
                     href="/stats/opponents"
-                    className="block w-full mt-2 text-center text-sm text-green-600 py-2 hover:text-green-700"
+                    className="mt-2 block w-full py-2 text-center text-sm text-green-600 hover:text-green-700"
                   >
                     View all {summary?.records.length} opponents
                   </Link>
@@ -135,9 +135,9 @@ export default function StatsPage() {
                   <Card
                     variant="elevated"
                     padding="md"
-                    className="bg-gradient-to-br from-green-600 to-green-800 text-white hover:shadow-lg transition-shadow"
+                    className="bg-gradient-to-br from-green-600 to-green-800 text-white transition-shadow hover:shadow-lg"
                   >
-                    <p className="text-green-200 text-xs">View Your</p>
+                    <p className="text-xs text-green-200">View Your</p>
                     <p className="font-bold">Golf Wrapped</p>
                   </Card>
                 </Link>
@@ -145,9 +145,9 @@ export default function StatsPage() {
                   <Card
                     variant="elevated"
                     padding="md"
-                    className="hover:shadow-lg transition-shadow"
+                    className="transition-shadow hover:shadow-lg"
                   >
-                    <p className="text-gray-500 text-xs">Check Your</p>
+                    <p className="text-xs text-gray-500">Check Your</p>
                     <p className="font-bold text-gray-900">Ledger</p>
                   </Card>
                 </Link>
@@ -162,29 +162,29 @@ export default function StatsPage() {
 
 function StatsPageSkeleton() {
   return (
-    <div className="space-y-6 animate-pulse">
-      <div className="h-8 bg-gray-200 rounded w-1/3" />
+    <div className="animate-pulse space-y-6">
+      <div className="h-8 w-1/3 rounded bg-gray-200" />
       <div className="grid grid-cols-2 gap-3">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-24 bg-gray-200 rounded-lg" />
+          <div key={i} className="h-24 rounded-lg bg-gray-200" />
         ))}
       </div>
-      <div className="h-32 bg-gray-200 rounded-lg" />
+      <div className="h-32 rounded-lg bg-gray-200" />
     </div>
   )
 }
 
 function EmptyStatsState() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[50vh] p-4 text-center">
-      <span className="text-5xl mb-4">📊</span>
-      <h2 className="text-xl font-bold text-gray-900 mb-2">No Stats Yet</h2>
-      <p className="text-gray-500 mb-4">
+    <div className="flex min-h-[50vh] flex-col items-center justify-center p-4 text-center">
+      <span className="mb-4 text-5xl">📊</span>
+      <h2 className="mb-2 text-xl font-bold text-gray-900">No Stats Yet</h2>
+      <p className="mb-4 text-gray-500">
         Complete your first match to start tracking your performance.
       </p>
       <Link
         href="/match/new"
-        className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700"
+        className="rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700"
       >
         Create a Match
       </Link>

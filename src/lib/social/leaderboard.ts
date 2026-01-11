@@ -23,12 +23,15 @@ export function calculateStandings(
   previousStandings?: SeasonStanding[]
 ): SeasonStanding[] {
   // Initialize stats for all members
-  const stats = new Map<string, {
-    netAmount: number
-    matchesPlayed: number
-    wins: number
-    losses: number
-  }>()
+  const stats = new Map<
+    string,
+    {
+      netAmount: number
+      matchesPlayed: number
+      wins: number
+      losses: number
+    }
+  >()
 
   for (const id of memberIds) {
     stats.set(id, { netAmount: 0, matchesPlayed: 0, wins: 0, losses: 0 })
@@ -72,9 +75,7 @@ export function calculateStandings(
 
   // Calculate trends vs previous standings
   if (previousStandings && previousStandings.length > 0) {
-    const prevRanks = new Map(
-      previousStandings.map(s => [s.playerId, s.rank])
-    )
+    const prevRanks = new Map(previousStandings.map((s) => [s.playerId, s.rank]))
 
     for (const standing of standings) {
       const prevRank = prevRanks.get(standing.playerId)
@@ -101,12 +102,15 @@ export function calculateStandingsFromLedger(
   previousStandings?: SeasonStanding[]
 ): SeasonStanding[] {
   // Initialize stats for all members
-  const stats = new Map<string, {
-    netAmount: number
-    matchesPlayed: number
-    wins: number
-    losses: number
-  }>()
+  const stats = new Map<
+    string,
+    {
+      netAmount: number
+      matchesPlayed: number
+      wins: number
+      losses: number
+    }
+  >()
 
   for (const id of memberIds) {
     stats.set(id, { netAmount: 0, matchesPlayed: 0, wins: 0, losses: 0 })
@@ -167,9 +171,7 @@ export function calculateStandingsFromLedger(
 
   // Calculate trends vs previous standings
   if (previousStandings && previousStandings.length > 0) {
-    const prevRanks = new Map(
-      previousStandings.map(s => [s.playerId, s.rank])
-    )
+    const prevRanks = new Map(previousStandings.map((s) => [s.playerId, s.rank]))
 
     for (const standing of standings) {
       const prevRank = prevRanks.get(standing.playerId)
@@ -196,7 +198,7 @@ export function filterMatchesByDateRange(
   startDate: Date,
   endDate: Date
 ): Match[] {
-  return matches.filter(m => {
+  return matches.filter((m) => {
     const matchDate = m.teeTime
     return matchDate >= startDate && matchDate <= endDate
   })
@@ -210,7 +212,7 @@ export function filterLedgerByDateRange(
   startDate: Date,
   endDate: Date
 ): LedgerEntry[] {
-  return entries.filter(e => {
+  return entries.filter((e) => {
     return e.createdAt >= startDate && e.createdAt <= endDate
   })
 }
@@ -219,18 +221,25 @@ export function filterLedgerByDateRange(
 
 export function formatRankChange(standing: SeasonStanding): string {
   switch (standing.trend) {
-    case 'up': return '↑'
-    case 'down': return '↓'
-    default: return '–'
+    case 'up':
+      return '↑'
+    case 'down':
+      return '↓'
+    default:
+      return '–'
   }
 }
 
 export function getRankEmoji(rank: number): string {
   switch (rank) {
-    case 1: return '🥇'
-    case 2: return '🥈'
-    case 3: return '🥉'
-    default: return ''
+    case 1:
+      return '🥇'
+    case 2:
+      return '🥈'
+    case 3:
+      return '🥉'
+    default:
+      return ''
   }
 }
 

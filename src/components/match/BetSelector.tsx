@@ -90,7 +90,7 @@ export function BetSelector({ value, onChange, className }: BetSelectorProps) {
               key={type.id}
               onClick={() => handleBetTypeChange(type.id)}
               className={cn(
-                'p-3 rounded-lg border-2 transition-all',
+                'rounded-lg border-2 p-3 transition-all',
                 'text-left text-sm font-medium',
                 'tap-target',
                 localConfig.type === type.id
@@ -107,15 +107,13 @@ export function BetSelector({ value, onChange, className }: BetSelectorProps) {
 
       {/* Nassau Config */}
       {(localConfig.type === 'nassau' || localConfig.type === 'both') && (
-        <Card variant="outlined" className="p-4 space-y-4">
+        <Card variant="outlined" className="space-y-4 p-4">
           <h4 className="font-semibold text-gray-900">Nassau Settings</h4>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Bet Amount per 9
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-700">Bet Amount per 9</label>
             <div className="flex items-center gap-2">
-              <span className="text-lg text-fairway-600">$</span>
+              <span className="text-fairway-600 text-lg">$</span>
               <Input
                 type="number"
                 step={0.5}
@@ -130,18 +128,16 @@ export function BetSelector({ value, onChange, className }: BetSelectorProps) {
             </div>
           </div>
 
-          <label className="flex items-center gap-3 cursor-pointer tap-target p-2 rounded-lg hover:bg-gray-50">
+          <label className="tap-target flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-gray-50">
             <input
               type="checkbox"
               checked={localConfig.nassauAutoPress ?? true}
               onChange={handleNassauAutoPressChange}
-              className="w-6 h-6 rounded cursor-pointer"
+              className="h-6 w-6 cursor-pointer rounded"
             />
             <div>
               <div className="font-medium text-gray-900">Auto-press</div>
-              <div className="text-xs text-gray-600">
-                Automatically start a new bet if winner
-              </div>
+              <div className="text-xs text-gray-600">Automatically start a new bet if winner</div>
             </div>
           </label>
         </Card>
@@ -149,15 +145,15 @@ export function BetSelector({ value, onChange, className }: BetSelectorProps) {
 
       {/* Skins Config */}
       {(localConfig.type === 'skins' || localConfig.type === 'both') && (
-        <Card variant="outlined" className="p-4 space-y-4">
+        <Card variant="outlined" className="space-y-4 p-4">
           <h4 className="font-semibold text-gray-900">Skins Settings</h4>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Bet Amount per Skin
             </label>
             <div className="flex items-center gap-2">
-              <span className="text-lg text-fairway-600">$</span>
+              <span className="text-fairway-600 text-lg">$</span>
               <Input
                 type="number"
                 step={0.5}
@@ -172,18 +168,16 @@ export function BetSelector({ value, onChange, className }: BetSelectorProps) {
             </div>
           </div>
 
-          <label className="flex items-center gap-3 cursor-pointer tap-target p-2 rounded-lg hover:bg-gray-50">
+          <label className="tap-target flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-gray-50">
             <input
               type="checkbox"
               checked={localConfig.skinsCarryover ?? true}
               onChange={handleSkinsCarryoverChange}
-              className="w-6 h-6 rounded cursor-pointer"
+              className="h-6 w-6 cursor-pointer rounded"
             />
             <div>
               <div className="font-medium text-gray-900">Carryover</div>
-              <div className="text-xs text-gray-600">
-                Unclaimed skins carry over to next hole
-              </div>
+              <div className="text-xs text-gray-600">Unclaimed skins carry over to next hole</div>
             </div>
           </label>
         </Card>
@@ -191,8 +185,8 @@ export function BetSelector({ value, onChange, className }: BetSelectorProps) {
 
       {/* Summary */}
       {localConfig.type !== 'none' && (
-        <Card variant="elevated" className="p-4 bg-fairway-50">
-          <div className="text-sm text-fairway-900">
+        <Card variant="elevated" className="bg-fairway-50 p-4">
+          <div className="text-fairway-900 text-sm">
             {localConfig.type === 'nassau' && (
               <div>
                 Nassau: ${localConfig.nassauAmount}/9 holes

@@ -26,7 +26,7 @@ export function useSeasonStandings(
   const [refreshKey, setRefreshKey] = useState(0)
 
   const refetch = useCallback(() => {
-    setRefreshKey(prev => prev + 1)
+    setRefreshKey((prev) => prev + 1)
   }, [])
 
   // Memoize memberIds for dependency tracking
@@ -59,7 +59,7 @@ export function useSeasonStandings(
           for (const chunk of chunks) {
             const usersQuery = query(usersCollection(), where('__name__', 'in', chunk))
             const usersSnapshot = await getDocs(usersQuery)
-            usersSnapshot.docs.forEach(doc => {
+            usersSnapshot.docs.forEach((doc) => {
               usersMap.set(doc.id, doc.data())
             })
           }
@@ -79,7 +79,7 @@ export function useSeasonStandings(
         for (const memberId of memberIds) {
           const fromQuery = query(ledgerRef, where('fromUserId', '==', memberId))
           const fromSnapshot = await getDocs(fromQuery)
-          fromSnapshot.docs.forEach(doc => {
+          fromSnapshot.docs.forEach((doc) => {
             const data = doc.data()
             allEntries.push({
               id: doc.id,
@@ -102,19 +102,19 @@ export function useSeasonStandings(
 
         // Filter to entries within season and between group members
         const memberIdSet = new Set(memberIds)
-        const seasonEntries = allEntries.filter(entry => {
+        const seasonEntries = allEntries.filter((entry) => {
           // Both parties must be group members
           if (!memberIdSet.has(entry.fromUserId) || !memberIdSet.has(entry.toUserId)) {
             return false
           }
           // Entry must be within season dates
-          return entry.createdAt >= currentSeason.startDate && entry.createdAt <= currentSeason.endDate
+          return (
+            entry.createdAt >= currentSeason.startDate && entry.createdAt <= currentSeason.endDate
+          )
         })
 
         // Remove duplicates (we may have fetched same entry twice)
-        const uniqueEntries = Array.from(
-          new Map(seasonEntries.map(e => [e.id, e])).values()
-        )
+        const uniqueEntries = Array.from(new Map(seasonEntries.map((e) => [e.id, e])).values())
 
         // Calculate standings
         const calculatedStandings = calculateStandingsFromLedger(
@@ -152,5 +152,11 @@ export function useSeasonStandings(
   const derivedLoading = hasData ? isLoading : false
   const derivedError = hasData ? error : null
 
-  return { season: derivedSeason, standings: derivedStandings, isLoading: derivedLoading, error: derivedError, refetch }
+  return {
+    season: derivedSeason,
+    standings: derivedStandings,
+    isLoading: derivedLoading,
+    error: derivedError,
+    refetch,
+  }
 }

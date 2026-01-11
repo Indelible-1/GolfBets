@@ -22,7 +22,7 @@ export function computeUserStats(
   matches: Match[],
   ledgerEntriesOrMap: LedgerEntry[] | Map<string, LedgerEntry[]>,
   bets: Map<string, Bet[]>,
-  userId: string,
+  userId: string
 ): UserStats {
   if (matches.length === 0) {
     return createEmptyStats()
@@ -112,7 +112,7 @@ export function computeUserStats(
 function groupEntriesByUserId(
   entries: LedgerEntry[],
   matches: Match[],
-  userId: string,
+  userId: string
 ): Map<string, LedgerEntry[]> {
   const grouped = new Map<string, LedgerEntry[]>()
 
@@ -129,10 +129,7 @@ function groupEntriesByUserId(
     // Find match that has both userId and otherUserId as participants
     // and matches the entry's timing (using createdAt as approximation)
     for (const match of matches) {
-      if (
-        match.participantIds.includes(userId) &&
-        match.participantIds.includes(otherUserId)
-      ) {
+      if (match.participantIds.includes(userId) && match.participantIds.includes(otherUserId)) {
         // Check if entry was created around the same time as the match
         // This is a heuristic - in real usage, entries are fetched per-match
         const matchTime = match.teeTime.getTime()
@@ -158,7 +155,7 @@ export function getMatchResult(
   match: Match,
   ledgerEntries: LedgerEntry[],
   matchBets: Bet[],
-  userId: string,
+  userId: string
 ): MatchResult {
   // Calculate net: sum of money received minus money owed
   let net = 0
@@ -207,7 +204,7 @@ function countByGame(results: MatchResult[]): Record<string, number> {
  * Get the user's most frequently played game type
  */
 function getFavoriteGame(
-  counts: Record<string, number>,
+  counts: Record<string, number>
 ): 'nassau' | 'skins' | 'match_play' | 'stroke_play' | null {
   const entries = Object.entries(counts)
   if (entries.length === 0) return null
@@ -255,7 +252,7 @@ function createEmptyStats(): UserStats {
 export function computeMatchStats(
   match: Match,
   ledgerEntries: LedgerEntry[],
-  userId: string,
+  userId: string
 ): {
   result: 'win' | 'loss' | 'push'
   net: number

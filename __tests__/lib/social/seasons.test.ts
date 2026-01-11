@@ -1,8 +1,4 @@
-import {
-  getSeasonDates,
-  isSeasonActive,
-  getSeasonProgress,
-} from '@/lib/social/seasons'
+import { getSeasonDates, isSeasonActive, getSeasonProgress } from '@/lib/social/seasons'
 import type { Season } from '@/types'
 
 function createSeason(overrides: Partial<Season> = {}): Season {

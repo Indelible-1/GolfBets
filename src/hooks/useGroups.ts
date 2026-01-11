@@ -19,7 +19,7 @@ export function useGroups(userId: string | null | undefined): UseGroupsReturn {
   const [refreshKey, setRefreshKey] = useState(0)
 
   const refetch = useCallback(() => {
-    setRefreshKey(prev => prev + 1)
+    setRefreshKey((prev) => prev + 1)
   }, [])
 
   useEffect(() => {
@@ -29,16 +29,13 @@ export function useGroups(userId: string | null | undefined): UseGroupsReturn {
 
     let isMounted = true
 
-    const q = query(
-      groupsCollection(),
-      where('memberIds', 'array-contains', userId)
-    )
+    const q = query(groupsCollection(), where('memberIds', 'array-contains', userId))
 
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
         if (isMounted) {
-          const groupData = snapshot.docs.map(doc => doc.data())
+          const groupData = snapshot.docs.map((doc) => doc.data())
           // Sort by most recently updated
           groupData.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
           setGroups(groupData)
