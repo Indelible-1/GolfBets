@@ -19,10 +19,7 @@ export async function POST(request: NextRequest) {
     const { idToken } = body
 
     if (!idToken || typeof idToken !== 'string') {
-      return NextResponse.json(
-        { error: 'Missing or invalid idToken' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Missing or invalid idToken' }, { status: 400 })
     }
 
     // Get Firebase Admin Auth
@@ -51,7 +48,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ status: 'success' })
   } catch (error) {
-    logger.error('Session creation error', error instanceof Error ? error : new Error('Unknown error'))
+    logger.error(
+      'Session creation error',
+      error instanceof Error ? error : new Error('Unknown error')
+    )
 
     // Check for specific Firebase errors
     let statusCode = 500
@@ -90,10 +90,10 @@ export async function DELETE() {
 
     return NextResponse.json({ status: 'success' })
   } catch (error) {
-    logger.error('Session deletion error', error instanceof Error ? error : new Error('Unknown error'))
-    return NextResponse.json(
-      { error: 'Failed to delete session' },
-      { status: 500 }
+    logger.error(
+      'Session deletion error',
+      error instanceof Error ? error : new Error('Unknown error')
     )
+    return NextResponse.json({ error: 'Failed to delete session' }, { status: 500 })
   }
 }

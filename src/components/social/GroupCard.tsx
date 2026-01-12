@@ -19,13 +19,13 @@ export function GroupCard({ group, className }: GroupCardProps) {
     <Link
       href={`/groups/${group.id}`}
       className={cn(
-        'block bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 hover:shadow-sm transition-all',
+        'block rounded-lg border border-gray-200 bg-white p-4 transition-all hover:border-gray-300 hover:shadow-sm',
         className
       )}
     >
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-semibold text-lg text-gray-900">{group.name}</h3>
+          <h3 className="text-lg font-semibold text-gray-900">{group.name}</h3>
           <p className="text-sm text-gray-500">
             {memberCount} member{memberCount !== 1 ? 's' : ''}
           </p>
@@ -41,13 +41,13 @@ export function GroupCard({ group, className }: GroupCardProps) {
         {group.memberIds.slice(0, 4).map((id, i) => (
           <div
             key={id}
-            className="w-8 h-8 rounded-full bg-emerald-100 border-2 border-white flex items-center justify-center text-xs font-medium text-emerald-700"
+            className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-emerald-100 text-xs font-medium text-emerald-700"
           >
             {String.fromCharCode(65 + i)}
           </div>
         ))}
         {memberCount > 4 && (
-          <div className="w-8 h-8 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-xs text-gray-500">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gray-100 text-xs text-gray-500">
             +{memberCount - 4}
           </div>
         )}

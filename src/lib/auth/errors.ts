@@ -36,7 +36,8 @@ export const AUTH_ERROR_MESSAGES: Record<AuthErrorCode, string> = {
   'auth/too-many-requests': 'Too many attempts. Please try again later.',
   'auth/popup-closed-by-user': 'Sign-in was cancelled. Please try again.',
   'auth/operation-not-allowed': 'This sign-in method is not enabled.',
-  'auth/account-exists-with-different-credential': 'An account already exists with the same email but different sign-in method.',
+  'auth/account-exists-with-different-credential':
+    'An account already exists with the same email but different sign-in method.',
 }
 
 /**
@@ -76,9 +77,11 @@ export function getAuthErrorMessage(error: unknown): string {
  */
 export function isSessionError(error: unknown): boolean {
   if (error instanceof FirebaseError) {
-    return error.code === 'auth/session-expired' ||
-           error.code === 'auth/user-token-expired' ||
-           error.message.includes('session')
+    return (
+      error.code === 'auth/session-expired' ||
+      error.code === 'auth/user-token-expired' ||
+      error.message.includes('session')
+    )
   }
   return false
 }
@@ -98,8 +101,7 @@ export function isRateLimitError(error: unknown): boolean {
  */
 export function isMagicLinkError(error: unknown): boolean {
   if (error instanceof FirebaseError) {
-    return error.code === 'auth/expired-action-code' ||
-           error.code === 'auth/invalid-action-code'
+    return error.code === 'auth/expired-action-code' || error.code === 'auth/invalid-action-code'
   }
   return false
 }

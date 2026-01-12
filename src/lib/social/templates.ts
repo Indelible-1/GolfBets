@@ -59,7 +59,7 @@ export async function getUserBetTemplates(userId: string): Promise<BetTemplate[]
   )
   const snapshot = await getDocs(q)
 
-  return snapshot.docs.map(doc => doc.data())
+  return snapshot.docs.map((doc) => doc.data())
 }
 
 export async function getDefaultBetTemplate(userId: string): Promise<BetTemplate | null> {
@@ -77,30 +77,21 @@ export async function getDefaultBetTemplate(userId: string): Promise<BetTemplate
 
 // ============ UPDATE ============
 
-export async function updateBetTemplateName(
-  templateId: string,
-  name: string
-): Promise<void> {
+export async function updateBetTemplateName(templateId: string, name: string): Promise<void> {
   const docRef = betTemplateDoc(templateId)
   await updateDoc(docRef, {
     name: name.trim(),
   })
 }
 
-export async function updateBetTemplateBets(
-  templateId: string,
-  bets: Bet[]
-): Promise<void> {
+export async function updateBetTemplateBets(templateId: string, bets: Bet[]): Promise<void> {
   const docRef = betTemplateDoc(templateId)
   await updateDoc(docRef, {
     bets: bets.map(cloneBetForTemplate),
   })
 }
 
-export async function setDefaultTemplate(
-  userId: string,
-  templateId: string
-): Promise<void> {
+export async function setDefaultTemplate(userId: string, templateId: string): Promise<void> {
   // First, unset any existing default
   await unsetDefaultTemplate(userId)
 
@@ -113,7 +104,7 @@ export async function setDefaultTemplate(
 
 async function unsetDefaultTemplate(userId: string): Promise<void> {
   const templates = await getUserBetTemplates(userId)
-  const defaultTemplates = templates.filter(t => t.isDefault)
+  const defaultTemplates = templates.filter((t) => t.isDefault)
 
   for (const template of defaultTemplates) {
     const docRef = betTemplateDoc(template.id)
@@ -152,7 +143,7 @@ function cloneBetForTemplate(bet: Bet): Bet {
  * Apply a template's bets to create new bet instances
  */
 export function applyBetTemplate(template: BetTemplate, createdBy: string): Bet[] {
-  return template.bets.map(bet => ({
+  return template.bets.map((bet) => ({
     ...bet,
     id: crypto.randomUUID(),
     createdAt: new Date(),
@@ -185,7 +176,7 @@ export function getTemplateSummary(template: BetTemplate): string {
     return 'No bets configured'
   }
 
-  const betDescriptions = template.bets.map(bet => {
+  const betDescriptions = template.bets.map((bet) => {
     switch (bet.type) {
       case 'nassau':
         return `Nassau $${bet.unitValue}`

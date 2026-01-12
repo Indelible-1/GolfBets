@@ -66,7 +66,7 @@ export function useMatch(matchId: string | null): UseMatchReturn {
             console.error('Error subscribing to participants:', err)
             setError(err instanceof Error ? err : new Error('Unknown error'))
             setLoading(false)
-          },
+          }
         )
       } catch (err) {
         const error = err instanceof Error ? err : new Error('Unknown error')

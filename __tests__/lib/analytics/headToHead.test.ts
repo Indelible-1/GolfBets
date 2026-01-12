@@ -27,11 +27,7 @@ function createMatch(participantIds: string[], overrides: Partial<Match> = {}): 
   }
 }
 
-function createLedgerEntry(
-  fromUserId: string,
-  toUserId: string,
-  amount: number,
-): LedgerEntry {
+function createLedgerEntry(fromUserId: string, toUserId: string, amount: number): LedgerEntry {
   const now = new Date()
   return {
     id: `ledger_${Math.random().toString(36).substr(2, 9)}`,
@@ -96,7 +92,7 @@ describe('computeHeadToHead', () => {
         bets: new Map(),
         users: new Map(),
       },
-      USER_ID,
+      USER_ID
     )
 
     expect(summary.records).toHaveLength(0)
@@ -123,7 +119,7 @@ describe('computeHeadToHead', () => {
         bets: new Map(),
         users,
       },
-      USER_ID,
+      USER_ID
     )
 
     expect(summary.records).toHaveLength(2)
@@ -154,7 +150,7 @@ describe('computeHeadToHead', () => {
         bets: new Map(),
         users,
       },
-      USER_ID,
+      USER_ID
     )
 
     expect(summary.topRival?.opponentId).toBe(OPPONENT_1)
@@ -181,7 +177,7 @@ describe('computeHeadToHead', () => {
         bets: new Map(),
         users,
       },
-      USER_ID,
+      USER_ID
     )
 
     // With no ledger entries, all are pushes, so no debtors
@@ -202,7 +198,7 @@ describe('computeHeadToHead', () => {
         bets: new Map(),
         users,
       },
-      USER_ID,
+      USER_ID
     )
 
     expect(summary.records[0].totalMatches).toBe(1)
@@ -227,7 +223,7 @@ describe('computeHeadToHead', () => {
         bets: new Map(),
         users,
       },
-      USER_ID,
+      USER_ID
     )
 
     expect(summary.records[0].opponentId).toBe(OPPONENT_2)
@@ -260,7 +256,7 @@ describe('computeOpponentRecord', () => {
       USER_ID,
       OPPONENT_1,
       'Test Opponent',
-      null,
+      null
     )
 
     expect(record.wins).toBe(1)
@@ -290,7 +286,7 @@ describe('computeOpponentRecord', () => {
       USER_ID,
       OPPONENT_1,
       'Test Opponent',
-      null,
+      null
     )
 
     expect(record.netAmount).toBe(15) // 25 - 10
@@ -322,7 +318,7 @@ describe('computeOpponentRecord', () => {
       USER_ID,
       OPPONENT_1,
       'Test Opponent',
-      null,
+      null
     )
 
     expect(record.lastResult).toBe('loss')
@@ -330,9 +326,7 @@ describe('computeOpponentRecord', () => {
   })
 
   it('tracks results by game type', () => {
-    const matches = [
-      createMatch([USER_ID, OPPONENT_1], { id: 'match1' }),
-    ]
+    const matches = [createMatch([USER_ID, OPPONENT_1], { id: 'match1' })]
     const entriesByMatch = new Map<string, LedgerEntry[]>([
       ['match1', [createLedgerEntry(OPPONENT_1, USER_ID, 10)]],
     ])
@@ -346,7 +340,7 @@ describe('computeOpponentRecord', () => {
       USER_ID,
       OPPONENT_1,
       'Test Opponent',
-      null,
+      null
     )
 
     expect(record.resultsByGame['nassau']).toBeDefined()
@@ -362,7 +356,7 @@ describe('computeOpponentRecord', () => {
       USER_ID,
       OPPONENT_1,
       'Test Opponent',
-      null,
+      null
     )
 
     expect(record.totalMatches).toBe(0)

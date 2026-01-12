@@ -35,28 +35,26 @@ export function Header({
   return (
     <header
       className={cn(
-        'sticky top-0 z-30 safe-top',
-        onGradient
-          ? 'bg-transparent'
-          : 'bg-white border-b border-gray-100',
+        'safe-top sticky top-0 z-30',
+        onGradient ? 'bg-transparent' : 'border-b border-gray-100 bg-white',
         className
       )}
     >
-      <div className="flex items-center justify-between h-14 px-4">
+      <div className="flex h-14 items-center justify-between px-4">
         {/* Left: Back button or spacer */}
         <div className="w-10">
           {showBack && (
             <button
               onClick={handleBack}
               className={cn(
-                'p-2 -ml-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center',
+                '-ml-2 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2',
                 onGradient
-                  ? 'text-white/80 hover:text-white hover:bg-white/10'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  ? 'text-white/80 hover:bg-white/10 hover:text-white'
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
               )}
             >
               <svg
-                className="w-6 h-6"
+                className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -70,18 +68,25 @@ export function Header({
 
         {/* Center: Title */}
         <div className="flex-1 text-center">
-          <h1 className={cn('text-lg font-semibold truncate', onGradient ? 'text-white' : 'text-gray-900')}>
+          <h1
+            className={cn(
+              'truncate text-lg font-semibold',
+              onGradient ? 'text-white' : 'text-gray-900'
+            )}
+          >
             {title}
           </h1>
           {subtitle && (
-            <p className={cn('text-sm truncate', onGradient ? 'text-emerald-200' : 'text-gray-500')}>
+            <p
+              className={cn('truncate text-sm', onGradient ? 'text-emerald-200' : 'text-gray-500')}
+            >
               {subtitle}
             </p>
           )}
         </div>
 
         {/* Right: Action or spacer */}
-        <div className="w-10 flex justify-end">{action}</div>
+        <div className="flex w-10 justify-end">{action}</div>
       </div>
     </header>
   )

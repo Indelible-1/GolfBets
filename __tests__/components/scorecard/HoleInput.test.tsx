@@ -74,25 +74,19 @@ describe('HoleInput', () => {
 
   describe('Color Coding', () => {
     it('applies green color for birdie (under par)', () => {
-      const { container } = render(
-        <HoleInput {...defaultProps} par={4} score={3} />
-      )
+      const { container } = render(<HoleInput {...defaultProps} par={4} score={3} />)
       expect(container.querySelector('.text-fairway-600')).toBeInTheDocument()
       expect(container.querySelector('.bg-fairway-50')).toBeInTheDocument()
     })
 
     it('applies red color for bogey (over par)', () => {
-      const { container } = render(
-        <HoleInput {...defaultProps} par={4} score={5} />
-      )
+      const { container } = render(<HoleInput {...defaultProps} par={4} score={5} />)
       expect(container.querySelector('.text-red-600')).toBeInTheDocument()
       expect(container.querySelector('.bg-red-50')).toBeInTheDocument()
     })
 
     it('applies neutral color for par score', () => {
-      const { container } = render(
-        <HoleInput {...defaultProps} par={4} score={4} />
-      )
+      const { container } = render(<HoleInput {...defaultProps} par={4} score={4} />)
       expect(container.querySelector('.text-gray-900')).toBeInTheDocument()
     })
   })
@@ -108,13 +102,7 @@ describe('HoleInput', () => {
 
     it('increments score by 1 when clicking plus', () => {
       const onScoreChange = jest.fn()
-      render(
-        <HoleInput
-          {...defaultProps}
-          score={4}
-          onScoreChange={onScoreChange}
-        />
-      )
+      render(<HoleInput {...defaultProps} score={4} onScoreChange={onScoreChange} />)
 
       fireEvent.click(screen.getByText('+'))
       expect(onScoreChange).toHaveBeenCalledWith(5)
@@ -122,13 +110,7 @@ describe('HoleInput', () => {
 
     it('does not increment above 20', () => {
       const onScoreChange = jest.fn()
-      render(
-        <HoleInput
-          {...defaultProps}
-          score={20}
-          onScoreChange={onScoreChange}
-        />
-      )
+      render(<HoleInput {...defaultProps} score={20} onScoreChange={onScoreChange} />)
 
       fireEvent.click(screen.getByText('+'))
       expect(onScoreChange).not.toHaveBeenCalled()
@@ -151,13 +133,7 @@ describe('HoleInput', () => {
 
     it('decrements score by 1 when clicking minus', () => {
       const onScoreChange = jest.fn()
-      render(
-        <HoleInput
-          {...defaultProps}
-          score={4}
-          onScoreChange={onScoreChange}
-        />
-      )
+      render(<HoleInput {...defaultProps} score={4} onScoreChange={onScoreChange} />)
 
       fireEvent.click(screen.getByText('−'))
       expect(onScoreChange).toHaveBeenCalledWith(3)
@@ -165,13 +141,7 @@ describe('HoleInput', () => {
 
     it('does not decrement below 1', () => {
       const onScoreChange = jest.fn()
-      render(
-        <HoleInput
-          {...defaultProps}
-          score={1}
-          onScoreChange={onScoreChange}
-        />
-      )
+      render(<HoleInput {...defaultProps} score={1} onScoreChange={onScoreChange} />)
 
       fireEvent.click(screen.getByText('−'))
       expect(onScoreChange).not.toHaveBeenCalled()
@@ -198,14 +168,7 @@ describe('HoleInput', () => {
 
     it('does not call onScoreChange when disabled', () => {
       const onScoreChange = jest.fn()
-      render(
-        <HoleInput
-          {...defaultProps}
-          score={4}
-          disabled
-          onScoreChange={onScoreChange}
-        />
-      )
+      render(<HoleInput {...defaultProps} score={4} disabled onScoreChange={onScoreChange} />)
 
       fireEvent.click(screen.getByText('+'))
       fireEvent.click(screen.getByText('−'))
@@ -216,26 +179,18 @@ describe('HoleInput', () => {
   describe('Accessibility', () => {
     it('has aria-label on minus button', () => {
       render(<HoleInput {...defaultProps} />)
-      expect(
-        screen.getByLabelText('Decrease score for hole 1')
-      ).toBeInTheDocument()
+      expect(screen.getByLabelText('Decrease score for hole 1')).toBeInTheDocument()
     })
 
     it('has aria-label on plus button', () => {
       render(<HoleInput {...defaultProps} />)
-      expect(
-        screen.getByLabelText('Increase score for hole 1')
-      ).toBeInTheDocument()
+      expect(screen.getByLabelText('Increase score for hole 1')).toBeInTheDocument()
     })
 
     it('updates aria-label based on hole number', () => {
       render(<HoleInput {...defaultProps} holeNumber={7} />)
-      expect(
-        screen.getByLabelText('Decrease score for hole 7')
-      ).toBeInTheDocument()
-      expect(
-        screen.getByLabelText('Increase score for hole 7')
-      ).toBeInTheDocument()
+      expect(screen.getByLabelText('Decrease score for hole 7')).toBeInTheDocument()
+      expect(screen.getByLabelText('Increase score for hole 7')).toBeInTheDocument()
     })
 
     it('has tap-target class for touch accessibility', () => {
@@ -246,16 +201,12 @@ describe('HoleInput', () => {
 
   describe('Custom ClassName', () => {
     it('accepts custom className', () => {
-      const { container } = render(
-        <HoleInput {...defaultProps} className="custom-class" />
-      )
+      const { container } = render(<HoleInput {...defaultProps} className="custom-class" />)
       expect(container.firstChild).toHaveClass('custom-class')
     })
 
     it('merges custom className with default classes', () => {
-      const { container } = render(
-        <HoleInput {...defaultProps} className="custom-class" />
-      )
+      const { container } = render(<HoleInput {...defaultProps} className="custom-class" />)
       expect(container.firstChild).toHaveClass('custom-class')
       expect(container.firstChild).toHaveClass('rounded-lg')
     })

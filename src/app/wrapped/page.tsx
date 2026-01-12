@@ -34,7 +34,7 @@ export default function WrappedPage() {
       // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(
-          `${wrapped.headline}\n${wrapped.subhead}\n\nCheck out GolfSettled!`,
+          `${wrapped.headline}\n${wrapped.subhead}\n\nCheck out GolfSettled!`
         )
         alert('Copied to clipboard!')
       } catch (err) {
@@ -48,7 +48,7 @@ export default function WrappedPage() {
       <Screen padBottom>
         <Header title="Golf Wrapped" subtitle="Your Year in Review" backHref="/stats" />
 
-        <div className="p-4 pb-24 space-y-6">
+        <div className="space-y-6 p-4 pb-24">
           {/* Year Selector */}
           {availableYears.length > 1 && (
             <div className="flex gap-2 overflow-x-auto pb-2">
@@ -56,7 +56,7 @@ export default function WrappedPage() {
                 <button
                   key={year}
                   onClick={() => setSelectedYear(year)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                  className={`rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                     year === selectedYear
                       ? 'bg-green-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -73,22 +73,20 @@ export default function WrappedPage() {
 
           {/* Error State */}
           {error && (
-            <Card variant="outlined" className="bg-red-50 border-red-200 p-4">
-              <p className="text-red-700 text-sm">{error.message}</p>
+            <Card variant="outlined" className="border-red-200 bg-red-50 p-4">
+              <p className="text-sm text-red-700">{error.message}</p>
             </Card>
           )}
 
           {/* Empty State */}
           {!isLoading && wrapped && wrapped.totalMatches === 0 && (
-            <div className="text-center py-12">
-              <span className="text-5xl mb-4 block">⛳</span>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">No Matches in {selectedYear}</h2>
-              <p className="text-gray-500 mb-4">
-                Play some matches to generate your Golf Wrapped!
-              </p>
+            <div className="py-12 text-center">
+              <span className="mb-4 block text-5xl">⛳</span>
+              <h2 className="mb-2 text-xl font-bold text-gray-900">No Matches in {selectedYear}</h2>
+              <p className="mb-4 text-gray-500">Play some matches to generate your Golf Wrapped!</p>
               <Link
                 href="/match/new"
-                className="inline-block px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700"
+                className="inline-block rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700"
               >
                 Create a Match
               </Link>
@@ -103,13 +101,13 @@ export default function WrappedPage() {
 
               {/* Monthly Net Chart */}
               <section>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Monthly Breakdown</h3>
+                <h3 className="mb-3 text-lg font-semibold text-gray-900">Monthly Breakdown</h3>
                 <NetChart monthlyNet={wrapped.monthlyNet} year={wrapped.year} />
               </section>
 
               {/* Additional Stats */}
               <section>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">More Stats</h3>
+                <h3 className="mb-3 text-lg font-semibold text-gray-900">More Stats</h3>
 
                 <div className="space-y-3">
                   {/* Favorite Course */}
@@ -125,7 +123,8 @@ export default function WrappedPage() {
                     <Card variant="outlined" padding="md">
                       <p className="text-sm text-gray-500">Longest Streak</p>
                       <p className="font-bold text-gray-900">
-                        {wrapped.longestStreak.count} {wrapped.longestStreak.type === 'win' ? 'wins' : 'losses'} in a row{' '}
+                        {wrapped.longestStreak.count}{' '}
+                        {wrapped.longestStreak.type === 'win' ? 'wins' : 'losses'} in a row{' '}
                         {wrapped.longestStreak.type === 'win' ? '🔥' : '❄️'}
                       </p>
                     </Card>
@@ -134,7 +133,7 @@ export default function WrappedPage() {
                   {/* Games Breakdown */}
                   {wrapped.topGames.length > 0 && (
                     <Card variant="outlined" padding="md">
-                      <p className="text-sm text-gray-500 mb-2">Game Types</p>
+                      <p className="mb-2 text-sm text-gray-500">Game Types</p>
                       <div className="space-y-1">
                         {wrapped.topGames.map((game, i) => (
                           <div key={i} className="flex justify-between">
@@ -151,7 +150,7 @@ export default function WrappedPage() {
               {/* Share Again */}
               <button
                 onClick={handleShare}
-                className="w-full py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors"
+                className="w-full rounded-xl bg-green-600 py-3 font-semibold text-white transition-colors hover:bg-green-700"
               >
                 Share Your Wrapped
               </button>
@@ -161,7 +160,7 @@ export default function WrappedPage() {
           {/* Back to Stats */}
           <Link
             href="/stats"
-            className="block text-center text-green-600 hover:text-green-700 font-medium"
+            className="block text-center font-medium text-green-600 hover:text-green-700"
           >
             Back to Stats
           </Link>
@@ -173,12 +172,12 @@ export default function WrappedPage() {
 
 function WrappedSkeleton() {
   return (
-    <div className="space-y-6 animate-pulse">
-      <div className="h-[500px] bg-gradient-to-br from-green-200 to-green-300 rounded-2xl" />
-      <div className="h-40 bg-gray-200 rounded-lg" />
+    <div className="animate-pulse space-y-6">
+      <div className="h-[500px] rounded-2xl bg-gradient-to-br from-green-200 to-green-300" />
+      <div className="h-40 rounded-lg bg-gray-200" />
       <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-20 bg-gray-200 rounded-lg" />
+          <div key={i} className="h-20 rounded-lg bg-gray-200" />
         ))}
       </div>
     </div>

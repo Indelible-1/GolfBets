@@ -7,7 +7,7 @@ import { NassauConfig, SkinsConfig } from '@/types'
  */
 export function createNassauBetData(
   unitValue: number,
-  overrides?: Partial<NassauConfig>,
+  overrides?: Partial<NassauConfig>
 ): NassauConfig {
   return {
     frontAmount: unitValue,
@@ -27,7 +27,7 @@ export function createNassauBetData(
  */
 export function createSkinsBetData(
   unitValue: number,
-  overrides?: Partial<SkinsConfig>,
+  overrides?: Partial<SkinsConfig>
 ): SkinsConfig {
   return {
     skinValue: unitValue,
@@ -64,10 +64,7 @@ export const SKINS_PRESETS = {
  * Formula: (front + back + overall) * unitValue * (participants - 1)
  * Note: Actual calculation happens in Cloud Functions after match completion
  */
-export function estimateNassauTotal(
-  config: NassauConfig,
-  numParticipants: number,
-): number {
+export function estimateNassauTotal(config: NassauConfig, numParticipants: number): number {
   const perPersonNassau = config.frontAmount + config.backAmount + config.overallAmount
   return perPersonNassau * (numParticipants - 1)
 }
@@ -80,7 +77,7 @@ export function estimateNassauTotal(
 export function estimateSkinsTotal(
   config: SkinsConfig,
   numParticipants: number,
-  totalHoles: number,
+  totalHoles: number
 ): number {
   return config.skinValue * totalHoles * (numParticipants - 1)
 }

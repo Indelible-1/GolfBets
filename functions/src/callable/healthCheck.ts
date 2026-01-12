@@ -17,7 +17,7 @@ export const healthCheck = functions.https.onCall(async (_data, context) => {
     const userId = context.auth?.uid || 'anonymous'
 
     // Test Firestore connectivity with a dummy read
-    const testDoc = await db.collection('_health').doc('check').get()
+    await db.collection('_health').doc('check').get()
 
     return {
       status: 'ok',

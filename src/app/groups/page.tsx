@@ -21,10 +21,15 @@ export default function GroupsPage() {
           {/* Create Group Button */}
           <Link
             href="/groups/new"
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 mb-4 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+            className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 font-medium text-white transition-colors hover:bg-emerald-700"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
             </svg>
             <span>Create New Group</span>
           </Link>
@@ -38,7 +43,7 @@ export default function GroupsPage() {
           {/* Groups List */}
           {!isLoading && groups.length > 0 && (
             <div className="space-y-3">
-              {groups.map(group => (
+              {groups.map((group) => (
                 <GroupCard key={group.id} group={group} />
               ))}
             </div>
@@ -51,9 +56,9 @@ export default function GroupsPage() {
 
 function GroupsPageSkeleton() {
   return (
-    <div className="space-y-3 animate-pulse">
-      {[1, 2, 3].map(i => (
-        <div key={i} className="h-28 bg-gray-200 rounded-lg" />
+    <div className="animate-pulse space-y-3">
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="h-28 rounded-lg bg-gray-200" />
       ))}
     </div>
   )
@@ -61,15 +66,15 @@ function GroupsPageSkeleton() {
 
 function EmptyGroupsState() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[40vh] p-4 text-center">
-      <span className="text-5xl mb-4">👥</span>
-      <h2 className="text-xl font-bold text-gray-900 mb-2">No Groups Yet</h2>
-      <p className="text-gray-500 mb-4">
+    <div className="flex min-h-[40vh] flex-col items-center justify-center p-4 text-center">
+      <span className="mb-4 text-5xl">👥</span>
+      <h2 className="mb-2 text-xl font-bold text-gray-900">No Groups Yet</h2>
+      <p className="mb-4 text-gray-500">
         Create a group to track standings with your regular golf buddies.
       </p>
       <Link
         href="/groups/new"
-        className="px-6 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700"
+        className="rounded-lg bg-emerald-600 px-6 py-2 font-medium text-white hover:bg-emerald-700"
       >
         Create Your First Group
       </Link>

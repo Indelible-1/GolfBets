@@ -33,10 +33,9 @@ export function Scorecard({
   const totalPar = pars.reduce((sum, par) => sum + par, 0)
 
   // Calculate running totals
-  const currentUserTotal = Object.values(currentUserScores).reduce<number>(
-    (sum, score) => sum + (score || 0),
-    0
-  ) || undefined
+  const currentUserTotal =
+    Object.values(currentUserScores).reduce<number>((sum, score) => sum + (score || 0), 0) ||
+    undefined
   const holesEntered = Object.values(currentUserScores).filter((s) => s !== undefined).length
 
   // Get current hole (next to enter)
@@ -45,14 +44,18 @@ export function Scorecard({
   // Build leaderboard
   const leaderboard = Object.entries(allParticipantScores)
     .map(([userId, scores]) => {
-      const total = Object.values(scores).reduce<number>((sum, score) => sum + (score || 0), 0) || undefined
+      const total =
+        Object.values(scores).reduce<number>((sum, score) => sum + (score || 0), 0) || undefined
       const entered = Object.values(scores).filter((s) => s !== undefined).length
       return {
         userId,
         name: participantNames[userId] || `Player ${userId.slice(0, 6)}`,
         total: total || 0,
         entered,
-        toPar: total !== undefined ? total - (pars.slice(0, entered).reduce((s, p) => s + p, 0) || totalPar) : 0,
+        toPar:
+          total !== undefined
+            ? total - (pars.slice(0, entered).reduce((s, p) => s + p, 0) || totalPar)
+            : 0,
       }
     })
     .sort((a, b) => {
@@ -83,7 +86,7 @@ export function Scorecard({
 
       {/* Holes Grid */}
       <div className="space-y-4">
-        <h3 className="font-semibold text-gray-900 text-sm uppercase">Scorecard</h3>
+        <h3 className="text-sm font-semibold text-gray-900 uppercase">Scorecard</h3>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
           {pars.map((par, index) => {
             const holeNumber = index + 1
@@ -104,7 +107,7 @@ export function Scorecard({
 
       {/* Leaderboard */}
       <div className="space-y-3">
-        <h3 className="font-semibold text-gray-900 text-sm uppercase">Leaderboard</h3>
+        <h3 className="text-sm font-semibold text-gray-900 uppercase">Leaderboard</h3>
         <div className="space-y-2">
           {leaderboard.length > 0 ? (
             leaderboard.map((player, index) => (
@@ -112,19 +115,19 @@ export function Scorecard({
                 key={player.userId}
                 variant="outlined"
                 className={cn(
-                  'p-3 flex items-center justify-between',
+                  'flex items-center justify-between p-3',
                   'tap-target',
-                  index === 0 && 'border-2 border-fairway-400 bg-fairway-50'
+                  index === 0 && 'border-fairway-400 bg-fairway-50 border-2'
                 )}
               >
-                <div className="flex items-center gap-3 flex-1">
+                <div className="flex flex-1 items-center gap-3">
                   <div className="text-center">
-                    <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
                       <span className="text-xs font-bold text-gray-600">{index + 1}</span>
                     </div>
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900 text-sm">{player.name}</p>
+                    <p className="text-sm font-medium text-gray-900">{player.name}</p>
                     <p className="text-xs text-gray-500">{player.entered} holes entered</p>
                   </div>
                 </div>
@@ -156,7 +159,7 @@ export function Scorecard({
             ))
           ) : (
             <Card variant="outlined" className="p-4 text-center">
-              <p className="text-gray-500 text-sm">No scores entered yet</p>
+              <p className="text-sm text-gray-500">No scores entered yet</p>
             </Card>
           )}
         </div>

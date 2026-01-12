@@ -13,7 +13,7 @@ export function OfflineBanner({ className }: OfflineBannerProps) {
   const pathname = usePathname()
   const { user } = useAuth()
   const [isOnline, setIsOnline] = useState(
-    typeof navigator !== 'undefined' ? navigator.onLine : true,
+    typeof navigator !== 'undefined' ? navigator.onLine : true
   )
   const [wasOffline, setWasOffline] = useState(false)
   const [showBackOnlineMessage, setShowBackOnlineMessage] = useState(false)
@@ -57,12 +57,10 @@ export function OfflineBanner({ className }: OfflineBannerProps) {
   return (
     <div
       className={cn(
-        'fixed bottom-20 left-4 right-4 z-50 px-4 py-3 rounded-lg text-sm font-medium',
+        'fixed right-4 bottom-20 left-4 z-50 rounded-lg px-4 py-3 text-sm font-medium',
         'flex items-center justify-center gap-2 transition-all duration-300',
-        showBackOnlineMessage
-          ? 'bg-green-500 text-white'
-          : 'bg-yellow-500 text-white',
-        className,
+        showBackOnlineMessage ? 'bg-green-500 text-white' : 'bg-yellow-500 text-white',
+        className
       )}
       role="status"
       aria-live="polite"

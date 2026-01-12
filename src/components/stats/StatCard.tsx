@@ -20,17 +20,13 @@ export function StatCard({ label, value, subtext, trend, icon, className }: Stat
   }
 
   return (
-    <div
-      className={cn('bg-white rounded-lg p-4 shadow-sm border border-gray-100', className)}
-    >
-      <div className="flex items-center justify-between mb-1">
+    <div className={cn('rounded-lg border border-gray-100 bg-white p-4 shadow-sm', className)}>
+      <div className="mb-1 flex items-center justify-between">
         <span className="text-sm text-gray-500">{label}</span>
         {icon && <span className="text-gray-400">{icon}</span>}
       </div>
       <div className="flex items-baseline gap-2">
-        <span
-          className={cn('text-2xl font-bold', trend ? trendColors[trend] : 'text-gray-900')}
-        >
+        <span className={cn('text-2xl font-bold', trend ? trendColors[trend] : 'text-gray-900')}>
           {value}
         </span>
         {subtext && <span className="text-sm text-gray-400">{subtext}</span>}
