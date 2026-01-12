@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @config "../../tailwind.config.ts";
 
 @layer base {
@@ -32,7 +32,9 @@
 
   *:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px #22c55e, 0 0 0 4px rgba(34, 197, 94, 0.5);
+    box-shadow:
+      0 0 0 2px #22c55e,
+      0 0 0 4px rgba(34, 197, 94, 0.5);
   }
 }
 
@@ -63,14 +65,18 @@
   .card {
     background-color: #ffffff;
     border-radius: 0.75rem;
-    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 2px 8px -2px rgba(0, 0, 0, 0.1),
+      0 2px 4px -2px rgba(0, 0, 0, 0.06);
     padding: 1rem;
   }
 
   .card-interactive {
     background-color: #ffffff;
     border-radius: 0.75rem;
-    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 2px 8px -2px rgba(0, 0, 0, 0.1),
+      0 2px 4px -2px rgba(0, 0, 0, 0.06);
     padding: 1rem;
     cursor: pointer;
     transition-property: box-shadow;
@@ -79,7 +85,9 @@
   }
 
   .card-interactive:hover {
-    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 4px 12px -2px rgba(0, 0, 0, 0.15),
+      0 4px 6px -2px rgba(0, 0, 0, 0.1);
   }
 
   .btn {

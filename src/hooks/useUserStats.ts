@@ -54,7 +54,7 @@ export function useUserStats(userId: string | null | undefined): UseUserStatsRet
             completedMatches.map(async (match) => {
               const matchBets = await getMatchBets(match.id)
               betsMap.set(match.id, matchBets)
-            }),
+            })
           )
 
           if (!cancelled) {
@@ -107,7 +107,7 @@ export function useUserStats(userId: string | null | undefined): UseUserStatsRet
           console.error('Error subscribing to ledger (from):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setIsLoading(false)
-        },
+        }
       )
 
       unsubscribeTo = onSnapshot(
@@ -123,7 +123,7 @@ export function useUserStats(userId: string | null | undefined): UseUserStatsRet
           console.error('Error subscribing to ledger (to):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setIsLoading(false)
-        },
+        }
       )
 
       return () => {

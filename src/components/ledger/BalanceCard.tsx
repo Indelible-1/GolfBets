@@ -27,7 +27,7 @@ export function BalanceCard({
         <div className="flex-1">
           <h3 className="font-semibold text-gray-900">{name}</h3>
           <p
-            className={cn('text-sm mt-1 font-medium', isOwed ? 'text-fairway-600' : 'text-red-600')}
+            className={cn('mt-1 text-sm font-medium', isOwed ? 'text-fairway-600' : 'text-red-600')}
           >
             {isOwed ? '✓ Owes you' : '• You owe'}
           </p>
@@ -45,10 +45,10 @@ export function BalanceCard({
           onClick={onSettle}
           disabled={isSettling}
           className={cn(
-            'w-full mt-4 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+            'mt-4 w-full rounded-lg px-3 py-2 text-sm font-medium transition-colors',
             isSettling
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-gray-100 hover:bg-gray-200 text-gray-900',
+              ? 'cursor-not-allowed bg-gray-100 text-gray-400'
+              : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
           )}
           aria-label={`Mark ${name} as settled`}
         >

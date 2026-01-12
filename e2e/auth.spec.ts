@@ -45,7 +45,10 @@ test.describe('Authentication', () => {
     await emailInput.fill('invalid-email')
 
     // Try to submit (find the form submit button)
-    const submitBtn = page.locator('button').filter({ hasText: /send|submit|magic/i }).first()
+    const submitBtn = page
+      .locator('button')
+      .filter({ hasText: /send|submit|magic/i })
+      .first()
     await submitBtn.click()
 
     // Should show validation error or not navigate away

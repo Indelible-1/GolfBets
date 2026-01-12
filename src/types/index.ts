@@ -302,7 +302,10 @@ export type FirestoreUser = Omit<User, 'createdAt' | 'updatedAt' | 'lastActiveAt
   lastActiveAt: Timestamp
 }
 
-export type FirestoreMatch = Omit<Match, 'createdAt' | 'updatedAt' | 'startedAt' | 'completedAt' | 'teeTime'> & {
+export type FirestoreMatch = Omit<
+  Match,
+  'createdAt' | 'updatedAt' | 'startedAt' | 'completedAt' | 'teeTime'
+> & {
   createdAt: Timestamp
   updatedAt: Timestamp
   startedAt: Timestamp | null

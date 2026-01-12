@@ -14,14 +14,12 @@ const firebaseConfig = {
 
 // Validate required Firebase config
 const requiredConfigKeys = ['apiKey', 'authDomain', 'projectId', 'appId'] as const
-const missingKeys = requiredConfigKeys.filter(
-  (key) => !firebaseConfig[key]
-)
+const missingKeys = requiredConfigKeys.filter((key) => !firebaseConfig[key])
 
 if (missingKeys.length > 0 && typeof window !== 'undefined') {
   console.error(
     `Firebase configuration is incomplete. Missing: ${missingKeys.join(', ')}. ` +
-    'Please ensure your .env.local file contains the required NEXT_PUBLIC_FIREBASE_* variables.'
+      'Please ensure your .env.local file contains the required NEXT_PUBLIC_FIREBASE_* variables.'
   )
 }
 

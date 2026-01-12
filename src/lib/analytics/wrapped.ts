@@ -23,7 +23,7 @@ export function generateGolfWrapped(
   bets: Map<string, Bet[]>,
   users: Map<string, User>,
   userId: string,
-  year: number,
+  year: number
 ): GolfWrapped {
   // Filter to target year
   const yearMatches = matches.filter((m) => {
@@ -51,7 +51,7 @@ export function generateGolfWrapped(
       bets,
       users,
     },
-    userId,
+    userId
   )
 
   // Calculate monthly breakdown
@@ -72,7 +72,7 @@ export function generateGolfWrapped(
     yearEntries,
     bets,
     users,
-    userId,
+    userId
   )
 
   // Result emoji
@@ -92,7 +92,11 @@ export function generateGolfWrapped(
   }))
 
   // Generate headlines
-  const { headline, subhead } = generateHeadlines(yearMatches.length, stats.netLifetime, topOpponent)
+  const { headline, subhead } = generateHeadlines(
+    yearMatches.length,
+    stats.netLifetime,
+    topOpponent
+  )
 
   return {
     year,
@@ -128,7 +132,7 @@ function calculateMonthlyNet(
   matches: Match[],
   entries: LedgerEntry[],
   bets: Map<string, Bet[]>,
-  userId: string,
+  userId: string
 ): number[] {
   const monthlyNet = new Array(12).fill(0)
 
@@ -139,7 +143,7 @@ function calculateMonthlyNet(
       (e) =>
         (e.fromUserId === userId || e.toUserId === userId) &&
         e.createdAt.getMonth() === month &&
-        e.createdAt.getFullYear() === match.teeTime.getFullYear(),
+        e.createdAt.getFullYear() === match.teeTime.getFullYear()
     )
 
     const result = getMatchResult(match, matchEntries, matchBets, userId)
@@ -199,7 +203,7 @@ function findBiggestResults(
   entries: LedgerEntry[],
   bets: Map<string, Bet[]>,
   users: Map<string, User>,
-  userId: string,
+  userId: string
 ): {
   biggestWin: { amount: number; opponent: string; date: Date }
   biggestLoss: { amount: number; opponent: string; date: Date }
@@ -251,7 +255,7 @@ function getResultEmoji(netResult: number): '🏆' | '📈' | '📉' | '😐' {
 function generateHeadlines(
   totalMatches: number,
   netResult: number,
-  topOpponent: { opponentName: string; totalMatches: number } | null,
+  topOpponent: { opponentName: string; totalMatches: number } | null
 ): { headline: string; subhead: string } {
   const netText =
     netResult >= 0 ? `$${netResult.toFixed(0)} ahead` : `$${Math.abs(netResult).toFixed(0)} behind`

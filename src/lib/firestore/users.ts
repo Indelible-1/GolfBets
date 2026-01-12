@@ -27,7 +27,7 @@ export async function createUser(
   data: {
     displayName: string
     email: string
-  },
+  }
 ): Promise<User> {
   const now = new Date()
   const user: User = {
@@ -66,7 +66,7 @@ export async function createUser(
  */
 export async function updateUser(
   userId: string,
-  updates: Partial<Omit<User, 'id' | 'email' | 'createdAt'>>,
+  updates: Partial<Omit<User, 'id' | 'email' | 'createdAt'>>
 ): Promise<void> {
   try {
     await updateDoc(userDoc(userId), {
@@ -102,7 +102,7 @@ export async function updateUserGolfProfile(
     handicapIndex?: number | null
     homeClub?: string | null
     defaultTeeBox?: TeeBox
-  },
+  }
 ): Promise<void> {
   try {
     await updateDoc(userDoc(userId), {
@@ -120,7 +120,7 @@ export async function updateUserGolfProfile(
  */
 export async function updateNotificationPreferences(
   userId: string,
-  notificationsEnabled: boolean,
+  notificationsEnabled: boolean
 ): Promise<void> {
   try {
     await updateDoc(userDoc(userId), {

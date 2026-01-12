@@ -1,7 +1,14 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { collectionGroup, onSnapshot, query, where, getFirestore, getDocs } from 'firebase/firestore'
+import {
+  collectionGroup,
+  onSnapshot,
+  query,
+  where,
+  getFirestore,
+  getDocs,
+} from 'firebase/firestore'
 import type { Match, LedgerEntry, Bet, User } from '@/types'
 import type { GolfWrapped } from '@/lib/analytics/types'
 import { generateGolfWrapped, getAvailableYears } from '@/lib/analytics/wrapped'
@@ -82,7 +89,7 @@ export function useGolfWrapped(userId: string | null | undefined): UseGolfWrappe
           completedMatches.map(async (match) => {
             const matchBets = await getMatchBets(match.id)
             betsMap.set(match.id, matchBets)
-          }),
+          })
         )
 
         if (cancelled) return
@@ -130,7 +137,7 @@ export function useGolfWrapped(userId: string | null | undefined): UseGolfWrappe
           console.error('Error subscribing to ledger (from):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setIsLoading(false)
-        },
+        }
       )
 
       unsubscribeTo = onSnapshot(
@@ -146,7 +153,7 @@ export function useGolfWrapped(userId: string | null | undefined): UseGolfWrappe
           console.error('Error subscribing to ledger (to):', err)
           setError(err instanceof Error ? err : new Error('Unknown error'))
           setIsLoading(false)
-        },
+        }
       )
 
       return () => {

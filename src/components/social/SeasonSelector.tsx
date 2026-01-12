@@ -16,7 +16,7 @@ export function SeasonSelector({
   seasons,
   selectedSeason,
   onSeasonChange,
-  className
+  className,
 }: SeasonSelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -33,11 +33,11 @@ export function SeasonSelector({
     <div className={cn('relative', className)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+        className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
       >
         <span>{selectedSeason?.name ?? 'Select Season'}</span>
         <svg
-          className={cn('w-4 h-4 transition-transform', isOpen && 'rotate-180')}
+          className={cn('h-4 w-4 transition-transform', isOpen && 'rotate-180')}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -49,13 +49,10 @@ export function SeasonSelector({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setIsOpen(false)}
-          />
+          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
 
           {/* Dropdown */}
-          <div className="absolute right-0 mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20 overflow-hidden">
+          <div className="absolute right-0 z-20 mt-1 w-56 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             {seasons.map((season) => {
               const isSelected = selectedSeason?.id === season.id
               const isActive = season.status === 'active'
@@ -66,19 +63,21 @@ export function SeasonSelector({
                   key={season.id}
                   onClick={() => handleSelect(season)}
                   className={cn(
-                    'w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors',
+                    'w-full px-4 py-3 text-left transition-colors hover:bg-gray-50',
                     isSelected && 'bg-emerald-50'
                   )}
                 >
                   <div className="flex items-center justify-between">
-                    <span className={cn(
-                      'font-medium',
-                      isSelected ? 'text-emerald-700' : 'text-gray-900'
-                    )}>
+                    <span
+                      className={cn(
+                        'font-medium',
+                        isSelected ? 'text-emerald-700' : 'text-gray-900'
+                      )}
+                    >
                       {season.name}
                     </span>
                     {isActive && (
-                      <span className="text-xs px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full">
+                      <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700">
                         Active
                       </span>
                     )}
@@ -86,7 +85,7 @@ export function SeasonSelector({
 
                   {/* Progress bar for active season */}
                   {isActive && (
-                    <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="mt-2 h-1 overflow-hidden rounded-full bg-gray-200">
                       <div
                         className="h-full bg-emerald-500 transition-all"
                         style={{ width: `${progress}%` }}
@@ -95,7 +94,7 @@ export function SeasonSelector({
                   )}
 
                   {/* Date range */}
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="mt-1 text-xs text-gray-500">
                     {formatDateRange(season.startDate, season.endDate)}
                   </p>
                 </button>
@@ -125,20 +124,20 @@ export function SeasonInfo({ season, className }: SeasonInfoProps) {
   const progress = isActive ? getSeasonProgress(season) : 100
 
   return (
-    <div className={cn('bg-white rounded-lg border border-gray-200 p-4', className)}>
-      <div className="flex items-center justify-between mb-2">
+    <div className={cn('rounded-lg border border-gray-200 bg-white p-4', className)}>
+      <div className="mb-2 flex items-center justify-between">
         <h3 className="font-semibold text-gray-900">{season.name}</h3>
-        <span className={cn(
-          'text-xs px-2 py-0.5 rounded-full',
-          isActive
-            ? 'bg-emerald-100 text-emerald-700'
-            : 'bg-gray-100 text-gray-600'
-        )}>
+        <span
+          className={cn(
+            'rounded-full px-2 py-0.5 text-xs',
+            isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'
+          )}
+        >
           {isActive ? 'Active' : 'Completed'}
         </span>
       </div>
 
-      <p className="text-sm text-gray-500 mb-3">
+      <p className="mb-3 text-sm text-gray-500">
         {formatDateRange(season.startDate, season.endDate)}
       </p>
 
@@ -148,7 +147,7 @@ export function SeasonInfo({ season, className }: SeasonInfoProps) {
             <span>Season Progress</span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 overflow-hidden rounded-full bg-gray-200">
             <div
               className="h-full bg-emerald-500 transition-all"
               style={{ width: `${progress}%` }}

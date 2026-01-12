@@ -1,0 +1,2 @@
+echo "Running pre-push checks..."
+npm run typecheck && npm run test -- --ci --maxWorkers=2

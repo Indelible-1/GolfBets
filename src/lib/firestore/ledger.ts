@@ -26,7 +26,10 @@ function getDb(): Firestore {
 /**
  * Fetch ledger entry by ID
  */
-export async function getLedgerEntry(matchId: string, entryId: string): Promise<LedgerEntry | null> {
+export async function getLedgerEntry(
+  matchId: string,
+  entryId: string
+): Promise<LedgerEntry | null> {
   try {
     const snapshot = await getDoc(ledgerEntryDoc(matchId, entryId))
     return snapshot.exists() ? snapshot.data() : null
@@ -58,7 +61,7 @@ export async function getUserLedger(userId: string): Promise<LedgerEntry[]> {
     // Query where user is either creditor or debtor
     const fromUserQuery = query(
       collectionGroup(getDb(), 'ledger'),
-      where('fromUserId', '==', userId),
+      where('fromUserId', '==', userId)
     )
     const toUserQuery = query(collectionGroup(getDb(), 'ledger'), where('toUserId', '==', userId))
 
@@ -136,7 +139,7 @@ export async function createLedgerEntry(
     betId: string
     description: string
     calculatedBy: string
-  },
+  }
 ): Promise<LedgerEntry> {
   const now = new Date()
   const entryId = `ledger_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
@@ -177,7 +180,7 @@ export async function createLedgerEntry(
 export async function markLedgerEntrySettled(
   matchId: string,
   entryId: string,
-  settledByUserId: string,
+  settledByUserId: string
 ): Promise<void> {
   try {
     const now = new Date()
@@ -200,7 +203,7 @@ export async function markLedgerEntrySettled(
 export async function batchMarkSettled(
   matchId: string,
   entryIds: string[],
-  settledByUserId: string,
+  settledByUserId: string
 ): Promise<void> {
   try {
     const now = new Date()
@@ -211,7 +214,7 @@ export async function batchMarkSettled(
     }
 
     const updatePromises = entryIds.map((entryId) =>
-      updateDoc(ledgerEntryDoc(matchId, entryId), updateData),
+      updateDoc(ledgerEntryDoc(matchId, entryId), updateData)
     )
 
     await Promise.all(updatePromises)
