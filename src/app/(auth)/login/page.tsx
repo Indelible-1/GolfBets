@@ -21,6 +21,14 @@ function getErrorMessage(err: unknown): string {
         return 'Network error. Please check your connection and try again.'
       case 'auth/popup-closed-by-user':
         return 'Sign-in was cancelled. Please try again.'
+      case 'auth/unauthorized-continue-uri':
+        return 'The callback URL is not authorized. Please add your domain to Firebase Console > Authentication > Settings > Authorized domains.'
+      case 'auth/invalid-continue-uri':
+        return 'The callback URL is invalid. Please check your NEXT_PUBLIC_APP_URL configuration.'
+      case 'auth/missing-continue-uri':
+        return 'Missing callback URL. Please set the NEXT_PUBLIC_APP_URL environment variable.'
+      case 'auth/operation-not-allowed':
+        return 'Email link sign-in is not enabled. Please enable it in Firebase Console > Authentication > Sign-in method.'
       default:
         return `Authentication error: ${code}`
     }
