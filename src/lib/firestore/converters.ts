@@ -1,8 +1,4 @@
-import {
-  Timestamp,
-  FirestoreDataConverter,
-  QueryDocumentSnapshot,
-} from 'firebase/firestore'
+import { Timestamp, FirestoreDataConverter, QueryDocumentSnapshot } from 'firebase/firestore'
 import {
   User,
   FirestoreUser,

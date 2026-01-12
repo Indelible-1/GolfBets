@@ -43,9 +43,7 @@ function extractGreenieResults(
 /**
  * Extract sandy results from hole side bets
  */
-function extractSandyResults(
-  sideBetResults: Record<number, HoleSideBets>
-): SandyResult[] {
+function extractSandyResults(sideBetResults: Record<number, HoleSideBets>): SandyResult[] {
   const results: SandyResult[] = []
 
   for (const [holeStr, bets] of Object.entries(sideBetResults)) {
@@ -69,9 +67,7 @@ function extractSandyResults(
 /**
  * Extract BBB results from hole side bets
  */
-function extractBBBResults(
-  sideBetResults: Record<number, HoleSideBets>
-): BBBHoleResult[] {
+function extractBBBResults(sideBetResults: Record<number, HoleSideBets>): BBBHoleResult[] {
   return Object.entries(sideBetResults).map(([holeStr, bets]) => ({
     holeNumber: parseInt(holeStr, 10),
     bingo: bets.bingo ?? null,
@@ -165,12 +161,13 @@ export function getDetailedSettlement(
 
         settlements.push({
           type: 'greenie',
-          results: participantIds.map(id => ({
+          results: participantIds.map((id) => ({
             playerId: id,
             wins: countGreenies(greenieResults, id),
             amount: payouts.get(id) ?? 0,
           })),
-          totalPot: greenieResults.filter(r => r.winnerId).length * config.amount * participantIds.length,
+          totalPot:
+            greenieResults.filter((r) => r.winnerId).length * config.amount * participantIds.length,
         })
         break
       }
@@ -180,12 +177,13 @@ export function getDetailedSettlement(
 
         settlements.push({
           type: 'sandy',
-          results: participantIds.map(id => ({
+          results: participantIds.map((id) => ({
             playerId: id,
             wins: countSandies(sandyResults, id),
             amount: payouts.get(id) ?? 0,
           })),
-          totalPot: sandyResults.filter(r => r.success).length * config.amount * participantIds.length,
+          totalPot:
+            sandyResults.filter((r) => r.success).length * config.amount * participantIds.length,
         })
         break
       }
@@ -196,7 +194,7 @@ export function getDetailedSettlement(
 
         settlements.push({
           type: 'bingo_bango_bongo',
-          results: points.map(p => ({
+          results: points.map((p) => ({
             playerId: p.playerId,
             wins: p.totalPoints,
             amount: payouts.get(p.playerId) ?? 0,
@@ -218,9 +216,7 @@ export function getDetailedSettlement(
 /**
  * Create default side bet configurations
  */
-export function createDefaultSideBetConfigs(
-  amount: number = 1
-): SideBetConfig[] {
+export function createDefaultSideBetConfigs(amount: number = 1): SideBetConfig[] {
   return [
     { type: 'greenie', amount, enabled: false },
     { type: 'sandy', amount, enabled: false },
@@ -232,14 +228,14 @@ export function createDefaultSideBetConfigs(
  * Check if any side bets are enabled
  */
 export function hasSideBetsEnabled(configs: SideBetConfig[]): boolean {
-  return configs.some(c => c.enabled)
+  return configs.some((c) => c.enabled)
 }
 
 /**
  * Get enabled side bet types
  */
 export function getEnabledSideBets(configs: SideBetConfig[]): SideBetConfig['type'][] {
-  return configs.filter(c => c.enabled).map(c => c.type)
+  return configs.filter((c) => c.enabled).map((c) => c.type)
 }
 
 /**

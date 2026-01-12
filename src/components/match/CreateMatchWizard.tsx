@@ -169,12 +169,12 @@ export function CreateMatchWizard() {
     <div className="space-y-6">
       {/* Progress Indicator */}
       <div className="space-y-2">
-        <div className="flex justify-between items-center gap-1">
+        <div className="flex items-center justify-between gap-1">
           {steps.map((step, index) => (
             <div
               key={step}
               className={cn(
-                'flex-1 h-2 rounded-full transition-colors',
+                'h-2 flex-1 rounded-full transition-colors',
                 index <= currentStepIndex ? 'bg-fairway-600' : 'bg-gray-200'
               )}
             />
@@ -187,8 +187,8 @@ export function CreateMatchWizard() {
 
       {/* Error Display */}
       {error && (
-        <Card variant="outlined" className="bg-red-50 border-red-200 p-4">
-          <p className="text-red-700 text-sm">{error}</p>
+        <Card variant="outlined" className="border-red-200 bg-red-50 p-4">
+          <p className="text-sm text-red-700">{error}</p>
         </Card>
       )}
 
@@ -197,21 +197,15 @@ export function CreateMatchWizard() {
         {/* Step 1: Course Name */}
         {currentStep === 'course' && (
           <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-900">
-              Course Name
-            </label>
+            <label className="block text-sm font-medium text-gray-900">Course Name</label>
             <Input
               type="text"
               placeholder="e.g., Pebble Beach, Local GC"
               value={state.courseName}
-              onChange={(e) =>
-                setState({ ...state, courseName: e.target.value })
-              }
+              onChange={(e) => setState({ ...state, courseName: e.target.value })}
               autoFocus
             />
-            <p className="text-xs text-gray-500">
-              Where are you playing today?
-            </p>
+            <p className="text-xs text-gray-500">Where are you playing today?</p>
           </div>
         )}
 
@@ -219,31 +213,23 @@ export function CreateMatchWizard() {
         {currentStep === 'datetime' && (
           <div className="space-y-4">
             <div className="space-y-3">
-              <label className="block text-sm font-medium text-gray-900">
-                Tee Time
-              </label>
+              <label className="block text-sm font-medium text-gray-900">Tee Time</label>
               <Input
                 type="datetime-local"
                 value={state.teeTime}
-                onChange={(e) =>
-                  setState({ ...state, teeTime: e.target.value })
-                }
+                onChange={(e) => setState({ ...state, teeTime: e.target.value })}
               />
             </div>
 
             <div className="space-y-3">
-              <label className="block text-sm font-medium text-gray-900">
-                Holes
-              </label>
+              <label className="block text-sm font-medium text-gray-900">Holes</label>
               <div className="grid grid-cols-2 gap-3">
                 {[9, 18].map((holes) => (
                   <button
                     key={holes}
-                    onClick={() =>
-                      setState({ ...state, holes: holes as 9 | 18 })
-                    }
+                    onClick={() => setState({ ...state, holes: holes as 9 | 18 })}
                     className={cn(
-                      'p-3 rounded-lg border-2 font-semibold transition-all',
+                      'rounded-lg border-2 p-3 font-semibold transition-all',
                       'tap-target',
                       state.holes === holes
                         ? 'border-fairway-600 bg-fairway-50 text-fairway-900'
@@ -268,17 +254,13 @@ export function CreateMatchWizard() {
 
         {/* Step 4: Confirm */}
         {currentStep === 'confirm' && (
-          <Card variant="elevated" className="p-6 space-y-4">
-            <h3 className="font-semibold text-lg text-gray-900">
-              Match Summary
-            </h3>
+          <Card variant="elevated" className="space-y-4 p-6">
+            <h3 className="text-lg font-semibold text-gray-900">Match Summary</h3>
 
-            <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
+            <div className="space-y-3 rounded-lg bg-gray-50 p-4">
               <div className="flex justify-between">
                 <span className="text-gray-600">Course</span>
-                <span className="font-semibold text-gray-900">
-                  {state.courseName}
-                </span>
+                <span className="font-semibold text-gray-900">{state.courseName}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Tee Time</span>
@@ -294,13 +276,11 @@ export function CreateMatchWizard() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Format</span>
-                <span className="font-semibold text-gray-900">
-                  {state.holes} Holes
-                </span>
+                <span className="font-semibold text-gray-900">{state.holes} Holes</span>
               </div>
-              <div className="border-t border-gray-200 pt-3 flex justify-between">
+              <div className="flex justify-between border-t border-gray-200 pt-3">
                 <span className="text-gray-600">Bet Type</span>
-                <span className="font-semibold text-fairway-600">
+                <span className="text-fairway-600 font-semibold">
                   {state.betConfig.type === 'none'
                     ? 'No Bets'
                     : state.betConfig.type === 'nassau'
@@ -331,20 +311,11 @@ export function CreateMatchWizard() {
         </Button>
 
         {!isLastStep ? (
-          <Button
-            onClick={handleNext}
-            disabled={!canProceed() || loading}
-            fullWidth
-          >
+          <Button onClick={handleNext} disabled={!canProceed() || loading} fullWidth>
             Next
           </Button>
         ) : (
-          <Button
-            onClick={handleSubmit}
-            loading={loading}
-            disabled={loading}
-            fullWidth
-          >
+          <Button onClick={handleSubmit} loading={loading} disabled={loading} fullWidth>
             Create Match
           </Button>
         )}

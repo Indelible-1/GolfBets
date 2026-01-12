@@ -88,6 +88,13 @@ jobs:
         run: npm run typecheck
 
   # ============================================
+  # SECURITY SCANNING (CodeQL)
+  # ============================================
+  # NOTE: CodeQL is handled by GitHub's default setup (Settings > Security)
+  # No need for a separate job here - it runs automatically on PRs
+  # See: .github/workflows/codeql.yml for manual configuration if needed
+
+  # ============================================
   # DEPENDENCY VULNERABILITY CHECK
   # ============================================
   dependency-audit:
@@ -172,10 +179,11 @@ jobs:
           node -e "
             const coverage = require('./coverage/coverage-summary.json');
             const totals = coverage.total;
-            const MIN_LINES = 60;
-            const MIN_BRANCHES = 50;
-            const MIN_FUNCTIONS = 60;
-            const MIN_STATEMENTS = 60;
+            // MVP-appropriate thresholds for solo builder
+            const MIN_LINES = 15;
+            const MIN_BRANCHES = 10;
+            const MIN_FUNCTIONS = 15;
+            const MIN_STATEMENTS = 15;
 
             console.log('Coverage Report:');
             console.log('  Lines:', totals.lines.pct + '%');

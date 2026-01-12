@@ -40,12 +40,9 @@ export function FormField({
 }: FormFieldProps) {
   return (
     <div className={cn('space-y-1', className)}>
-      <label
-        htmlFor={htmlFor}
-        className="block text-sm font-medium text-gray-700"
-      >
+      <label htmlFor={htmlFor} className="block text-sm font-medium text-gray-700">
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="ml-1 text-red-500">*</span>}
       </label>
 
       {children}
@@ -56,9 +53,7 @@ export function FormField({
         </p>
       )}
 
-      {hint && !error && (
-        <p className="text-sm text-gray-500">{hint}</p>
-      )}
+      {hint && !error && <p className="text-sm text-gray-500">{hint}</p>}
     </div>
   )
 }
@@ -70,7 +65,7 @@ export function InlineError({ message }: { message?: string }) {
   if (!message) return null
 
   return (
-    <p className="text-sm text-red-600 mt-1" role="alert" aria-live="polite">
+    <p className="mt-1 text-sm text-red-600" role="alert" aria-live="polite">
       {message}
     </p>
   )
@@ -85,11 +80,7 @@ export function ErrorSummary({ errors }: { errors: Record<string, string> }) {
   if (errorEntries.length === 0) return null
 
   return (
-    <div
-      className="rounded-md bg-red-50 p-4 mb-4"
-      role="alert"
-      aria-live="assertive"
-    >
+    <div className="mb-4 rounded-md bg-red-50 p-4" role="alert" aria-live="assertive">
       <div className="flex">
         <div className="flex-shrink-0">
           <svg
@@ -106,10 +97,8 @@ export function ErrorSummary({ errors }: { errors: Record<string, string> }) {
           </svg>
         </div>
         <div className="ml-3">
-          <h3 className="text-sm font-medium text-red-800">
-            Please fix the following errors:
-          </h3>
-          <ul className="mt-2 text-sm text-red-700 list-disc list-inside">
+          <h3 className="text-sm font-medium text-red-800">Please fix the following errors:</h3>
+          <ul className="mt-2 list-inside list-disc text-sm text-red-700">
             {errorEntries.map(([field, message]) => (
               <li key={field}>{message}</li>
             ))}

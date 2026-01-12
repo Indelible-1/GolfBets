@@ -1,28 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // Routes that require authentication
-const protectedRoutes = [
-  '/match',
-  '/ledger',
-  '/settings',
-  '/profile',
-]
+const protectedRoutes = ['/match', '/ledger', '/settings', '/profile']
 
 // Routes accessible only when logged out
-const authRoutes = [
-  '/login',
-]
+const authRoutes = ['/login']
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Check if route requires protection
-  const isProtectedRoute = protectedRoutes.some(route =>
-    pathname.startsWith(route)
-  )
-  const isAuthRoute = authRoutes.some(route =>
-    pathname.startsWith(route)
-  )
+  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route))
 
   // Get session token from cookies
   const sessionToken = request.cookies.get('__session')?.value

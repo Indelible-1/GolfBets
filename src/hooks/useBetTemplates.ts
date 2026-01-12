@@ -20,7 +20,7 @@ export function useBetTemplates(userId: string | null | undefined): UseBetTempla
   const [refreshKey, setRefreshKey] = useState(0)
 
   const refetch = useCallback(() => {
-    setRefreshKey(prev => prev + 1)
+    setRefreshKey((prev) => prev + 1)
   }, [])
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export function useBetTemplates(userId: string | null | undefined): UseBetTempla
       q,
       (snapshot) => {
         if (isMounted) {
-          const templateData = snapshot.docs.map(doc => doc.data())
+          const templateData = snapshot.docs.map((doc) => doc.data())
           setTemplates(templateData)
           setIsLoading(false)
           setError(null)
@@ -66,7 +66,13 @@ export function useBetTemplates(userId: string | null | undefined): UseBetTempla
   const derivedLoading = userId ? isLoading : false
   const derivedError = userId ? error : null
 
-  const defaultTemplate = derivedTemplates.find(t => t.isDefault) ?? null
+  const defaultTemplate = derivedTemplates.find((t) => t.isDefault) ?? null
 
-  return { templates: derivedTemplates, defaultTemplate, isLoading: derivedLoading, error: derivedError, refetch }
+  return {
+    templates: derivedTemplates,
+    defaultTemplate,
+    isLoading: derivedLoading,
+    error: derivedError,
+    refetch,
+  }
 }

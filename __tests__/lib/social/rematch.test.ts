@@ -43,19 +43,25 @@ function createBet(type: 'nassau' | 'skins' = 'nassau'): Bet {
     type,
     unitValue: 5,
     scoringMode: 'net',
-    nassauConfig: type === 'nassau' ? {
-      frontAmount: 5,
-      backAmount: 5,
-      overallAmount: 5,
-      autoPress: true,
-      pressTrigger: 2,
-      maxPresses: 3,
-    } : null,
-    skinsConfig: type === 'skins' ? {
-      skinValue: 2,
-      carryover: true,
-      validation: false,
-    } : null,
+    nassauConfig:
+      type === 'nassau'
+        ? {
+            frontAmount: 5,
+            backAmount: 5,
+            overallAmount: 5,
+            autoPress: true,
+            pressTrigger: 2,
+            maxPresses: 3,
+          }
+        : null,
+    skinsConfig:
+      type === 'skins'
+        ? {
+            skinValue: 2,
+            carryover: true,
+            validation: false,
+          }
+        : null,
     createdAt: now,
     createdBy: USER_A,
   }

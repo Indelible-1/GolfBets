@@ -23,7 +23,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return (
       <Screen className="flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin text-4xl mb-4">⛳</div>
+          <div className="mb-4 animate-spin text-4xl">⛳</div>
           <p className="text-gray-500">Loading...</p>
         </div>
       </Screen>

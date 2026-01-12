@@ -51,7 +51,10 @@ export default function ResultsPage() {
           if (result.status === 'fulfilled' && result.value.userData) {
             userMap.set(result.value.userId, result.value.userData)
           } else if (result.status === 'rejected') {
-            console.warn(`Failed to fetch user data for participant ${parts[index]?.userId}:`, result.reason)
+            console.warn(
+              `Failed to fetch user data for participant ${parts[index]?.userId}:`,
+              result.reason
+            )
           }
         })
         setParticipantUsers(userMap)
@@ -74,8 +77,8 @@ export default function ResultsPage() {
       <ProtectedRoute>
         <Screen>
           <Header title="Results" />
-          <div className="p-4 flex items-center justify-center h-96">
-            <div className="text-center space-y-2">
+          <div className="flex h-96 items-center justify-center p-4">
+            <div className="space-y-2 text-center">
               <div className="animate-spin text-4xl">⛳</div>
               <p className="text-gray-500">Loading results...</p>
             </div>
@@ -91,8 +94,8 @@ export default function ResultsPage() {
         <Screen>
           <Header title="Results" />
           <div className="p-4">
-            <Card variant="outlined" className="bg-red-50 border-red-200">
-              <p className="text-red-700 text-sm">Match not found or not authenticated</p>
+            <Card variant="outlined" className="border-red-200 bg-red-50">
+              <p className="text-sm text-red-700">Match not found or not authenticated</p>
             </Card>
           </div>
         </Screen>
@@ -115,10 +118,10 @@ export default function ResultsPage() {
       <Screen padBottom>
         <Header title={match.courseName} subtitle="Match Results" />
 
-        <div className="p-4 pb-24 space-y-6">
+        <div className="space-y-6 p-4 pb-24">
           {error && (
-            <Card variant="outlined" className="bg-red-50 border-red-200 p-4">
-              <p className="text-red-700 text-sm">{error}</p>
+            <Card variant="outlined" className="border-red-200 bg-red-50 p-4">
+              <p className="text-sm text-red-700">{error}</p>
             </Card>
           )}
 
@@ -134,12 +137,12 @@ export default function ResultsPage() {
           {/* Summary Stats */}
           <div className="grid grid-cols-2 gap-3">
             <Card variant="elevated" className="p-4 text-center">
-              <p className="text-gray-500 text-sm mb-1">Total Bets</p>
-              <p className="text-2xl font-bold text-fairway-600">{ledgerEntries.length}</p>
+              <p className="mb-1 text-sm text-gray-500">Total Bets</p>
+              <p className="text-fairway-600 text-2xl font-bold">{ledgerEntries.length}</p>
             </Card>
 
             <Card variant="elevated" className="p-4 text-center">
-              <p className="text-gray-500 text-sm mb-1">Unsettled</p>
+              <p className="mb-1 text-sm text-gray-500">Unsettled</p>
               <p className="text-2xl font-bold text-orange-600">{unsettledLedger.length}</p>
             </Card>
           </div>
@@ -153,9 +156,7 @@ export default function ResultsPage() {
             </Link>
 
             <Link href="/ledger" className="block">
-              <Button fullWidth>
-                View Full Ledger
-              </Button>
+              <Button fullWidth>View Full Ledger</Button>
             </Link>
           </div>
         </div>

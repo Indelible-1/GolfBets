@@ -35,16 +35,15 @@ export function BottomNav() {
   return (
     <nav
       className={cn(
-        'fixed bottom-0 left-0 right-0',
+        'fixed right-0 bottom-0 left-0',
         'border-t border-gray-200 bg-white',
-        'flex justify-around items-center',
+        'flex items-center justify-around',
         'h-20 px-4',
         'safe-bottom'
       )}
     >
       {navItems.map((item) => {
-        const isActive =
-          pathname === item.href || pathname?.startsWith(item.href + '/')
+        const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
 
         return (
           <Link
@@ -52,18 +51,16 @@ export function BottomNav() {
             href={item.href}
             className={cn(
               'flex flex-col items-center justify-center',
-              'w-16 h-16 rounded-lg',
+              'h-16 w-16 rounded-lg',
               'transition-colors duration-200',
               'tap-target',
-              isActive
-                ? 'text-fairway-600 bg-fairway-50'
-                : 'text-gray-500 hover:text-gray-700'
+              isActive ? 'text-fairway-600 bg-fairway-50' : 'text-gray-500 hover:text-gray-700'
             )}
             aria-label={item.label}
             aria-current={isActive ? 'page' : undefined}
           >
             <span className="text-2xl">{item.icon}</span>
-            <span className="text-xs font-medium mt-1">{item.label}</span>
+            <span className="mt-1 text-xs font-medium">{item.label}</span>
           </Link>
         )
       })}
