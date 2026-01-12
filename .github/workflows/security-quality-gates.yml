@@ -88,29 +88,11 @@ jobs:
         run: npm run typecheck
 
   # ============================================
-  # SECURITY SCANNING (CodeQL SAST)
+  # SECURITY SCANNING (CodeQL)
   # ============================================
-  codeql:
-    name: 🛡️ CodeQL Security Scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript-typescript
-          # Security and quality queries
-          queries: security-and-quality
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: '/language:javascript-typescript'
+  # NOTE: CodeQL is handled by GitHub's default setup (enabled in repo settings)
+  # Do not add a custom CodeQL job here - it conflicts with the default setup
+  # and causes "advanced configuration cannot be processed" errors
 
   # ============================================
   # DEPENDENCY VULNERABILITY CHECK
@@ -274,7 +256,6 @@ jobs:
       - format-check
       - lint
       - typecheck
-      - codeql
       - dependency-audit
       - secrets-scan
       - test-coverage
@@ -287,16 +268,15 @@ jobs:
           echo "format-check: ${{ needs.format-check.result }}"
           echo "lint: ${{ needs.lint.result }}"
           echo "typecheck: ${{ needs.typecheck.result }}"
-          echo "codeql: ${{ needs.codeql.result }}"
           echo "dependency-audit: ${{ needs.dependency-audit.result }}"
           echo "secrets-scan: ${{ needs.secrets-scan.result }}"
           echo "test-coverage: ${{ needs.test-coverage.result }}"
           echo "build: ${{ needs.build.result }}"
+          echo "(CodeQL security scanning handled by GitHub default setup)"
 
           if [[ "${{ needs.format-check.result }}" != "success" ]] || \
              [[ "${{ needs.lint.result }}" != "success" ]] || \
              [[ "${{ needs.typecheck.result }}" != "success" ]] || \
-             [[ "${{ needs.codeql.result }}" != "success" ]] || \
              [[ "${{ needs.dependency-audit.result }}" != "success" ]] || \
              [[ "${{ needs.secrets-scan.result }}" != "success" ]] || \
              [[ "${{ needs.test-coverage.result }}" != "success" ]] || \
