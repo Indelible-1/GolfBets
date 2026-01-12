@@ -68,10 +68,21 @@ class Logger {
   }
 
   error(message: string, error?: Error, context?: LogContext) {
+    // Extract error details, handling Firebase errors which have a 'code' property
+    const errorDetails: Record<string, unknown> = {}
+    if (error) {
+      errorDetails.error = error.message || String(error)
+      if ('code' in error) {
+        errorDetails.errorCode = (error as { code: string }).code
+      }
+      if (process.env.NODE_ENV === 'development') {
+        errorDetails.stack = error.stack
+      }
+    }
+
     this.log('error', message, {
       ...context,
-      error: error?.message,
-      stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
+      ...errorDetails,
     })
   }
 }

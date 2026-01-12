@@ -66,8 +66,19 @@ export async function sendMagicLink(email: string): Promise<void> {
 
   const normalizedEmail = validation.data.email
 
+  // Validate APP_URL is configured
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL
+  if (!appUrl) {
+    const error = new Error(
+      'NEXT_PUBLIC_APP_URL environment variable is not set. ' +
+      'Please configure it in your .env.local file (e.g., NEXT_PUBLIC_APP_URL=http://localhost:3000)'
+    )
+    logger.error('Missing NEXT_PUBLIC_APP_URL configuration', error)
+    throw error
+  }
+
   const actionCodeSettings = {
-    url: `${process.env.NEXT_PUBLIC_APP_URL}/callback`,
+    url: `${appUrl}${AUTH_CONFIG.CALLBACK_PATH}`,
     handleCodeInApp: true,
   }
 
@@ -77,7 +88,13 @@ export async function sendMagicLink(email: string): Promise<void> {
     localStorage.setItem(AUTH_CONFIG.EMAIL_STORAGE_KEY, normalizedEmail)
     logger.info('Magic link sent', { email: normalizedEmail })
   } catch (error) {
-    logger.error('Error sending magic link', error instanceof Error ? error : new Error('Unknown error'), { email: normalizedEmail })
+    // Cast to handle Firebase errors which have 'code' property
+    const firebaseError = error as { code?: string; message?: string }
+    logger.error(
+      'Error sending magic link',
+      error instanceof Error ? error : new Error(firebaseError.message || 'Unknown error'),
+      { email: normalizedEmail, errorCode: firebaseError.code }
+    )
     throw error
   }
 }
