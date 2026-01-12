@@ -30,8 +30,8 @@ export type FirestoreErrorCode =
  * User-friendly messages for Firestore errors
  */
 const FIRESTORE_ERROR_MESSAGES: Record<FirestoreErrorCode, string> = {
-  'cancelled': 'Operation was cancelled',
-  'unknown': 'An unexpected error occurred',
+  cancelled: 'Operation was cancelled',
+  unknown: 'An unexpected error occurred',
   'invalid-argument': 'Invalid data provided',
   'deadline-exceeded': 'Request timed out. Please try again.',
   'not-found': 'The requested data was not found',
@@ -39,13 +39,13 @@ const FIRESTORE_ERROR_MESSAGES: Record<FirestoreErrorCode, string> = {
   'permission-denied': "You don't have permission to do this",
   'resource-exhausted': 'Too many requests. Please try again later.',
   'failed-precondition': 'Operation cannot be performed in current state',
-  'aborted': 'Operation was aborted due to a conflict',
+  aborted: 'Operation was aborted due to a conflict',
   'out-of-range': 'Value is out of valid range',
-  'unimplemented': 'This feature is not available',
-  'internal': 'Server error. Please try again.',
-  'unavailable': 'Service temporarily unavailable. Please try again.',
+  unimplemented: 'This feature is not available',
+  internal: 'Server error. Please try again.',
+  unavailable: 'Service temporarily unavailable. Please try again.',
   'data-loss': 'Data may have been lost. Please verify and try again.',
-  'unauthenticated': 'Please sign in to continue',
+  unauthenticated: 'Please sign in to continue',
 }
 
 /**
@@ -90,10 +90,14 @@ export function handleFirestoreError(
 ): string {
   const message = getFirestoreErrorMessage(error)
 
-  logger.error(`Firestore operation failed: ${operation}`, error instanceof Error ? error : new Error(String(error)), {
-    ...context,
-    firestoreCode: error instanceof FirebaseError ? error.code : undefined,
-  })
+  logger.error(
+    `Firestore operation failed: ${operation}`,
+    error instanceof Error ? error : new Error(String(error)),
+    {
+      ...context,
+      firestoreCode: error instanceof FirebaseError ? error.code : undefined,
+    }
+  )
 
   return message
 }
@@ -132,8 +136,7 @@ export function resetQuotaWarning(): void {
  */
 export function requiresReauth(error: unknown): boolean {
   if (error instanceof FirebaseError) {
-    return error.code === 'permission-denied' ||
-           error.code === 'unauthenticated'
+    return error.code === 'permission-denied' || error.code === 'unauthenticated'
   }
   return false
 }

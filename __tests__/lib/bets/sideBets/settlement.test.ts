@@ -83,9 +83,7 @@ describe('settleAllSideBets', () => {
   })
 
   it('skips disabled bets', () => {
-    const configs: SideBetConfig[] = [
-      { type: 'greenie', amount: 5, enabled: false },
-    ]
+    const configs: SideBetConfig[] = [{ type: 'greenie', amount: 5, enabled: false }]
     const sideBetResults: Record<number, HoleSideBets> = {
       3: { holeNumber: 3, greenie: 'A' },
     }
@@ -97,9 +95,7 @@ describe('settleAllSideBets', () => {
   })
 
   it('handles empty results', () => {
-    const configs: SideBetConfig[] = [
-      { type: 'greenie', amount: 5, enabled: true },
-    ]
+    const configs: SideBetConfig[] = [{ type: 'greenie', amount: 5, enabled: true }]
     const sideBetResults: Record<number, HoleSideBets> = {}
 
     const payouts = settleAllSideBets(sideBetResults, configs, participants, coursePars)
@@ -131,9 +127,7 @@ describe('getDetailedSettlement', () => {
   })
 
   it('includes player wins and amounts', () => {
-    const configs: SideBetConfig[] = [
-      { type: 'greenie', amount: 5, enabled: true },
-    ]
+    const configs: SideBetConfig[] = [{ type: 'greenie', amount: 5, enabled: true }]
     const sideBetResults: Record<number, HoleSideBets> = {
       3: { holeNumber: 3, greenie: 'A' },
       7: { holeNumber: 7, greenie: 'A' },
@@ -141,8 +135,8 @@ describe('getDetailedSettlement', () => {
 
     const settlements = getDetailedSettlement(sideBetResults, configs, participants, coursePars)
 
-    const greenieSettlement = settlements.find(s => s.type === 'greenie')!
-    const playerAResult = greenieSettlement.results.find(r => r.playerId === 'A')!
+    const greenieSettlement = settlements.find((s) => s.type === 'greenie')!
+    const playerAResult = greenieSettlement.results.find((r) => r.playerId === 'A')!
 
     expect(playerAResult.wins).toBe(2)
     expect(playerAResult.amount).toBe(10)
@@ -154,14 +148,14 @@ describe('createDefaultSideBetConfigs', () => {
     const configs = createDefaultSideBetConfigs(2)
 
     expect(configs).toHaveLength(3)
-    expect(configs.every(c => c.amount === 2)).toBe(true)
-    expect(configs.every(c => c.enabled === false)).toBe(true)
+    expect(configs.every((c) => c.amount === 2)).toBe(true)
+    expect(configs.every((c) => c.enabled === false)).toBe(true)
   })
 
   it('creates default configs with default amount', () => {
     const configs = createDefaultSideBetConfigs()
 
-    expect(configs.every(c => c.amount === 1)).toBe(true)
+    expect(configs.every((c) => c.amount === 1)).toBe(true)
   })
 })
 
@@ -200,9 +194,7 @@ describe('getEnabledSideBets', () => {
   })
 
   it('returns empty array when none enabled', () => {
-    const configs: SideBetConfig[] = [
-      { type: 'greenie', amount: 5, enabled: false },
-    ]
+    const configs: SideBetConfig[] = [{ type: 'greenie', amount: 5, enabled: false }]
     expect(getEnabledSideBets(configs)).toEqual([])
   })
 })

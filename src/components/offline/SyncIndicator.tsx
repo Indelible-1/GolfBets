@@ -32,12 +32,12 @@ export function SyncIndicator({ className }: SyncIndicatorProps) {
   return (
     <div
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 safe-top transition-colors',
+        'safe-top fixed top-0 right-0 left-0 z-50 transition-colors',
         !isOnline && 'bg-red-100',
         isOnline && status === 'syncing' && 'bg-yellow-100',
         isOnline && status === 'error' && 'bg-orange-100',
         isOnline && status === 'idle' && pendingCount > 0 && 'bg-blue-100',
-        className,
+        className
       )}
       role="status"
       aria-live="polite"

@@ -50,12 +50,12 @@ export function getFunctionErrorMessage(error: unknown): string {
     if ('code' in error) {
       const code = (error as { code: string }).code
       const errorMap: Record<string, string> = {
-        'unauthenticated': 'Please sign in to continue',
+        unauthenticated: 'Please sign in to continue',
         'invalid-argument': 'Invalid data provided',
         'not-found': 'Resource not found',
         'failed-precondition': 'Operation not allowed at this time',
         'permission-denied': 'You do not have permission',
-        'internal': 'Server error - please try again',
+        internal: 'Server error - please try again',
       }
       return errorMap[code] || `Error: ${code}`
     }

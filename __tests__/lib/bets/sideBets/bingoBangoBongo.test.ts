@@ -47,8 +47,8 @@ describe('calculateBBBPoints', () => {
     ]
     const points = calculateBBBPoints(results, ['A', 'B'])
 
-    const playerA = points.find(p => p.playerId === 'A')!
-    const playerB = points.find(p => p.playerId === 'B')!
+    const playerA = points.find((p) => p.playerId === 'A')!
+    const playerB = points.find((p) => p.playerId === 'B')!
 
     expect(playerA.bingoCount).toBe(1)
     expect(playerA.bangoCount).toBe(1)
@@ -62,19 +62,15 @@ describe('calculateBBBPoints', () => {
   })
 
   it('handles player with no points', () => {
-    const results: BBBHoleResult[] = [
-      { holeNumber: 1, bingo: 'A', bango: 'A', bongo: 'A' },
-    ]
+    const results: BBBHoleResult[] = [{ holeNumber: 1, bingo: 'A', bango: 'A', bongo: 'A' }]
     const points = calculateBBBPoints(results, ['A', 'B'])
 
-    const playerB = points.find(p => p.playerId === 'B')!
+    const playerB = points.find((p) => p.playerId === 'B')!
     expect(playerB.totalPoints).toBe(0)
   })
 
   it('ignores points for non-participants', () => {
-    const results: BBBHoleResult[] = [
-      { holeNumber: 1, bingo: 'C', bango: 'A', bongo: 'A' },
-    ]
+    const results: BBBHoleResult[] = [{ holeNumber: 1, bingo: 'C', bango: 'A', bongo: 'A' }]
     const points = calculateBBBPoints(results, ['A', 'B'])
 
     // C is not a participant, so bingo is ignored
@@ -153,9 +149,7 @@ describe('settleBBB', () => {
 
   it('uses correct amount per point', () => {
     const expensiveConfig: SideBetConfig = { type: 'bingo_bango_bongo', amount: 5, enabled: true }
-    const results: BBBHoleResult[] = [
-      { holeNumber: 1, bingo: 'A', bango: 'A', bongo: 'A' },
-    ]
+    const results: BBBHoleResult[] = [{ holeNumber: 1, bingo: 'A', bango: 'A', bongo: 'A' }]
     const payouts = settleBBB(results, expensiveConfig, ['A', 'B'])
 
     // A has 3 points, B has 0 = 3 point diff * $5 = $15
@@ -166,9 +160,7 @@ describe('settleBBB', () => {
 
 describe('getBBBLeader', () => {
   it('returns leader with most points', () => {
-    const results: BBBHoleResult[] = [
-      { holeNumber: 1, bingo: 'A', bango: 'A', bongo: 'B' },
-    ]
+    const results: BBBHoleResult[] = [{ holeNumber: 1, bingo: 'A', bango: 'A', bongo: 'B' }]
     const leader = getBBBLeader(results, ['A', 'B'])
 
     expect(leader?.playerId).toBe('A')

@@ -34,10 +34,8 @@ export function SideBetInput({
   }
 
   return (
-    <div className="border-t border-gray-100 pt-3 mt-3 space-y-3">
-      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-        Side Bets
-      </p>
+    <div className="mt-3 space-y-3 border-t border-gray-100 pt-3">
+      <p className="text-xs font-medium tracking-wide text-gray-500 uppercase">Side Bets</p>
 
       {showGreenie && (
         <GreenieSelector
@@ -66,12 +64,14 @@ export function SideBetInput({
             bango: value.bango ?? null,
             bongo: value.bongo ?? null,
           }}
-          onChange={(bbb) => onChange({
-            ...value,
-            bingo: bbb.bingo,
-            bango: bbb.bango,
-            bongo: bbb.bongo,
-          })}
+          onChange={(bbb) =>
+            onChange({
+              ...value,
+              bingo: bbb.bingo,
+              bango: bbb.bango,
+              bongo: bbb.bongo,
+            })
+          }
           disabled={disabled}
         />
       )}

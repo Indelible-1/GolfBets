@@ -92,7 +92,7 @@ describe('calculateStandings', () => {
     const standings = calculateStandings([], memberIds, users)
 
     expect(standings).toHaveLength(3)
-    standings.forEach(s => {
+    standings.forEach((s) => {
       expect(s.netAmount).toBe(0)
       expect(s.matchesPlayed).toBe(0)
       expect(s.wins).toBe(0)
@@ -153,8 +153,26 @@ describe('calculateStandings', () => {
 
   it('calculates trend vs previous standings', () => {
     const prevStandings: SeasonStanding[] = [
-      { playerId: USER_A, displayName: 'A', netAmount: 0, matchesPlayed: 0, wins: 0, losses: 0, rank: 2, trend: 'same' },
-      { playerId: USER_B, displayName: 'B', netAmount: 0, matchesPlayed: 0, wins: 0, losses: 0, rank: 1, trend: 'same' },
+      {
+        playerId: USER_A,
+        displayName: 'A',
+        netAmount: 0,
+        matchesPlayed: 0,
+        wins: 0,
+        losses: 0,
+        rank: 2,
+        trend: 'same',
+      },
+      {
+        playerId: USER_B,
+        displayName: 'B',
+        netAmount: 0,
+        matchesPlayed: 0,
+        wins: 0,
+        losses: 0,
+        rank: 1,
+        trend: 'same',
+      },
     ]
 
     const matches = [
@@ -168,8 +186,8 @@ describe('calculateStandings', () => {
 
     const standings = calculateStandings(matches, [USER_A, USER_B], users, prevStandings)
 
-    const standingA = standings.find(s => s.playerId === USER_A)
-    const standingB = standings.find(s => s.playerId === USER_B)
+    const standingA = standings.find((s) => s.playerId === USER_A)
+    const standingB = standings.find((s) => s.playerId === USER_B)
 
     expect(standingA?.trend).toBe('up')
     expect(standingB?.trend).toBe('down')
@@ -177,17 +195,21 @@ describe('calculateStandings', () => {
 
   it('excludes non-completed matches', () => {
     const matches = [
-      createMatch([USER_A, USER_B], {
-        entries: [
-          { participantId: USER_A, balance: 50 },
-          { participantId: USER_B, balance: -50 },
-        ],
-      }, { status: 'pending' }),
+      createMatch(
+        [USER_A, USER_B],
+        {
+          entries: [
+            { participantId: USER_A, balance: 50 },
+            { participantId: USER_B, balance: -50 },
+          ],
+        },
+        { status: 'pending' }
+      ),
     ]
 
     const standings = calculateStandings(matches, memberIds, users)
 
-    standings.forEach(s => {
+    standings.forEach((s) => {
       expect(s.netAmount).toBe(0)
       expect(s.matchesPlayed).toBe(0)
     })
@@ -217,7 +239,7 @@ describe('calculateStandings', () => {
 
     const standings = calculateStandings(matches, [USER_A, USER_B], users)
 
-    const standingA = standings.find(s => s.playerId === USER_A)
+    const standingA = standings.find((s) => s.playerId === USER_A)
     expect(standingA?.wins).toBe(2)
     expect(standingA?.losses).toBe(1)
     expect(standingA?.matchesPlayed).toBe(3)
@@ -238,8 +260,8 @@ describe('calculateStandingsFromLedger', () => {
 
     const standings = calculateStandingsFromLedger(entries, [USER_A, USER_B], users)
 
-    const standingA = standings.find(s => s.playerId === USER_A)
-    const standingB = standings.find(s => s.playerId === USER_B)
+    const standingA = standings.find((s) => s.playerId === USER_A)
+    const standingB = standings.find((s) => s.playerId === USER_B)
 
     expect(standingA?.netAmount).toBe(15) // 25 - 10
     expect(standingB?.netAmount).toBe(-15) // -25 + 10
@@ -254,7 +276,7 @@ describe('calculateStandingsFromLedger', () => {
 
     const standings = calculateStandingsFromLedger(entries, [USER_A, USER_B], users)
 
-    const standingA = standings.find(s => s.playerId === USER_A)
+    const standingA = standings.find((s) => s.playerId === USER_A)
     expect(standingA?.netAmount).toBe(25) // Only the 25 from within group
   })
 })
@@ -275,7 +297,7 @@ describe('filterMatchesByDateRange', () => {
     const filtered = filterMatchesByDateRange(matches, jan1, jan31)
 
     expect(filtered).toHaveLength(2)
-    expect(filtered.map(m => m.id)).toEqual(['1', '2'])
+    expect(filtered.map((m) => m.id)).toEqual(['1', '2'])
   })
 })
 
@@ -295,7 +317,7 @@ describe('filterLedgerByDateRange', () => {
     const filtered = filterLedgerByDateRange(entries, jan1, jan31)
 
     expect(filtered).toHaveLength(2)
-    expect(filtered.map(e => e.amount)).toEqual([10, 20])
+    expect(filtered.map((e) => e.amount)).toEqual([10, 20])
   })
 })
 

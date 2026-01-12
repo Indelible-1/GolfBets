@@ -33,7 +33,10 @@ async function createSessionCookie(idToken: string): Promise<void> {
       body: JSON.stringify({ idToken }),
     })
   } catch (error) {
-    logger.error('Failed to create session cookie', error instanceof Error ? error : new Error('Unknown error'))
+    logger.error(
+      'Failed to create session cookie',
+      error instanceof Error ? error : new Error('Unknown error')
+    )
     throw error
   }
 }
@@ -47,7 +50,10 @@ async function deleteSessionCookie(): Promise<void> {
       method: 'DELETE',
     })
   } catch (error) {
-    logger.error('Failed to delete session cookie', error instanceof Error ? error : new Error('Unknown error'))
+    logger.error(
+      'Failed to delete session cookie',
+      error instanceof Error ? error : new Error('Unknown error')
+    )
   }
 }
 
@@ -77,7 +83,11 @@ export async function sendMagicLink(email: string): Promise<void> {
     localStorage.setItem(AUTH_CONFIG.EMAIL_STORAGE_KEY, normalizedEmail)
     logger.info('Magic link sent', { email: normalizedEmail })
   } catch (error) {
-    logger.error('Error sending magic link', error instanceof Error ? error : new Error('Unknown error'), { email: normalizedEmail })
+    logger.error(
+      'Error sending magic link',
+      error instanceof Error ? error : new Error('Unknown error'),
+      { email: normalizedEmail }
+    )
     throw error
   }
 }
@@ -113,7 +123,11 @@ export async function completeMagicLink(): Promise<UserCredential | null> {
     logger.info('User signed in via magic link', { userId: result.user.uid, email })
     return result
   } catch (error) {
-    logger.error('Error completing magic link sign-in', error instanceof Error ? error : new Error('Unknown error'), { email })
+    logger.error(
+      'Error completing magic link sign-in',
+      error instanceof Error ? error : new Error('Unknown error'),
+      { email }
+    )
     // Provide more specific error messages
     if (error instanceof Error) {
       if (error.message.includes('expired')) {
@@ -143,10 +157,16 @@ export async function signInWithGoogle(): Promise<UserCredential> {
     const idToken = await result.user.getIdToken()
     await createSessionCookie(idToken)
 
-    logger.info('User signed in via Google', { userId: result.user.uid, email: result.user.email || 'not-provided' })
+    logger.info('User signed in via Google', {
+      userId: result.user.uid,
+      email: result.user.email || 'not-provided',
+    })
     return result
   } catch (error) {
-    logger.error('Error signing in with Google', error instanceof Error ? error : new Error('Unknown error'))
+    logger.error(
+      'Error signing in with Google',
+      error instanceof Error ? error : new Error('Unknown error')
+    )
     throw error
   }
 }
@@ -170,4 +190,3 @@ export async function signOutUser(): Promise<void> {
     throw error
   }
 }
-

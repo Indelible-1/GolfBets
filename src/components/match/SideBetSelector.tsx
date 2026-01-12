@@ -51,11 +51,7 @@ const SIDE_BET_INFO: Array<{
   },
 ]
 
-export function SideBetSelector({
-  value,
-  onChange,
-  className,
-}: SideBetSelectorProps) {
+export function SideBetSelector({ value, onChange, className }: SideBetSelectorProps) {
   const [localConfig, setLocalConfig] = useState<SideBetSelectorConfig>(value)
 
   const updateConfig = useCallback(
@@ -94,7 +90,7 @@ export function SideBetSelector({
               variant="outlined"
               padding="sm"
               className={cn(
-                'transition-all cursor-pointer',
+                'cursor-pointer transition-all',
                 isEnabled && 'border-fairway-400 bg-fairway-50'
               )}
             >
@@ -103,14 +99,11 @@ export function SideBetSelector({
                   type="checkbox"
                   checked={isEnabled}
                   onChange={() => toggleBet(bet.enabledKey)}
-                  className="w-5 h-5 mt-0.5 rounded cursor-pointer accent-fairway-600"
+                  className="accent-fairway-600 mt-0.5 h-5 w-5 cursor-pointer rounded"
                   aria-label={`Enable ${bet.label}`}
                 />
-                <div className="flex-1 min-w-0">
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => toggleBet(bet.enabledKey)}
-                  >
+                <div className="min-w-0 flex-1">
+                  <div className="cursor-pointer" onClick={() => toggleBet(bet.enabledKey)}>
                     <p className="font-medium text-gray-900">{bet.label}</p>
                     <p className="text-xs text-gray-500">{bet.description}</p>
                   </div>
@@ -125,10 +118,7 @@ export function SideBetSelector({
                         value={amount.toString()}
                         onChange={(e) => {
                           const parsed = parseFloat(e.target.value)
-                          updateAmount(
-                            bet.amountKey,
-                            Number.isNaN(parsed) ? 1 : parsed
-                          )
+                          updateAmount(bet.amountKey, Number.isNaN(parsed) ? 1 : parsed)
                         }}
                         className="w-20"
                         aria-label={`${bet.label} amount`}
@@ -146,18 +136,12 @@ export function SideBetSelector({
       </div>
 
       {anySideBetsEnabled && (
-        <Card variant="elevated" className="p-3 bg-fairway-50">
-          <p className="text-sm font-medium text-fairway-900">Active Side Bets:</p>
-          <ul className="text-sm text-fairway-800 mt-1 space-y-0.5">
-            {localConfig.greenieEnabled && (
-              <li>Greenies: ${localConfig.greenieAmount}/greenie</li>
-            )}
-            {localConfig.sandyEnabled && (
-              <li>Sandies: ${localConfig.sandyAmount}/sandy</li>
-            )}
-            {localConfig.bbbEnabled && (
-              <li>BBB: ${localConfig.bbbAmount}/point</li>
-            )}
+        <Card variant="elevated" className="bg-fairway-50 p-3">
+          <p className="text-fairway-900 text-sm font-medium">Active Side Bets:</p>
+          <ul className="text-fairway-800 mt-1 space-y-0.5 text-sm">
+            {localConfig.greenieEnabled && <li>Greenies: ${localConfig.greenieAmount}/greenie</li>}
+            {localConfig.sandyEnabled && <li>Sandies: ${localConfig.sandyAmount}/sandy</li>}
+            {localConfig.bbbEnabled && <li>BBB: ${localConfig.bbbAmount}/point</li>}
           </ul>
         </Card>
       )}
