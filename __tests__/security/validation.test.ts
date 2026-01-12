@@ -31,14 +31,9 @@ describe('Email Validation', () => {
   })
 
   it('rejects invalid email formats', () => {
-    const invalidEmails = [
-      'invalid',
-      'user@',
-      '@example.com',
-      'user@example',
-    ]
+    const invalidEmails = ['invalid', 'user@', '@example.com', 'user@example']
 
-    invalidEmails.forEach(email => {
+    invalidEmails.forEach((email) => {
       const result = emailSchema.safeParse(email)
       expect(result.success).toBe(false)
     })
@@ -80,28 +75,18 @@ describe('Magic Link Schema', () => {
 
 describe('Display Name Validation', () => {
   it('accepts valid display names', () => {
-    const validNames = [
-      'John Doe',
-      "O'Brien",
-      'Mary-Jane',
-      'Bob123',
-    ]
+    const validNames = ['John Doe', "O'Brien", 'Mary-Jane', 'Bob123']
 
-    validNames.forEach(name => {
+    validNames.forEach((name) => {
       const result = displayNameSchema.safeParse(name)
       expect(result.success).toBe(true)
     })
   })
 
   it('rejects names with special characters', () => {
-    const invalidNames = [
-      '<script>alert(1)</script>',
-      'User@Admin',
-      'Test#Name',
-      'Name$Money',
-    ]
+    const invalidNames = ['<script>alert(1)</script>', 'User@Admin', 'Test#Name', 'Name$Money']
 
-    invalidNames.forEach(name => {
+    invalidNames.forEach((name) => {
       const result = displayNameSchema.safeParse(name)
       expect(result.success).toBe(false)
     })
@@ -122,7 +107,7 @@ describe('Handicap Validation', () => {
   it('accepts valid handicaps', () => {
     const validHandicaps = [0, 5, 10, 20, 54]
 
-    validHandicaps.forEach(handicap => {
+    validHandicaps.forEach((handicap) => {
       const result = handicapSchema.safeParse(handicap)
       expect(result.success).toBe(true)
     })

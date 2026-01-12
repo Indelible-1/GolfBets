@@ -8,13 +8,13 @@ updates:
   # ============================================
   # NPM Dependencies (Next.js, Firebase, etc.)
   # ============================================
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/Los_Angeles"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'America/Los_Angeles'
 
     # Limit open PRs to avoid overwhelming a solo dev
     open-pull-requests-limit: 5
@@ -24,73 +24,73 @@ updates:
     groups:
       # Production dependencies - minor and patch
       prod-minor-patch:
-        dependency-type: "production"
+        dependency-type: 'production'
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
       # Dev dependencies - minor and patch
       dev-minor-patch:
-        dependency-type: "development"
+        dependency-type: 'development'
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
     # Labels for filtering in GitHub UI
     labels:
-      - "dependencies"
-      - "automated"
+      - 'dependencies'
+      - 'automated'
 
     # Consistent commit message format
     commit-message:
-      prefix: "chore(deps)"
-      include: "scope"
+      prefix: 'chore(deps)'
+      include: 'scope'
 
   # ============================================
   # Cloud Functions Dependencies
   # ============================================
-  - package-ecosystem: "npm"
-    directory: "/functions"
+  - package-ecosystem: 'npm'
+    directory: '/functions'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/Los_Angeles"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'America/Los_Angeles'
 
     open-pull-requests-limit: 3
 
     groups:
       functions-minor-patch:
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
     labels:
-      - "dependencies"
-      - "functions"
-      - "automated"
+      - 'dependencies'
+      - 'functions'
+      - 'automated'
 
     commit-message:
-      prefix: "chore(deps-functions)"
-      include: "scope"
+      prefix: 'chore(deps-functions)'
+      include: 'scope'
 
   # ============================================
   # GitHub Actions (CI/CD workflows)
   # ============================================
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "monthly"
+      interval: 'monthly'
     open-pull-requests-limit: 3
     labels:
-      - "dependencies"
-      - "ci"
-      - "automated"
+      - 'dependencies'
+      - 'ci'
+      - 'automated'
     commit-message:
-      prefix: "chore(ci)"
+      prefix: 'chore(ci)'

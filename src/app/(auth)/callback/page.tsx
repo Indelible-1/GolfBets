@@ -17,7 +17,9 @@ export default function AuthCallbackPage() {
         // Check if auth is properly initialized
         if (!auth) {
           setStatus('error')
-          setErrorMessage('Firebase is not properly configured. Please check your environment variables.')
+          setErrorMessage(
+            'Firebase is not properly configured. Please check your environment variables.'
+          )
           return
         }
 
@@ -62,7 +64,9 @@ export default function AuthCallbackPage() {
           const code = (error as { code: string }).code
           switch (code) {
             case 'auth/invalid-action-code':
-              setErrorMessage('This link has expired or already been used. Please request a new one.')
+              setErrorMessage(
+                'This link has expired or already been used. Please request a new one.'
+              )
               break
             case 'auth/expired-action-code':
               setErrorMessage('This link has expired. Please request a new one.')
@@ -71,7 +75,9 @@ export default function AuthCallbackPage() {
               setErrorMessage('Invalid email address. Please try again.')
               break
             case 'auth/configuration-not-found':
-              setErrorMessage('Firebase Auth is not configured. Please ensure your Firebase project has Email/Password sign-in enabled and check your environment variables.')
+              setErrorMessage(
+                'Firebase Auth is not configured. Please ensure your Firebase project has Email/Password sign-in enabled and check your environment variables.'
+              )
               break
             default:
               setErrorMessage(`Authentication failed: ${code}. Please try again.`)
@@ -86,40 +92,60 @@ export default function AuthCallbackPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-800 p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+    <div className="flex min-h-screen items-center justify-center bg-green-800 p-4">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-xl">
         {status === 'loading' && (
           <>
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent mx-auto mb-4" />
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Signing you in...</h1>
+            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-green-600 border-t-transparent" />
+            <h1 className="mb-2 text-xl font-bold text-gray-900">Signing you in...</h1>
             <p className="text-gray-600">Please wait while we verify your link.</p>
           </>
         )}
 
         {status === 'success' && (
           <>
-            <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+              <svg
+                className="h-6 w-6 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">You&apos;re in!</h1>
+            <h1 className="mb-2 text-xl font-bold text-gray-900">You&apos;re in!</h1>
             <p className="text-gray-600">Redirecting to the app...</p>
           </>
         )}
 
         {status === 'error' && (
           <>
-            <div className="h-12 w-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+              <svg
+                className="h-6 w-6 text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </div>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Sign-in Failed</h1>
-            <p className="text-gray-600 mb-6">{errorMessage}</p>
+            <h1 className="mb-2 text-xl font-bold text-gray-900">Sign-in Failed</h1>
+            <p className="mb-6 text-gray-600">{errorMessage}</p>
             <button
               onClick={() => router.push('/login')}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+              className="w-full rounded-xl bg-green-600 px-4 py-3 font-semibold text-white transition-colors hover:bg-green-700"
             >
               Back to Login
             </button>

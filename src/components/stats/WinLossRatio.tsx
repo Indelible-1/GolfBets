@@ -37,7 +37,7 @@ export function WinLossRatio({
       </div>
 
       {/* Visual bar */}
-      <div className="h-2 flex rounded-full overflow-hidden bg-gray-100">
+      <div className="flex h-2 overflow-hidden rounded-full bg-gray-100">
         {wins > 0 && (
           <div
             className="bg-green-500 transition-all duration-300"

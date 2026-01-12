@@ -16,11 +16,7 @@ import {
 
 describe('emailSchema', () => {
   it('accepts valid emails', () => {
-    const validEmails = [
-      'user@example.com',
-      'test.user@domain.org',
-      'name+tag@company.co.uk',
-    ]
+    const validEmails = ['user@example.com', 'test.user@domain.org', 'name+tag@company.co.uk']
 
     validEmails.forEach((email) => {
       const result = emailSchema.safeParse(email)
@@ -70,12 +66,7 @@ describe('displayNameSchema', () => {
   })
 
   it('rejects names with special characters', () => {
-    const invalidNames = [
-      '<script>alert(1)</script>',
-      'User@Admin',
-      'Test#Name',
-      'Name$Money',
-    ]
+    const invalidNames = ['<script>alert(1)</script>', 'User@Admin', 'Test#Name', 'Name$Money']
 
     invalidNames.forEach((name) => {
       const result = displayNameSchema.safeParse(name)

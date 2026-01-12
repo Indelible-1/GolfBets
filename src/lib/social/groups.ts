@@ -63,7 +63,7 @@ export async function getUserGroups(userId: string): Promise<Group[]> {
   const q = query(groupsCollection(), where('memberIds', 'array-contains', userId))
   const snapshot = await getDocs(q)
 
-  return snapshot.docs.map(doc => doc.data())
+  return snapshot.docs.map((doc) => doc.data())
 }
 
 export async function getGroupWithMembers(
@@ -73,7 +73,7 @@ export async function getGroupWithMembers(
   const group = await getGroup(groupId)
   if (!group) return null
 
-  const members: GroupMember[] = group.memberIds.map(id => {
+  const members: GroupMember[] = group.memberIds.map((id) => {
     const user = users.get(id)
     return {
       id,
@@ -89,10 +89,7 @@ export async function getGroupWithMembers(
 
 // ============ UPDATE ============
 
-export async function updateGroupName(
-  groupId: string,
-  name: string
-): Promise<void> {
+export async function updateGroupName(groupId: string, name: string): Promise<void> {
   const docRef = groupDoc(groupId)
   await updateDoc(docRef, {
     name: name.trim(),
@@ -120,10 +117,7 @@ export async function updateGroupSettings(
   })
 }
 
-export async function addGroupMember(
-  groupId: string,
-  userId: string
-): Promise<void> {
+export async function addGroupMember(groupId: string, userId: string): Promise<void> {
   const docRef = groupDoc(groupId)
   await updateDoc(docRef, {
     memberIds: arrayUnion(userId),
@@ -131,10 +125,7 @@ export async function addGroupMember(
   })
 }
 
-export async function removeGroupMember(
-  groupId: string,
-  userId: string
-): Promise<void> {
+export async function removeGroupMember(groupId: string, userId: string): Promise<void> {
   const docRef = groupDoc(groupId)
   await updateDoc(docRef, {
     memberIds: arrayRemove(userId),
@@ -151,9 +142,7 @@ export async function deleteGroup(groupId: string): Promise<void> {
 
 // ============ STATS UPDATE ============
 
-export async function incrementGroupStats(
-  groupId: string
-): Promise<void> {
+export async function incrementGroupStats(groupId: string): Promise<void> {
   const docRef = groupDoc(groupId)
   const group = await getGroup(groupId)
 

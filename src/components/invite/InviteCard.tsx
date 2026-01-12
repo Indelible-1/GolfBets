@@ -28,38 +28,41 @@ export function InviteCard({
   })
 
   return (
-    <div className="p-4 pb-24 space-y-6">
+    <div className="space-y-6 p-4 pb-24">
       {/* Invite Header */}
-      <div className="text-center py-8">
-        <div className="text-6xl mb-4">⛳</div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">You&apos;re Invited!</h1>
+      <div className="py-8 text-center">
+        <div className="mb-4 text-6xl">⛳</div>
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">You&apos;re Invited!</h1>
         <p className="text-gray-600">Join a golf match on GolfSettled</p>
       </div>
 
       {/* Match Details */}
-      <Card variant="elevated" className="p-6 space-y-4">
+      <Card variant="elevated" className="space-y-4 p-6">
         <div>
-          <p className="text-sm text-gray-600 mb-1">Course</p>
+          <p className="mb-1 text-sm text-gray-600">Course</p>
           <p className="text-xl font-semibold text-gray-900">{match.courseName}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-gray-600 mb-1">Tee Time</p>
+            <p className="mb-1 text-sm text-gray-600">Tee Time</p>
             <p className="text-base font-semibold text-gray-900">{teeTimeLocal}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-600 mb-1">Holes</p>
+            <p className="mb-1 text-sm text-gray-600">Holes</p>
             <p className="text-base font-semibold text-gray-900">{match.holes}</p>
           </div>
         </div>
 
         <div>
-          <p className="text-sm text-gray-600 mb-2">Players ({match.participantIds.length})</p>
+          <p className="mb-2 text-sm text-gray-600">Players ({match.participantIds.length})</p>
           <div className="flex flex-wrap gap-2">
             {match.participantIds.map((_, idx) => (
-              <div key={idx} className="w-10 h-10 rounded-full bg-fairway-100 border-2 border-fairway-200 flex items-center justify-center">
-                <span className="text-sm font-semibold text-fairway-600">{idx + 1}</span>
+              <div
+                key={idx}
+                className="bg-fairway-100 border-fairway-200 flex h-10 w-10 items-center justify-center rounded-full border-2"
+              >
+                <span className="text-fairway-600 text-sm font-semibold">{idx + 1}</span>
               </div>
             ))}
           </div>
@@ -94,11 +97,11 @@ export function InviteCard({
       </div>
 
       {/* Info Banner */}
-      <Card variant="outlined" className="bg-blue-50 border-blue-200 p-4">
-        <p className="text-blue-900 text-sm">
+      <Card variant="outlined" className="border-blue-200 bg-blue-50 p-4">
+        <p className="text-sm text-blue-900">
           <span className="font-medium">💡 What&apos;s GolfSettled?</span>
-          <br />
-          A simple, offline-first app for tracking friendly golf bets. No money changes hands—just friendly wagers with friends.
+          <br />A simple, offline-first app for tracking friendly golf bets. No money changes
+          hands—just friendly wagers with friends.
         </p>
       </Card>
     </div>

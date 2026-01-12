@@ -46,27 +46,26 @@ export default function OfflinePage() {
   return (
     <>
       <Header title="Offline" />
-      <div className="min-h-[calc(100vh-140px)] flex items-center justify-center p-4">
-        <div className="max-w-md text-center space-y-6">
+      <div className="flex min-h-[calc(100vh-140px)] items-center justify-center p-4">
+        <div className="max-w-md space-y-6 text-center">
           <div className="text-6xl">📴</div>
           <div className="space-y-3">
-            <h2 className="text-2xl font-bold text-gray-900">
-              You&apos;re Offline
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900">You&apos;re Offline</h2>
             <p className="text-gray-600">
-              This page requires an internet connection. Your recent matches and scores are still available offline.
+              This page requires an internet connection. Your recent matches and scores are still
+              available offline.
             </p>
           </div>
           {isOnline && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-3 animate-pulse">
-              <p className="text-green-700 text-sm font-medium">
+            <div className="animate-pulse rounded-lg border border-green-200 bg-green-50 p-3">
+              <p className="text-sm font-medium text-green-700">
                 Connection restored! Redirecting...
               </p>
             </div>
           )}
           <button
             onClick={handleRetry}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-colors"
+            className="w-full rounded-lg bg-green-600 py-3 font-semibold text-white transition-colors hover:bg-green-700"
           >
             {isOnline ? 'Go Home' : 'Try Again'}
           </button>

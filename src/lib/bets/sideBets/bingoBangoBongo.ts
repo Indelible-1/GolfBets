@@ -104,10 +104,7 @@ export function calculateBBBPoints(
 /**
  * Get point breakdown for a specific player
  */
-export function getPlayerBBBPoints(
-  results: BBBHoleResult[],
-  playerId: string
-): BBBPoints {
+export function getPlayerBBBPoints(results: BBBHoleResult[], playerId: string): BBBPoints {
   let bingoCount = 0
   let bangoCount = 0
   let bongoCount = 0
@@ -220,10 +217,7 @@ export function getBBBLeader(
 /**
  * Get maximum possible points remaining
  */
-export function getRemainingPoints(
-  holesPlayed: number,
-  totalHoles: number = 18
-): number {
+export function getRemainingPoints(holesPlayed: number, totalHoles: number = 18): number {
   return (totalHoles - holesPlayed) * 3
 }
 

@@ -86,8 +86,8 @@ export function updateRematchParticipants(
   remove: string[]
 ): RematchConfig {
   const newParticipants = config.participantIds
-    .filter(id => !remove.includes(id))
-    .concat(add.filter(id => !config.participantIds.includes(id)))
+    .filter((id) => !remove.includes(id))
+    .concat(add.filter((id) => !config.participantIds.includes(id)))
 
   return {
     ...config,
@@ -98,10 +98,7 @@ export function updateRematchParticipants(
 /**
  * Update rematch tee time
  */
-export function updateRematchTeeTime(
-  config: RematchConfig,
-  teeTime: Date
-): RematchConfig {
+export function updateRematchTeeTime(config: RematchConfig, teeTime: Date): RematchConfig {
   return {
     ...config,
     teeTime,
@@ -111,10 +108,7 @@ export function updateRematchTeeTime(
 /**
  * Update rematch course
  */
-export function updateRematchCourse(
-  config: RematchConfig,
-  courseName: string
-): RematchConfig {
+export function updateRematchCourse(config: RematchConfig, courseName: string): RematchConfig {
   return {
     ...config,
     courseName,
@@ -128,7 +122,7 @@ export function updateRematchCourse(
  */
 export function getRematchSummary(config: RematchConfig): string {
   const playerCount = config.participantIds.length
-  const betTypes = [...new Set(config.bets.map(b => b.type))].join(', ')
+  const betTypes = [...new Set(config.bets.map((b) => b.type))].join(', ')
 
   return `${playerCount} players at ${config.courseName} (${betTypes})`
 }
@@ -165,8 +159,8 @@ export function isRematchModified(
     return true
   }
 
-  const configBetTypes = [...new Set(config.bets.map(b => b.type))].sort()
-  const originalBetTypes = [...new Set(originalBets.map(b => b.type))].sort()
+  const configBetTypes = [...new Set(config.bets.map((b) => b.type))].sort()
+  const originalBetTypes = [...new Set(originalBets.map((b) => b.type))].sort()
 
   if (configBetTypes.length !== originalBetTypes.length) {
     return true

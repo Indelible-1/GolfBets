@@ -13,8 +13,7 @@ export function StreakBadge({ streak, className }: StreakBadgeProps) {
     return null
   }
 
-  const bgColor =
-    streak.type === 'win' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+  const bgColor = streak.type === 'win' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
 
   const emoji = streak.type === 'win' ? '🔥' : '❄️'
   const label = streak.type === 'win' ? 'W' : 'L'
@@ -22,9 +21,9 @@ export function StreakBadge({ streak, className }: StreakBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium',
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-sm font-medium',
         bgColor,
-        className,
+        className
       )}
     >
       {emoji} {streak.count} {label} streak
@@ -48,7 +47,8 @@ export function StreakText({ streak, className }: StreakTextProps) {
 
   return (
     <span className={cn('font-medium', textColor, className)}>
-      {emoji} {streak.count}{label}
+      {emoji} {streak.count}
+      {label}
     </span>
   )
 }

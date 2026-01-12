@@ -52,7 +52,7 @@ export function determineGreenieWinner(
         // Player hit green if they have a valid proximity recorded
         return distance !== null && distance !== undefined && distance >= 0
       })
-      .sort((a, b) => a[1] - b[1])  // Sort by distance (closest first)
+      .sort((a, b) => a[1] - b[1]) // Sort by distance (closest first)
 
     if (onGreen.length === 0) {
       return { holeNumber, winnerId: null, par: 3 }
@@ -82,10 +82,7 @@ export function determineGreenieWinner(
 /**
  * Create a greenie result with a manually selected winner
  */
-export function createGreenieResult(
-  holeNumber: number,
-  winnerId: string | null
-): GreenieResult {
+export function createGreenieResult(holeNumber: number, winnerId: string | null): GreenieResult {
   return {
     holeNumber,
     winnerId,
@@ -130,10 +127,7 @@ export function settleGreenies(
   const winCounts = new Map<string, number>()
   for (const result of results) {
     if (result.winnerId) {
-      winCounts.set(
-        result.winnerId,
-        (winCounts.get(result.winnerId) ?? 0) + 1
-      )
+      winCounts.set(result.winnerId, (winCounts.get(result.winnerId) ?? 0) + 1)
     }
   }
 
@@ -167,23 +161,20 @@ export function settleGreenies(
 export function getPar3Holes(coursePars: number[]): number[] {
   return coursePars
     .map((par, index) => ({ hole: index + 1, par }))
-    .filter(h => h.par === 3)
-    .map(h => h.hole)
+    .filter((h) => h.par === 3)
+    .map((h) => h.hole)
 }
 
 /**
  * Count greenies won by a player
  */
-export function countGreenies(
-  results: GreenieResult[],
-  playerId: string
-): number {
-  return results.filter(r => r.winnerId === playerId).length
+export function countGreenies(results: GreenieResult[], playerId: string): number {
+  return results.filter((r) => r.winnerId === playerId).length
 }
 
 /**
  * Get total number of greenies available in a round
  */
 export function getTotalGreenies(coursePars: number[]): number {
-  return coursePars.filter(par => par === 3).length
+  return coursePars.filter((par) => par === 3).length
 }

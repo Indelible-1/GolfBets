@@ -8,7 +8,10 @@
 // Import functions we need to use in this module
 import { getAuthErrorMessage as _getAuthErrorMessage } from '@/lib/auth/errors'
 import { getFirestoreErrorMessage as _getFirestoreErrorMessage } from '@/lib/firestore/errors'
-import { isBetError as _isBetError, getBetErrorMessage as _getBetErrorMessage } from '@/lib/bets/errors'
+import {
+  isBetError as _isBetError,
+  getBetErrorMessage as _getBetErrorMessage,
+} from '@/lib/bets/errors'
 
 // Auth errors
 export {
@@ -93,8 +96,10 @@ export function getUserErrorMessage(error: unknown): string {
     }
 
     // Network errors
-    if (error.message.toLowerCase().includes('network') ||
-        error.message.toLowerCase().includes('fetch')) {
+    if (
+      error.message.toLowerCase().includes('network') ||
+      error.message.toLowerCase().includes('fetch')
+    ) {
       return 'Network error. Please check your connection and try again.'
     }
 
